@@ -2,6 +2,10 @@
 
 A production-ready marketing and case study site for a boutique freelancing collective. Built with Next.js 14, TypeScript, Tailwind CSS, shadcn/ui, Framer Motion, and MDX-powered content. The project ships with rich case studies, a filterable work index, backstage notes, multi-step intake form, analytics wiring, accessibility defaults, and automated tests.
 
+## Live Demo
+
+📌 Visit the live site: [https://achkari99.github.io/freelanceApp2](https://achkari99.github.io/freelanceApp2)
+
 This repository is published at https://github.com/achkari99/freelanceApp2.
 
 ## Tech Stack
