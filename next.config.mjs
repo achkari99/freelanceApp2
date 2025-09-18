@@ -22,7 +22,9 @@ const nextConfig = {
     ],
     unoptimized: true
   },
-  output: 'export'
+  output: 'export',
+  basePath: '/freelanceApp2',
+  assetPrefix: '/freelanceApp2'
 };
 
 export default withMDX(nextConfig);
