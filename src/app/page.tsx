@@ -16,11 +16,12 @@ const featuredProjects = projects.filter((project) => project.featured || projec
 export default function HomePage() {
   return (
     <div className="space-y-24 pb-24">
-      <section className="relative overflow-hidden bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800 text-white">
-        <div className="absolute inset-0 opacity-40" aria-hidden>
+      <section className="relative overflow-hidden text-white">
+        <div className="absolute inset-0 z-0">
           <AnimatedHero />
         </div>
-        <div className="relative mx-auto flex max-w-6xl flex-col gap-12 px-6 py-28 lg:flex-row lg:items-center lg:px-8">
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-slate-950/80 via-slate-950/60 to-slate-950/20" aria-hidden />
+        <div className="relative z-20 mx-auto flex max-w-6xl flex-col gap-12 px-6 py-28 lg:flex-row lg:items-center lg:px-8">
           <Reveal className="space-y-8 lg:w-2/3" direction="up">
             <Badge className="border-white/30 bg-white/10 text-white">
               <Sparkles className="mr-2 h-3.5 w-3.5" /> Boutique studio; bold outcomes
@@ -62,6 +63,7 @@ export default function HomePage() {
             ))}
           </Reveal>
         </div>
+
       </section>
 
       <section className="mx-auto max-w-6xl px-6 lg:px-8">

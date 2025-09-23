@@ -115,7 +115,7 @@ export function AnimatedHero({ className, options }: AnimatedHeroProps = {}) {
             minWidth: 200.0,
             scale: 1.0,
             scaleMobile: 1.0,
-            backgroundColor: 0x0b1526,
+            backgroundAlpha: 0,
             color: 0x1f9ef5
           };
 
@@ -137,9 +137,5 @@ export function AnimatedHero({ className, options }: AnimatedHeroProps = {}) {
     };
   }, [hasEnteredView, options, shouldReduceMotion]);
 
-  return (
-    <div ref={containerRef} className={cn("pointer-events-none relative h-full w-full", className)} aria-hidden>
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/0 via-slate-900/25 to-slate-950/60" />
-    </div>
-  );
+  return <div ref={containerRef} className={cn("pointer-events-none relative h-full w-full", className)} aria-hidden />;
 }
