@@ -1,4 +1,6 @@
-﻿export const project = {
+import { withBasePath } from "@/lib/utils";
+
+export const project = {
   slug: "nova-commerce-launch",
   title: "Nova Commerce Launch",
   client: "Nova Commerce",
@@ -10,7 +12,7 @@
   timeline: "10 weeks",
   status: "case-study",
   hero: {
-    image: "/images/projects/nova-commerce-hero.svg",
+    image: withBasePath("/images/projects/nova-commerce-hero.svg"),
     alt: "Playful ecommerce experience highlighting Nova brands"
   },
   kpis: [
@@ -33,3 +35,5 @@ We developed the shared narrative, brand system, and launch campaign assets that
 ## Outcome
 
 The launch secured key retail partnerships, carved out a distinct audience, and kept customers engaged through a storytelling-driven lifecycle strategy.
+
+

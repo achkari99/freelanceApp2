@@ -1,4 +1,6 @@
-﻿export const project = {
+import { withBasePath } from "@/lib/utils";
+
+export const project = {
   slug: "sunset-fm-app",
   title: "Sunset FM Listening App",
   client: "Sunset FM",
@@ -9,7 +11,7 @@
   timeline: "14 weeks",
   status: "case-study",
   hero: {
-    image: "/images/projects/sunset-fm-hero.svg",
+    image: withBasePath("/images/projects/sunset-fm-hero.svg"),
     alt: "Streaming interface design for Sunset FM"
   },
   kpis: [
@@ -31,3 +33,5 @@ We combined listener research with a modular design system covering mobile, car,
 ## Outcome
 
 Members now spend triple the time in the product each week and the membership program has scaled to a sustainable revenue channel.
+
+

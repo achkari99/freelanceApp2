@@ -1,4 +1,6 @@
-﻿export type TeamMember = {
+import { withBasePath } from "@/lib/utils";
+
+export type TeamMember = {
   name: string;
   role: string;
   bio: string;
@@ -10,19 +12,19 @@ export const team: TeamMember[] = [
     name: "Mara Jennings",
     role: "Founding Partner, Strategy",
     bio: "Former head of strategy at two venture-backed startups, Mara leads research and narrative systems that align teams.",
-    avatar: "/images/team/mara-jennings.svg"
+    avatar: withBasePath("/images/team/mara-jennings.svg")
   },
   {
     name: "Logan Price",
     role: "Founding Partner, Design",
     bio: "Logan crafts expressive design systems and product experiences rooted in user insight and business impact.",
-    avatar: "/images/team/logan-price.svg"
+    avatar: withBasePath("/images/team/logan-price.svg")
   },
   {
     name: "Yuna Tatsu",
     role: "Partner, Growth",
     bio: "Yuna brings a decade of growth experimentation across SaaS and marketplaces, pairing creative with analytics.",
-    avatar: "/images/team/yuna-tatsu.svg"
+    avatar: withBasePath("/images/team/yuna-tatsu.svg")
   }
 ];
 

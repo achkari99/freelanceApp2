@@ -1,4 +1,6 @@
-﻿export const project = {
+import { withBasePath } from "@/lib/utils";
+
+export const project = {
   slug: "ether-labs-sprint",
   title: "Ether Labs Discovery Sprints",
   client: "Ether Labs",
@@ -10,7 +12,7 @@
   timeline: "8 weeks",
   status: "case-study",
   hero: {
-    image: "/images/projects/ether-labs-hero.svg",
+    image: withBasePath("/images/projects/ether-labs-hero.svg"),
     alt: "A layered interface representing onboarding flows"
   },
   kpis: [
@@ -32,3 +34,5 @@ We organized rapid discovery sprints, prototyped multi-lingual flows, and deploy
 ## Outcome
 
 Reworked onboarding, guided messaging, and nurture programs doubled activation and freed the support team to focus on enterprise prospects.
+
+

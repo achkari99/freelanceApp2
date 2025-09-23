@@ -1,4 +1,6 @@
-﻿export const project = {
+import { withBasePath } from "@/lib/utils";
+
+export const project = {
   slug: "voyage-fund-story",
   title: "Voyage Fund Narrative",
   client: "Voyage Fund",
@@ -10,7 +12,7 @@
   timeline: "6 weeks",
   status: "case-study",
   hero: {
-    image: "/images/projects/voyage-fund-hero.svg",
+    image: withBasePath("/images/projects/voyage-fund-hero.svg"),
     alt: "Stylized climate capital infographic"
   },
   kpis: [
@@ -32,3 +34,5 @@ We reframed their portfolio impact story, built a cohesive design language, and 
 ## Outcome
 
 Within six weeks the team closed oversubscribed commitments and a new wave of climate founders entered the pipeline.
+
+

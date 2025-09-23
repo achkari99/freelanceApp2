@@ -1,4 +1,6 @@
-﻿export const project = {
+import { withBasePath } from "@/lib/utils";
+
+export const project = {
   slug: "atlas-supply-platform",
   title: "Atlas Supply Platform",
   client: "Atlas Supply",
@@ -9,7 +11,7 @@
   timeline: "In progress",
   status: "coming-soon",
   hero: {
-    image: "/images/projects/coming-soon-1.svg",
+    image: withBasePath("/images/projects/coming-soon-1.svg"),
     alt: "Coming soon placeholder"
   },
   kpis: [],
@@ -18,3 +20,5 @@
 };
 
 _A full write-up is on its way. Reach out to hear the story first._
+
+

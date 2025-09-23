@@ -1,4 +1,6 @@
-﻿export const project = {
+import { withBasePath } from "@/lib/utils";
+
+export const project = {
   slug: "glacier-bio-platform",
   title: "Glacier Bio Platform",
   client: "Glacier Bio",
@@ -9,7 +11,7 @@
   timeline: "In progress",
   status: "coming-soon",
   hero: {
-    image: "/images/projects/coming-soon-2.svg",
+    image: withBasePath("/images/projects/coming-soon-2.svg"),
     alt: "Coming soon placeholder"
   },
   kpis: [],
@@ -18,3 +20,5 @@
 };
 
 _More details to share soon--join the backstage feed for progress updates._
+
+

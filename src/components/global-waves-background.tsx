@@ -1,13 +1,19 @@
 "use client";
 
 import * as React from "react";
-import { preferReducedMotion } from "@/lib/utils";
+import { preferReducedMotion, withBasePath } from "@/lib/utils";
 
-const WAVES_THREE_SRC = "/animations/waves-three.js";
-const WAVES_EFFECT_SRC = "/animations/waves-effect.js";
+const WAVES_THREE_SRC = withBasePath("/animations/waves-three.js");
+const WAVES_EFFECT_SRC = withBasePath("/animations/waves-effect.js");
 
 type VantaWavesInstance = {
   destroy?: () => void;
+};
+
+type GlobalWavesBackgroundProps = {
+  color?: number;
+  shininess?: number;
+  waveSpeed?: number;
 };
 
 const loadScript = (src: string) => {
@@ -51,16 +57,16 @@ const loadScript = (src: string) => {
   });
 };
 
-export function GlobalWavesBackground() {
+export function GlobalWavesBackground({ color = 0x021117, shininess = 50, waveSpeed = 0.9 }: GlobalWavesBackgroundProps) {
   const containerRef = React.useRef<HTMLDivElement | null>(null);
+  const effectRef = React.useRef<VantaWavesInstance | null>(null);
   const shouldReduceMotion = preferReducedMotion();
 
   React.useEffect(() => {
-    if (shouldReduceMotion) {
+    if (shouldReduceMotion || effectRef.current || !containerRef.current) {
       return;
     }
 
-    let effect: VantaWavesInstance | undefined;
     let isCancelled = false;
 
     const init = async () => {
@@ -72,9 +78,12 @@ export function GlobalWavesBackground() {
           return;
         }
 
-        const vanta = (window as unknown as { VANTA?: { WAVES?: (options: Record<string, unknown>) => VantaWavesInstance } }).VANTA;
+        const vanta = (window as unknown as {
+          VANTA?: { WAVES?: (options: Record<string, unknown>) => VantaWavesInstance };
+        }).VANTA;
+
         if (vanta?.WAVES) {
-          effect = vanta.WAVES({
+          const baseOptions: Record<string, unknown> = {
             el: containerRef.current,
             mouseControls: true,
             touchControls: true,
@@ -83,8 +92,13 @@ export function GlobalWavesBackground() {
             minWidth: 200.0,
             scale: 1.0,
             scaleMobile: 1.0,
-            color: 0x021117
-          });
+            color,
+            shininess,
+            waveSpeed,
+            zoom: 0.9
+          };
+
+          effectRef.current = vanta.WAVES(baseOptions);
         }
       } catch (error) {
         console.error("Failed to initialize global Vanta background", error);
@@ -95,11 +109,12 @@ export function GlobalWavesBackground() {
 
     return () => {
       isCancelled = true;
-      if (effect?.destroy) {
-        effect.destroy();
+      if (effectRef.current?.destroy) {
+        effectRef.current.destroy();
+        effectRef.current = null;
       }
     };
-  }, [shouldReduceMotion]);
+  }, [color, shininess, shouldReduceMotion, waveSpeed]);
 
   return <div ref={containerRef} className="pointer-events-none fixed inset-0 -z-10" aria-hidden />;
 }

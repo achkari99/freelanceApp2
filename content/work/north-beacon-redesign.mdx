@@ -1,4 +1,6 @@
-﻿export const project = {
+import { withBasePath } from "@/lib/utils";
+
+export const project = {
   slug: "north-beacon-redesign",
   title: "North Beacon Product Redesign",
   client: "North Beacon",
@@ -9,7 +11,7 @@
   timeline: "12 weeks",
   status: "case-study",
   hero: {
-    image: "/images/projects/north-beacon-hero.svg",
+    image: withBasePath("/images/projects/north-beacon-hero.svg"),
     alt: "Real-time energy dashboards illustrating refinery data"
   },
   kpis: [
@@ -32,3 +34,5 @@ We embedded with field engineers, ran day-in-the-life studies, and mapped critic
 ## Outcome
 
 The redesigned product launched with priority alerts, scenario planning, and contextual education. Operators now complete daily workflows 47% faster and expansion seats followed suit.
+
+

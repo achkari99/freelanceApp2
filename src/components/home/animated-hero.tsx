@@ -1,13 +1,18 @@
 "use client";
 
 import * as React from "react";
-import { preferReducedMotion } from "@/lib/utils";
+import { cn, preferReducedMotion, withBasePath } from "@/lib/utils";
 
-const VANTA_THREE_SRC = "/animations/animation2.js";
-const VANTA_RINGS_SRC = "/animations/animation3.js";
+const VANTA_THREE_SRC = withBasePath("/animations/animation2.js");
+const VANTA_RINGS_SRC = withBasePath("/animations/animation3.js");
 
 type VantaInstance = {
   destroy?: () => void;
+};
+
+type AnimatedHeroProps = {
+  className?: string;
+  options?: Record<string, unknown>;
 };
 
 const loadScript = (src: string) => {
@@ -24,13 +29,13 @@ const loadScript = (src: string) => {
         return;
       }
 
-      const onLoad = () => {
+      const handleLoad = () => {
         existing.dataset.loaded = "true";
-        existing.removeEventListener("load", onLoad);
+        existing.removeEventListener("load", handleLoad);
         resolve();
       };
 
-      existing.addEventListener("load", onLoad, { once: true });
+      existing.addEventListener("load", handleLoad, { once: true });
       existing.addEventListener("error", reject, { once: true });
       return;
     }
@@ -51,17 +56,41 @@ const loadScript = (src: string) => {
   });
 };
 
-export function AnimatedHero() {
+export function AnimatedHero({ className, options }: AnimatedHeroProps = {}) {
   const containerRef = React.useRef<HTMLDivElement | null>(null);
+  const effectRef = React.useRef<VantaInstance | null>(null);
   const shouldReduceMotion = preferReducedMotion();
+  const [hasEnteredView, setHasEnteredView] = React.useState(false);
 
   React.useEffect(() => {
-    if (shouldReduceMotion) {
+    const element = containerRef.current;
+    if (!element) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const isIntersecting = entries.some((entry) => entry.isIntersecting);
+        if (isIntersecting) {
+          setHasEnteredView(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (shouldReduceMotion || !hasEnteredView || effectRef.current || !containerRef.current) {
       return;
     }
 
     let isCancelled = false;
-    let effect: VantaInstance | undefined;
 
     const init = async () => {
       try {
@@ -72,9 +101,12 @@ export function AnimatedHero() {
           return;
         }
 
-        const vanta = (window as unknown as { VANTA?: { RINGS?: (options: Record<string, unknown>) => VantaInstance } }).VANTA;
+        const vanta = (window as unknown as {
+          VANTA?: { RINGS?: (options: Record<string, unknown>) => VantaInstance };
+        }).VANTA;
+
         if (vanta?.RINGS) {
-          effect = vanta.RINGS({
+          const baseOptions: Record<string, unknown> = {
             el: containerRef.current,
             mouseControls: true,
             touchControls: true,
@@ -82,8 +114,12 @@ export function AnimatedHero() {
             minHeight: 200.0,
             minWidth: 200.0,
             scale: 1.0,
-            scaleMobile: 1.0
-          });
+            scaleMobile: 1.0,
+            backgroundColor: 0x0b1526,
+            color: 0x1f9ef5
+          };
+
+          effectRef.current = vanta.RINGS({ ...baseOptions, ...(options ?? {}) });
         }
       } catch (error) {
         console.error("Failed to initialize Vanta background", error);
@@ -94,15 +130,16 @@ export function AnimatedHero() {
 
     return () => {
       isCancelled = true;
-      if (effect?.destroy) {
-        effect.destroy();
+      if (effectRef.current?.destroy) {
+        effectRef.current.destroy();
+        effectRef.current = null;
       }
     };
-  }, [shouldReduceMotion]);
+  }, [hasEnteredView, options, shouldReduceMotion]);
 
   return (
-    <div ref={containerRef} className="pointer-events-none relative h-full w-full">
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/0 via-slate-900/20 to-slate-950/50" />
+    <div ref={containerRef} className={cn("pointer-events-none relative h-full w-full", className)} aria-hidden>
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/0 via-slate-900/25 to-slate-950/60" />
     </div>
   );
 }

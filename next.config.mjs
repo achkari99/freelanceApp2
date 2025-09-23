@@ -1,8 +1,10 @@
-﻿import createMDX from "@next/mdx";
+import createMDX from "@next/mdx";
 
 const withMDX = createMDX({
   extension: /\.mdx?$/
 });
+
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "/freelanceApp2";
 
 const nextConfig = {
   reactStrictMode: true,
@@ -22,9 +24,12 @@ const nextConfig = {
     ],
     unoptimized: true
   },
-  output: 'export',
-  basePath: '/freelanceApp2',
-  assetPrefix: '/freelanceApp2'
+  output: "export",
+  basePath,
+  assetPrefix: basePath,
+  env: {
+    NEXT_PUBLIC_BASE_PATH: basePath
+  }
 };
 
 export default withMDX(nextConfig);

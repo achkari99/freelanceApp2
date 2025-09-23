@@ -1,4 +1,6 @@
-﻿export const project = {
+import { withBasePath } from "@/lib/utils";
+
+export const project = {
   slug: "brightwave-platform",
   title: "Brightwave Platform Launch",
   client: "Brightwave",
@@ -11,7 +13,7 @@
   status: "case-study",
   featured: true,
   hero: {
-    image: "/images/projects/brightwave-hero.svg",
+    image: withBasePath("/images/projects/brightwave-hero.svg"),
     alt: "Brightwave analytics surfaces on desktop UI"
   },
   kpis: [
@@ -21,7 +23,7 @@
   ],
   gallery: [
     {
-      src: "/images/projects/brightwave-dashboard.svg",
+      src: withBasePath("/images/projects/brightwave-dashboard.svg"),
       alt: "Dashboards showcasing Brightwave workflows",
       width: 1400,
       height: 880,
@@ -42,3 +44,5 @@ We ran a two-week customer research sprint, aligned leadership on a new north-st
 ## Outcome
 
 The new narrative shipped alongside a modular homepage and in-app onboarding that framed the platform around outcomes and proof. Within the first quarter, demo conversions more than doubled and their average sales cycle accelerated by nearly a month.
+
+
