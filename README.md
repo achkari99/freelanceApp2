@@ -33,6 +33,7 @@ Copy `.env.example` to `.env.local` and provide the following when wiring produc
 
 ```
 NEXT_PUBLIC_SITE_URL=https://resonant.studio
+NEXT_PUBLIC_BASE_PATH=
 START_PROJECT_EMAIL_FROM=studio@example.com
 START_PROJECT_EMAIL_TO=intake@example.com
 SMTP_HOST=smtp.sendgrid.net
@@ -41,6 +42,9 @@ SMTP_USER=apikey
 SMTP_PASSWORD=your-secret
 SLACK_WEBHOOK_URL=https://hooks.slack.com/services/...
 ```
+
+ > **Leave `NEXT_PUBLIC_BASE_PATH` empty for local development. Set it to `/freelanceApp2` (or your subdirectory) when building for GitHub Pages or another subpath deployment.
+
 
 Without SMTP/Slack values the intake endpoint safely no-ops.
 
@@ -61,7 +65,7 @@ tests/               Vitest suites for content & schema integrity
 
 - Hero, services, testimonials, CTA-heavy home page
 - `/our-work` filterable grid with search, status toggles, tags, and pagination
-- Rich `/work/[slug]` pages (Problem -> Approach -> Outcome, KPIs, gallery, prev/next)
+- Rich `/work/[slug]` pages (Problem - > *Approach - > *Outcome, KPIs, gallery, prev/next)
 - `/services`, `/about`, `/backstage`, `/contact`, `/start-a-project`, `/search`
 - Accessible, responsive navigation with dark mode toggle and command-style search page
 - Multi-step project brief form with Zod validation, JSON-LD, email + Slack hooks
