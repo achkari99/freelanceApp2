@@ -1,33 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Sparkles, Rocket, Brain, Layers, Palette, Compass } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AnimatedHero } from "@/components/home/animated-hero";
-import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/ui/reveal";
 import { clientLogos } from "@/data/clients";
 import { services } from "@/data/services";
+import { ServiceShowcase } from "@/components/home/service-showcase";
 import { testimonials } from "@/data/testimonials";
 import { projects } from "content/work";
 
 const featuredProjects = projects.filter((project) => project.featured || project.status === "case-study").slice(0, 3);
-
-const serviceIcons = {
-  Rocket,
-  Brain,
-  Layers,
-  Palette,
-  Compass
-};
-
-const accentClasses: Record<string, string> = {
-  sky: "bg-sky-500/10 text-sky-600 dark:text-sky-300",
-  violet: "bg-violet-500/10 text-violet-600 dark:text-violet-300",
-  emerald: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-300",
-  amber: "bg-amber-500/10 text-amber-600 dark:text-amber-300",
-  rose: "bg-rose-500/10 text-rose-600 dark:text-rose-300"
-};
 
 export default function HomePage() {
   return (
@@ -112,66 +96,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-6 lg:px-8">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <Reveal className="space-y-3" direction="up">
-            <Badge>What we build</Badge>
-            <h2 className="font-display text-3xl tracking-tight text-slate-900 dark:text-white">
-              Prototypes that launch in 48 hours and foundations that scale beyond them.
-            </h2>
-            <p className="max-w-2xl text-base text-slate-600 dark:text-slate-300">
-              ACH blends creative strategy, technical depth, and design-first execution to launch AI copilots, SaaS platforms, and custom tools faster than internal teams can brief them.
-            </p>
-          </Reveal>
-          <Reveal direction="right" delay={0.12}>
-            <Button asChild variant="ghost">
-              <Link href="/services">
-                All services
-                <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
-              </Link>
-            </Button>
-          </Reveal>
-        </div>
-        <div className="mt-10 grid gap-6 md:grid-cols-2">
-          {services.map((service, index) => {
-            const Icon = serviceIcons[service.icon as keyof typeof serviceIcons];
-            const accent = accentClasses[service.accent] ?? "bg-slate-500/10 text-slate-600 dark:text-slate-300";
-            return (
-              <Reveal key={service.slug} delay={index * 0.1} className="h-full">
-                <Card className="group h-full border-slate-200/80 bg-white/90 backdrop-blur transition hover:border-slate-300 hover:shadow-lg dark:border-slate-800/80 dark:bg-slate-900/80">
-                  <div className="flex h-full flex-col justify-between gap-6">
-                    <div className="space-y-4">
-                      <div className="inline-flex items-center gap-3">
-                        {Icon ? (
-                          <span className={`flex h-10 w-10 items-center justify-center rounded-full text-slate-900 dark:text-white ${accent}`}>
-                            <Icon className="h-5 w-5" aria-hidden />
-                          </span>
-                        ) : null}
-                        <h3 className="font-display text-2xl text-slate-900 transition group-hover:text-sky-600 dark:text-white dark:group-hover:text-sky-300">
-                          {service.name}
-                        </h3>
-                      </div>
-                      <p className="text-sm text-slate-600 dark:text-slate-300">{service.teaser}</p>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">{service.description}</p>
-                      <ul className="mt-4 space-y-2 text-sm text-slate-500 dark:text-slate-400">
-                        {service.deliverables.map((deliverable) => (
-                          <li key={deliverable} className="flex items-center gap-2">
-                            <span aria-hidden className="inline-block h-2 w-2 rounded-full bg-sky-500" />
-                            {deliverable}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <Badge className="self-start bg-sky-50 text-sky-600 dark:bg-slate-800 dark:text-sky-300">
-                      {service.name.split(" ")[0]}
-                    </Badge>
-                  </div>
-                </Card>
-              </Reveal>
-            );
-          })}
-        </div>
-      </section>
+      {services.map((service, index) => (
+        <ServiceShowcase key={service.slug} service={service} index={index} />
+      ))}
 
       <section className="mx-auto max-w-6xl px-6 lg:px-8">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">

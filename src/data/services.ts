@@ -6,6 +6,7 @@ export type Service = {
   deliverables: string[];
   icon: string;
   accent: string;
+  animation: string;
 };
 
 export const services: Service[] = [
@@ -17,7 +18,8 @@ export const services: Service[] = [
       "We map the core journey, ship a clickable or coded prototype in 48 hours, and hand you the assets, technical notes, and roadmap to take it live.",
     deliverables: ["Experience mapping", "Clickable or coded prototype", "Tech + scaling plan", "Roadmap workshop"],
     icon: "Rocket",
-    accent: "sky"
+    accent: "sky",
+    animation: "prototype"
   },
   {
     slug: "ai-solutions",
@@ -27,7 +29,8 @@ export const services: Service[] = [
       "From chat copilots to custom NLP pipelines, we instrument data flows, connect to best-in-class models, and design guardrails so AI stays on-brand and on-task.",
     deliverables: ["AI opportunity audit", "Conversation + workflow design", "Model orchestration", "Analytics + governance"],
     icon: "Brain",
-    accent: "violet"
+    accent: "violet",
+    animation: "ai"
   },
   {
     slug: "fullstack-apps",
@@ -37,7 +40,8 @@ export const services: Service[] = [
       "ACH builds scalable SaaS, management systems, and internal tools with modern cloud infrastructure, automated testing, and observability baked in.",
     deliverables: ["Architecture blueprints", "Full-stack implementation", "CI/CD + infrastructure", "Performance monitoring"],
     icon: "Layers",
-    accent: "emerald"
+    accent: "emerald",
+    animation: "fullstack"
   },
   {
     slug: "ui-ux-design",
@@ -47,7 +51,8 @@ export const services: Service[] = [
       "We pair rapid ideation with component libraries, motion, and accessibility best practices to deliver interfaces people trust from day one.",
     deliverables: ["Product vision boards", "Design systems", "Interactive prototypes", "Design QA + documentation"],
     icon: "Palette",
-    accent: "amber"
+    accent: "amber",
+    animation: "design"
   },
   {
     slug: "consulting-transformation",
@@ -57,6 +62,7 @@ export const services: Service[] = [
       "RightMind Lab partners leverage our advisory sprints to align leadership, select platforms, and upskill teams so transformation happens with confidence.",
     deliverables: ["Capability assessment", "Technology roadmap", "Team enablement", "Launch + change management"],
     icon: "Compass",
-    accent: "rose"
+    accent: "rose",
+    animation: "consulting"
   }
 ];
