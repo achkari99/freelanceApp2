@@ -7,6 +7,7 @@ export type Service = {
   icon: string;
   accent: string;
   animation: string;
+  background: string;
 };
 
 export const services: Service[] = [
@@ -19,7 +20,8 @@ export const services: Service[] = [
     deliverables: ["Experience mapping", "Clickable or coded prototype", "Tech + scaling plan", "Roadmap workshop"],
     icon: "Rocket",
     accent: "sky",
-    animation: "prototype"
+    animation: "prototype",
+    background: "sky"
   },
   {
     slug: "ai-solutions",
@@ -30,7 +32,8 @@ export const services: Service[] = [
     deliverables: ["AI opportunity audit", "Conversation + workflow design", "Model orchestration", "Analytics + governance"],
     icon: "Brain",
     accent: "violet",
-    animation: "ai"
+    animation: "ai",
+    background: "violet"
   },
   {
     slug: "fullstack-apps",
@@ -41,7 +44,8 @@ export const services: Service[] = [
     deliverables: ["Architecture blueprints", "Full-stack implementation", "CI/CD + infrastructure", "Performance monitoring"],
     icon: "Layers",
     accent: "emerald",
-    animation: "fullstack"
+    animation: "fullstack",
+    background: "emerald"
   },
   {
     slug: "ui-ux-design",
@@ -52,7 +56,8 @@ export const services: Service[] = [
     deliverables: ["Product vision boards", "Design systems", "Interactive prototypes", "Design QA + documentation"],
     icon: "Palette",
     accent: "amber",
-    animation: "design"
+    animation: "design",
+    background: "amber"
   },
   {
     slug: "consulting-transformation",
@@ -63,6 +68,7 @@ export const services: Service[] = [
     deliverables: ["Capability assessment", "Technology roadmap", "Team enablement", "Launch + change management"],
     icon: "Compass",
     accent: "rose",
-    animation: "consulting"
+    animation: "consulting",
+    background: "rose"
   }
 ];

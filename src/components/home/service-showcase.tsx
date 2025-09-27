@@ -9,6 +9,7 @@ import { Reveal } from "@/components/ui/reveal";
 import type { Service } from "@/data/services";
 
 import { serviceAnimations } from "./service-animations";
+import { serviceBackgrounds } from "./service-backgrounds";
 
 const iconMap = {
   Rocket,
@@ -38,14 +39,15 @@ export type ServiceShowcaseProps = {
 
 export function ServiceShowcase({ service, index }: ServiceShowcaseProps) {
   const Icon = iconMap[service.icon as keyof typeof iconMap];
-  const Animation = serviceAnimations[service.animation];
+  const Animation = serviceAnimations[service.animation] ?? serviceAnimations.default;
+  const Background = serviceBackgrounds[service.background] ?? serviceBackgrounds.default;
   const reversed = index % 2 === 1;
   const accent = accentClasses[service.accent] ?? "bg-slate-500/10 text-slate-600 dark:text-slate-300";
   const sectionTone = sectionTones[index % sectionTones.length];
 
   return (
-    <section key={service.slug} className={`relative overflow-hidden bg-gradient-to-b ${sectionTone}`}>
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(148,163,184,0.12),_transparent_55%)] dark:bg-[radial-gradient(circle_at_top,_rgba(30,41,59,0.35),_transparent_55%)]" />
+    <section key={service.slug} className={`relative overflow-hidden bg-gradient-to-br ${sectionTone}`}>
+      <Background accent={service.accent} />
       <div className={`relative mx-auto flex max-w-6xl flex-col items-center gap-10 px-6 py-20 lg:flex-row ${reversed ? "lg:flex-row-reverse" : ""}`}>
         <Reveal className="w-full lg:w-1/2" direction={reversed ? "right" : "left"}>
           <Card className="relative h-full border-slate-200/80 bg-white/95 p-8 shadow-xl backdrop-blur-lg dark:border-slate-800/80 dark:bg-slate-950">
