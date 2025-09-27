@@ -1,48 +1,46 @@
-import { withBasePath } from "@/lib/utils";
-
-export const project = {
-  slug: "brightwave-platform",
-  title: "Brightwave Platform Launch",
-  client: "Brightwave",
-  excerpt:
-    "Standing up a unified product story and launch experience that converted enterprise data teams twice as fast.",
-  services: ["Product Strategy", "Product Design", "Brand Systems"],
-  tags: ["B2B SaaS", "AI", "Growth"],
-  categories: ["Product", "Brand"],
-  timeline: "16 weeks",
-  status: "case-study",
-  featured: true,
-  hero: {
-    image: withBasePath("/images/projects/brightwave-hero.svg"),
-    alt: "Brightwave analytics surfaces on desktop UI"
-  },
-  kpis: [
-    { label: "Demo conversions", value: "+118%" },
-    { label: "Sales cycle", value: "-24 days" },
-    { label: "NPS", value: "68" }
-  ],
-  gallery: [
-    {
-      src: withBasePath("/images/projects/brightwave-dashboard.svg"),
-      alt: "Dashboards showcasing Brightwave workflows",
-      width: 1400,
-      height: 880,
-      caption: "Modular dashboard widgets let teams tune workflows for any integration."
-    }
-  ],
-  publishedAt: "2024-02-12"
-};
-
-## Problem
-
-Brightwave's team unified multiple acquired products into a single data activation platform. Their story fragmented across marketing and product, with a dated interface eroding trust with enterprise buyers.
-
-## Approach
-
-We ran a two-week customer research sprint, aligned leadership on a new north-star narrative, and mapped the product experience to the enterprise data maturity curve. Parallel design and copy tracks delivered a component-based marketing site and multi-surface product design system.
-
-## Outcome
-
-The new narrative shipped alongside a modular homepage and in-app onboarding that framed the platform around outcomes and proof. Within the first quarter, demo conversions more than doubled and their average sales cycle accelerated by nearly a month.
-
-
+import { withBasePath } from "@/lib/utils";
+
+export const project = {
+  slug: "rightmind-model-recommender",
+  title: "RightMind AI Model Recommendation",
+  client: "RightMind Lab",
+  excerpt:
+    "A 48H prototype that guides analysts to the best-performing AI model, now powering production workflows across the lab.",
+  services: ["48H Prototypes", "AI Solutions", "UI/UX Design"],
+  tags: ["AI", "Decision support", "Workflow automation"],
+  categories: ["Product", "AI"],
+  timeline: "48 hours to prototype, 3 weeks to production",
+  status: "case-study",
+  featured: true,
+  hero: {
+    image: withBasePath("/images/projects/brightwave-hero.svg"),
+    alt: "RightMind AI model recommendation dashboard"
+  },
+  kpis: [
+    { label: "Prototype delivery", value: "48h" },
+    { label: "Analyst adoption", value: "92%" },
+    { label: "Selection time", value: "-63%" }
+  ],
+  gallery: [
+    {
+      src: withBasePath("/images/projects/brightwave-dashboard.svg"),
+      alt: "Recommendation matrix highlighting best-fit models",
+      width: 1400,
+      height: 880,
+      caption: "The orchestrator scores latency, cost, and compliance to surface the right model per request."
+    }
+  ],
+  publishedAt: "2024-05-10"
+};
+
+## Problem
+
+Research teams at RightMind Lab test dozens of foundation models weekly. Model selection lived in spreadsheets, with context scattered across Slack and notebooks--slow, opaque, and impossible to audit.
+
+## Approach
+
+ACH interviewed data scientists on Monday morning and mapped every decision point. By Tuesday night the squad delivered a fully interactive prototype: a heat-map explorer, conversation-driven comparisons, and guardrails for regulated datasets. We orchestrated OpenAI, Anthropic, and custom models behind a single API with smart defaults.
+
+## Outcome
+
+The prototype became the production tool still in use today. Analysts cut evaluation time by 63%, compliance teams gained a transparent audit trail, and leadership finally saw model spend in real time. The same architecture now powers client-facing recommendation workflows across RightMind Lab.

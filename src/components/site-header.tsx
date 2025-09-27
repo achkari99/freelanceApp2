@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import Link from "next/link";
@@ -32,14 +32,16 @@ export function SiteHeader() {
     scrolled && "shadow-[0_14px_40px_-25px_rgba(15,23,42,0.45)]"
   );
 
+  const CTA = siteConfig.actions[0];
+
   return (
     <header className={headerClasses}>
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-4 lg:px-8">
         <Link href="/" className="flex items-center gap-2 font-display text-lg tracking-tight">
           <span aria-hidden className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-sky-500 text-sm font-semibold text-white shadow-[0_10px_30px_-20px_rgba(14,165,233,0.8)]">
-            RS
+            ACH
           </span>
-          <span className="leading-none">Resonant Studio</span>
+          <span className="leading-none">{siteConfig.name}</span>
           <span className="sr-only">Return home</span>
         </Link>
         <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
@@ -71,12 +73,14 @@ export function SiteHeader() {
           })}
         </nav>
         <div className="flex items-center gap-3">
-          <Link
-            href={siteConfig.actions[0]?.href ?? "/start-a-project"}
-            className="hidden rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 md:inline-flex"
-          >
-            {siteConfig.actions[0]?.label ?? "Start a project"}
-          </Link>
+          {CTA ? (
+            <Link
+              href={CTA.href}
+              className="hidden rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 md:inline-flex"
+            >
+              {CTA.label}
+            </Link>
+          ) : null}
           <ThemeToggle />
           <button
             type="button"
@@ -127,12 +131,14 @@ export function SiteHeader() {
                 );
               })}
               <li>
-                <Link
-                  href={siteConfig.actions[0]?.href ?? "/start-a-project"}
-                  className="block rounded-lg bg-slate-900 px-4 py-2 text-base font-semibold text-white hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300"
-                >
-                  {siteConfig.actions[0]?.label ?? "Start a project"}
-                </Link>
+                {CTA ? (
+                  <Link
+                    href={CTA.href}
+                    className="block rounded-lg bg-slate-900 px-4 py-2 text-base font-semibold text-white hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300"
+                  >
+                    {CTA.label}
+                  </Link>
+                ) : null}
               </li>
             </ul>
           </motion.nav>

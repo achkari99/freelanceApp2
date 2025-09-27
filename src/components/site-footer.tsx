@@ -1,37 +1,44 @@
 ﻿import Link from "next/link";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { Mail, ArrowUpRight } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 
 export function SiteFooter() {
+  const year = new Date().getFullYear();
+
   return (
-    <footer className="border-t border-slate-200 bg-[rgb(var(--background))] py-16 dark:border-slate-800">
-      <div className="mx-auto grid max-w-6xl gap-12 px-6 lg:grid-cols-[2fr_1fr] lg:px-8">
+    <footer className="border-t border-slate-200 bg-[rgb(var(--background))] py-16 text-slate-600 dark:border-slate-800 dark:text-slate-300">
+      <div className="mx-auto grid max-w-6xl gap-12 px-6 lg:grid-cols-[1.8fr_1fr] lg:px-8">
         <div className="space-y-6">
-          <div>
-            <p className="font-display text-2xl font-semibold tracking-tight">Let&apos;s build what&apos;s next.</p>
-            <p className="mt-3 max-w-xl text-base text-slate-600 dark:text-slate-300">
-              Resonant Studio partners with founders and marketing leaders to ship digital products, purposeful brands, and campaigns that move audiences.
+          <div className="space-y-3">
+            <p className="font-display text-2xl text-slate-900 dark:text-white">Build the thing the room needs to see.</p>
+            <p className="max-w-xl text-base">
+              ACH delivers 48 hour prototypes, AI copilots, and launch-ready platforms with the documentation your team needs to scale.
             </p>
           </div>
-          <div className="flex flex-wrap gap-4 text-sm text-slate-600 dark:text-slate-300">
-            <span className="inline-flex items-center gap-2"><MapPin className="h-4 w-4" aria-hidden />Remote, global</span>
-            <Link href={`mailto:${siteConfig.links.email}`} className="inline-flex items-center gap-2 hover:text-sky-600 dark:hover:text-sky-400">
+          <div className="flex flex-wrap items-center gap-4 text-sm">
+            <Link
+              href={`mailto:${siteConfig.links.email}`}
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 font-medium transition hover:border-slate-300 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:hover:border-slate-600"
+            >
               <Mail className="h-4 w-4" aria-hidden />
               {siteConfig.links.email}
             </Link>
-            <Link href="tel:+16475551234" className="inline-flex items-center gap-2 hover:text-sky-600 dark:hover:text-sky-400">
-              <Phone className="h-4 w-4" aria-hidden />
-              +1 (647) 555-1234
+            <Link
+              href="/start-a-project"
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-slate-300 hover:text-sky-600 dark:border-slate-700 dark:text-white dark:hover:border-slate-500 dark:hover:text-sky-300"
+            >
+              Start a project
+              <ArrowUpRight className="h-4 w-4" aria-hidden />
             </Link>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-6 text-sm text-slate-600 dark:text-slate-300">
+        <div className="grid grid-cols-2 gap-8 text-sm">
           <div>
-            <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-400">Company</h3>
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-400">Navigation</h3>
             <ul className="mt-4 space-y-2">
               {siteConfig.navigation.map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="hover:text-sky-600 dark:hover:text-sky-400">
+                  <Link href={item.href} className="transition hover:text-sky-600 dark:hover:text-sky-400">
                     {item.label}
                   </Link>
                 </li>
@@ -42,18 +49,18 @@ export function SiteFooter() {
             <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-400">Connect</h3>
             <ul className="mt-4 space-y-2">
               <li>
-                <Link href={siteConfig.links.twitter} className="hover:text-sky-600 dark:hover:text-sky-400">
+                <Link href={siteConfig.links.twitter} className="transition hover:text-sky-600 dark:hover:text-sky-400">
                   Twitter
                 </Link>
               </li>
               <li>
-                <Link href={siteConfig.links.linkedin} className="hover:text-sky-600 dark:hover:text-sky-400">
+                <Link href={siteConfig.links.linkedin} className="transition hover:text-sky-600 dark:hover:text-sky-400">
                   LinkedIn
                 </Link>
               </li>
               <li>
-                <Link href="/start-a-project" className="hover:text-sky-600 dark:hover:text-sky-400">
-                  Start a project
+                <Link href="/contact" className="transition hover:text-sky-600 dark:hover:text-sky-400">
+                  Contact the lab
                 </Link>
               </li>
             </ul>
@@ -61,10 +68,8 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="mt-16 px-6 text-sm text-slate-500 dark:text-slate-500 lg:px-8">
-        <p>&copy; {new Date().getFullYear()} Resonant Studio. All rights reserved.</p>
+        <p>&copy; {year} {siteConfig.name}. All rights reserved.</p>
       </div>
     </footer>
   );
 }
-
-

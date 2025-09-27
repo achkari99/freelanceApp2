@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -20,28 +20,28 @@ export default function HomePage() {
         <div className="absolute inset-0 z-0">
           <AnimatedHero />
         </div>
-        <div className="absolute inset-0 z-10 bg-gradient-to-b from-slate-950/80 via-slate-950/60 to-slate-950/20" aria-hidden />
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-slate-950/85 via-slate-950/65 to-slate-950/30" aria-hidden />
         <div className="relative z-20 mx-auto flex max-w-6xl flex-col gap-12 px-6 py-28 lg:flex-row lg:items-center lg:px-8">
           <Reveal className="space-y-8 lg:w-2/3" direction="up">
             <Badge className="border-white/30 bg-white/10 text-white">
-              <Sparkles className="mr-2 h-3.5 w-3.5" /> Boutique studio; bold outcomes
+              <Sparkles className="mr-2 h-3.5 w-3.5" /> ACH | Better than AI and faster
             </Badge>
             <h1 className="font-display text-4xl leading-tight sm:text-5xl lg:text-6xl">
-              We help ambitious teams ship work that resonates--product, brand, and go-to-market in lockstep.
+              Your idea, our prototype in 48 hours.
             </h1>
             <p className="max-w-2xl text-lg text-slate-200">
-              Resonant Studio is a multidisciplinary partner for founders and marketing leaders. We translate complex stories into experiences and experiments that power growth across the funnel.
+              We are ACH, the rapid-build unit inside RightMind Lab. In forty-eight hours we deliver clickable or coded prototypes for AI products, SaaS platforms, and mobile experiences, complete with architecture notes so you can scale with confidence.
             </p>
             <div className="flex flex-wrap gap-4">
               <Button asChild size="lg">
                 <Link href="/start-a-project">
-                  Start a project
+                  Start your prototype for free
                   <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="border-white/30 text-white hover:border-white/50 hover:bg-white/10">
-                <Link href="/our-work">
-                  See our work
+                <Link href="/services">
+                  Explore what we build
                   <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
                 </Link>
               </Button>
@@ -55,7 +55,7 @@ export default function HomePage() {
                   <p className="mt-2 font-semibold text-white">{project.title}</p>
                   <p className="mt-3 text-sm text-slate-200">{project.excerpt}</p>
                   <div className="mt-4 inline-flex items-center text-sm font-semibold text-white">
-                    Read the case study
+                    View build story
                     <ArrowRight className="ml-2 h-4 w-4 transition group-hover:translate-x-1" aria-hidden />
                   </div>
                 </Link>
@@ -63,16 +63,15 @@ export default function HomePage() {
             ))}
           </Reveal>
         </div>
-
       </section>
 
       <section className="mx-auto max-w-6xl px-6 lg:px-8">
         <Reveal className="flex flex-wrap items-center justify-between gap-4" direction="up">
           <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
-            Trusted by teams shipping what matters
+            Teams scaling with RightMind Lab
           </h2>
           <Link href="/our-work" className="text-sm font-semibold text-slate-700 hover:text-sky-600 dark:text-slate-200 dark:hover:text-sky-400">
-            Explore our case studies
+            See all results
           </Link>
         </Reveal>
         <div className="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-6">
@@ -99,12 +98,12 @@ export default function HomePage() {
       <section className="mx-auto max-w-6xl px-6 lg:px-8">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <Reveal className="space-y-3" direction="up">
-            <Badge>What we do</Badge>
+            <Badge>What we build</Badge>
             <h2 className="font-display text-3xl tracking-tight text-slate-900 dark:text-white">
-              Strategy, design, and growth experiments to move the needle for your product.
+              Prototypes that launch in 48 hours and foundations that scale beyond them.
             </h2>
             <p className="max-w-2xl text-base text-slate-600 dark:text-slate-300">
-              Every engagement blends vision with velocity. From zero-to-one launches to post-Series-B optimization, we plug in as an integrated extension of your team.
+              ACH blends creative strategy, technical depth, and design-first execution to launch AI copilots, SaaS platforms, and custom tools faster than internal teams can brief them.
             </p>
           </Reveal>
           <Reveal direction="right" delay={0.12}>
@@ -146,9 +145,9 @@ export default function HomePage() {
       <section className="mx-auto max-w-6xl px-6 lg:px-8">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <Reveal direction="up">
-            <Badge>Case studies</Badge>
+            <Badge>Proof</Badge>
             <h2 className="mt-3 font-display text-3xl tracking-tight text-slate-900 dark:text-white">
-              Selected work that paired brand and product for measurable outcomes.
+              Prototypes that graduate into production products.
             </h2>
           </Reveal>
           <Reveal direction="right" delay={0.12}>
@@ -201,7 +200,7 @@ export default function HomePage() {
             <Reveal className="lg:w-1/2" direction="up">
               <Badge className="border-white/20 bg-white/10 text-white">Testimonials</Badge>
               <h2 className="mt-4 font-display text-3xl tracking-tight">
-                Teams work with us because we sweat the details--and the outcomes.
+                Clients trust ACH when speed, craft, and reliability all matter.
               </h2>
             </Reveal>
             <div className="grid gap-6 lg:w-1/2">
@@ -226,18 +225,19 @@ export default function HomePage() {
       <section className="mx-auto max-w-6xl px-6 lg:px-8">
         <div className="grid gap-8 rounded-3xl border border-slate-200 bg-white p-12 shadow-xl dark:border-slate-800 dark:bg-slate-900">
           <Reveal className="space-y-4" direction="up">
-            <Badge>Ready to move</Badge>
-            <h2 className="font-display text-3xl text-slate-900 dark:text-white">Let&apos;s co-create your next chapter.</h2>
+            <Badge>Get started</Badge>
+            <h2 className="font-display text-3xl text-slate-900 dark:text-white">Ready for a 48 hour prototype?</h2>
             <p className="max-w-xl text-base text-slate-600 dark:text-slate-300">
-              Tell us what you&apos;re building and where you&apos;re stuck. We&apos;ll bring a small senior team to synthesize, ship, and measure real outcomes alongside you.
+              Share what you are building and we will schedule a kickoff within hours. You will receive strategy notes, design assets, and a working prototype you can demo or pitch immediately.
             </p>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Prefer email? Reach us directly at <a className="underline" href="mailto:achiibanayaa36@gmail.com">achiibanayaa36@gmail.com</a>.</p>
           </Reveal>
           <Reveal className="flex flex-col gap-4 sm:flex-row" direction="up" delay={0.12}>
             <Button asChild size="lg">
-              <Link href="/start-a-project">Start a project</Link>
+              <Link href="/start-a-project">Request your 48 hour prototype</Link>
             </Button>
             <Button asChild variant="outline" size="lg">
-              <Link href="/contact">Contact us</Link>
+              <Link href="/contact">Talk to the lab</Link>
             </Button>
           </Reveal>
         </div>
@@ -245,8 +245,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-
-
-
-

@@ -1,12 +1,16 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
+import type { ComponentPropsWithoutRef } from "react";
 import { motion } from "@/components/motion";
 import { cn } from "@/lib/utils";
 
 type Direction = "up" | "down" | "left" | "right";
 
-export interface RevealProps extends React.HTMLAttributes<HTMLDivElement> {
+type MotionDivProps = ComponentPropsWithoutRef<typeof motion.div>;
+
+export interface RevealProps
+  extends Omit<MotionDivProps, "initial" | "whileInView" | "viewport" | "transition"> {
   delay?: number;
   duration?: number;
   direction?: Direction;
@@ -54,3 +58,4 @@ export const Reveal = React.forwardRef<HTMLDivElement, RevealProps>(function Rev
 });
 
 Reveal.displayName = "Reveal";
+

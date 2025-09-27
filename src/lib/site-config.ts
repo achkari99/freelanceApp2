@@ -1,27 +1,28 @@
-﻿const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://resonant.studio";
+﻿const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://rightmindlab.com/ach";
 
 export const siteConfig = {
-  name: "Resonant Studio",
+  name: "ACH | 48H Prototype",
   description:
-    "Resonant Studio is a boutique product and brand partner crafting resonant digital experiences for ambitious teams.",
+    "ACH is RightMind Lab's rapid prototyping squad. We turn ambitious ideas into AI-ready, design-first products in 48 hours, then scale them into resilient platforms.",
   url: siteUrl,
   ogImage: `${siteUrl.replace(/\/$/, "")}/og-image.svg`,
   links: {
-    twitter: "https://twitter.com/resonant",
-    linkedin: "https://www.linkedin.com/company/resonant-studio",
-    email: "hello@resonant.studio"
+    twitter: "https://twitter.com/rightmindlab",
+    linkedin: "https://www.linkedin.com/company/rightmind-lab",
+    email: "achiibanayaa36@gmail.com"
   },
   navigation: [
-    { href: "/our-work", label: "Our Work" },
+    { href: "/our-work", label: "Results" },
     { href: "/services", label: "Services" },
     { href: "/about", label: "About" },
-    { href: "/backstage", label: "Backstage" },
+    { href: "/backstage", label: "Lab Notes" },
     { href: "/contact", label: "Contact" },
     { href: "/search", label: "Search" }
   ],
   actions: [
-    { href: "/start-a-project", label: "Start a project" }
+    { href: "/start-a-project", label: "Start your 48H prototype" }
   ]
 } as const;
 
 export type SiteNavigationItem = (typeof siteConfig.navigation)[number];
+

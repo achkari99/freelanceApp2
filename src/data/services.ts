@@ -1,42 +1,50 @@
-﻿export type Service = {
-  slug: string;
-  name: string;
-  teaser: string;
-  description: string;
-  deliverables: string[];
-};
-
-export const services: Service[] = [
-  {
-    slug: "product-strategy",
-    name: "Product Strategy",
-    teaser: "Ground your roadmap in outcomes with lean discovery and sharp positioning.",
-    description:
-      "Research sprints uncover customer truths. We translate them into positioning, roadmaps, and success metrics that align your product team around measurable outcomes.",
-    deliverables: ["Research sprints", "Opportunity mapping", "Positioning frameworks", "North-star metrics"]
-  },
-  {
-    slug: "brand-systems",
-    name: "Brand Systems",
-    teaser: "Build a brand that feels inevitable across every touchpoint.",
-    description:
-      "We craft expressive design systems, verbal identity, and launch toolkits that empower your team to show up consistently--with room for evolution.",
-    deliverables: ["Visual identity", "Messaging architecture", "Design system foundations", "Launch toolkits"]
-  },
-  {
-    slug: "growth-experiments",
-    name: "Growth Experiments",
-    teaser: "Run experiments that compound customer acquisition and retention.",
-    description:
-      "Working beside marketing and product teams, we design, ship, and learn from campaigns that move KPIs without compromising brand equity.",
-    deliverables: ["Experiment design", "Full-funnel messaging", "Lifecycle automation", "Marketing site optimization"]
-  },
-  {
-    slug: "product-design",
-    name: "Product Design",
-    teaser: "Design intuitive, emotive digital products that resonate.",
-    description:
-      "Our product designers embed with your engineers to ship flows, prototypes, and design systems that keep teams shipping with confidence.",
-    deliverables: ["Interaction design", "Design systems", "Design QA", "Prototyping"]
-  }
-];
+export type Service = {
+  slug: string;
+  name: string;
+  teaser: string;
+  description: string;
+  deliverables: string[];
+};
+
+export const services: Service[] = [
+  {
+    slug: "48h-prototypes",
+    name: "48H Prototypes",
+    teaser: "Launch-ready MVPs for web, mobile, or SaaS in two days flat.",
+    description:
+      "We map the core journey, ship a clickable or coded prototype in 48 hours, and hand you the assets, technical notes, and roadmap to take it live.",
+    deliverables: ["Experience mapping", "Clickable or coded prototype", "Tech + scaling plan", "Roadmap workshop"]
+  },
+  {
+    slug: "ai-solutions",
+    name: "AI Solutions",
+    teaser: "Intelligent assistants, automation, and orchestration built for your stack.",
+    description:
+      "From chat copilots to custom NLP pipelines, we instrument data flows, connect to best-in-class models, and design guardrails so AI stays on-brand and on-task.",
+    deliverables: ["AI opportunity audit", "Conversation + workflow design", "Model orchestration", "Analytics + governance"]
+  },
+  {
+    slug: "fullstack-apps",
+    name: "Web & Mobile Development",
+    teaser: "Robust apps that evolve from prototype to production without rewrite.",
+    description:
+      "ACH builds scalable SaaS, management systems, and internal tools with modern cloud infrastructure, automated testing, and observability baked in.",
+    deliverables: ["Architecture blueprints", "Full-stack implementation", "CI/CD + infrastructure", "Performance monitoring"]
+  },
+  {
+    slug: "ui-ux-design",
+    name: "UI/UX Design",
+    teaser: "Design-first interfaces that convert, delight, and scale with you.",
+    description:
+      "We pair rapid ideation with component libraries, motion, and accessibility best practices to deliver interfaces people trust from day one.",
+    deliverables: ["Product vision boards", "Design systems", "Interactive prototypes", "Design QA + documentation"]
+  },
+  {
+    slug: "consulting-transformation",
+    name: "Consulting & Digital Transformation",
+    teaser: "Strategic guidance on AI, cloud, and automation adoption across teams.",
+    description:
+      "RightMind Lab partners leverage our advisory sprints to align leadership, select platforms, and upskill teams so transformation happens with confidence.",
+    deliverables: ["Capability assessment", "Technology roadmap", "Team enablement", "Launch + change management"]
+  }
+];

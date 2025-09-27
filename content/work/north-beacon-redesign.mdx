@@ -1,38 +1,39 @@
-import { withBasePath } from "@/lib/utils";
+﻿import { withBasePath } from "@/lib/utils";
 
 export const project = {
-  slug: "north-beacon-redesign",
-  title: "North Beacon Product Redesign",
-  client: "North Beacon",
-  excerpt: "Reframing an industrial IoT platform around clarity, speed, and operator trust.",
-  services: ["Product Design", "Product Strategy"],
-  tags: ["Industrial", "IoT", "Design Systems"],
-  categories: ["Product"],
-  timeline: "12 weeks",
+  slug: "super-ai-orchestrator",
+  title: "Super AI Orchestrator Control Room",
+  client: "RightMind Super AI",
+  excerpt:
+    "A realtime control room for agent operations that gives leadership instant visibility into missions, spend, and escalations.",
+  services: ["AI Solutions", "Web & Mobile Development", "Consulting & Digital Transformation"],
+  tags: ["Agent ops", "AI orchestration", "Control room"],
+  categories: ["AI", "Platform"],
+  timeline: "48 hours to prototype, 5 weeks to production rollout",
   status: "case-study",
+  featured: true,
   hero: {
     image: withBasePath("/images/projects/north-beacon-hero.svg"),
-    alt: "Real-time energy dashboards illustrating refinery data"
+    alt: "Super AI control room dashboards"
   },
   kpis: [
-    { label: "Task completion", value: "+47%" },
-    { label: "Support tickets", value: "-36%" },
-    { label: "Adoption", value: "+2.3x" }
+    { label: "Escalation resolution", value: "-57%" },
+    { label: "Executive engagement", value: "+3.4x" },
+    { label: "Ops efficiency", value: "+42%" }
   ],
   gallery: [],
-  publishedAt: "2023-11-18"
+  publishedAt: "2024-07-18"
 };
 
 ## Problem
 
-North Beacon's platform ingested millions of signals but surface-level dashboards left plant operators guessing. Adoption lagged, and support teams triaged endless help tickets.
+RightMind Super AI orchestrates dozens of autonomous agents for enterprise clients. Leaders lacked a unified view into mission status, compliance checks, and cost spikes, forcing the team to stitch together spreadsheets and alerts across tools.
 
 ## Approach
 
-We embedded with field engineers, ran day-in-the-life studies, and mapped critical workflows. A modular design system equipped product and engineering teams to ship performant views for every role.
+ACH embedded with the ops squad for a 48 hour discovery sprint, mapping every escalation ritual and data source. We prototyped a modular control room that blended telemetry streams, AI summarisation, and human override workflows. The squad validated the design live, then we hardened the build with access controls and audit logging for production.
 
 ## Outcome
 
-The redesigned product launched with priority alerts, scenario planning, and contextual education. Operators now complete daily workflows 47% faster and expansion seats followed suit.
-
+The Super AI Orchestrator now powers daily standups and executive reviews. Escalations resolve in minutes instead of hours, leadership sees spend trends before they spike, and clients trust the transparency of the agent network. The platform continues to expand with customer-facing views built on the same architecture.
 

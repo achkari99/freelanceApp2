@@ -137,10 +137,10 @@ export function WorkGrid({ projects, categories, services, tags }: WorkGridProps
           </div>
           <label className="relative flex w-full items-center gap-3 rounded-full border border-slate-200 bg-white px-4 py-3 text-sm shadow-sm dark:border-slate-700 dark:bg-slate-900 lg:w-80">
             <Search className="h-4 w-4 text-slate-400" aria-hidden />
-            <span className="sr-only">Search case studies</span>
+            <span className="sr-only">Search build stories</span>
             <input
               className="w-full border-0 bg-transparent text-slate-900 placeholder:text-slate-400 focus:outline-none dark:text-white"
-              placeholder="Search case studies"
+              placeholder="Search build stories"
               value={filters.query}
               onChange={(event) => setFilters((prev) => ({ ...prev, query: event.target.value }))}
             />
@@ -154,7 +154,7 @@ export function WorkGrid({ projects, categories, services, tags }: WorkGridProps
                 active={filters.status === status}
                 onClick={() => setFilters((prev) => ({ ...prev, status }))}
               >
-                {status === "all" ? "All" : status === "case-study" ? "Live" : "Coming soon"}
+                {status === "all" ? "All" : status === "case-study" ? "Shipped" : "Coming soon"}
               </FilterChip>
             ))}
           </FilterGroup>
@@ -208,7 +208,7 @@ export function WorkGrid({ projects, categories, services, tags }: WorkGridProps
 
       <div className="space-y-8">
         <p className="text-sm text-slate-600 dark:text-slate-300">
-          Showing {visible.length} of {results.length} case studies
+          Showing {visible.length} of {results.length} build stories
         </p>
         <AnimatePresence initial={!shouldReduceMotion} mode="popLayout">
           <motion.div

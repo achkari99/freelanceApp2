@@ -1,38 +1,36 @@
-import { withBasePath } from "@/lib/utils";
-
-export const project = {
-  slug: "ether-labs-sprint",
-  title: "Ether Labs Discovery Sprints",
-  client: "Ether Labs",
-  excerpt:
-    "Designing trust-first Web3 onboarding that translated complex staking workflows into human-centric language.",
-  services: ["Product Strategy", "Growth Experiments"],
-  tags: ["Web3", "Fintech", "Experimentation"],
-  categories: ["Product", "Growth"],
-  timeline: "8 weeks",
-  status: "case-study",
-  hero: {
-    image: withBasePath("/images/projects/ether-labs-hero.svg"),
-    alt: "A layered interface representing onboarding flows"
-  },
-  kpis: [
-    { label: "Activation", value: "+68%" },
-    { label: "Support chats", value: "-52%" }
-  ],
-  gallery: [],
-  publishedAt: "2023-06-02"
-};
-
-## Problem
-
-Ether Labs' staking suite promised high-yield for treasury teams, but jargon-heavy flows stalled onboarding.
-
-## Approach
-
-We organized rapid discovery sprints, prototyped multi-lingual flows, and deployed in-product experiments.
-
-## Outcome
-
-Reworked onboarding, guided messaging, and nurture programs doubled activation and freed the support team to focus on enterprise prospects.
-
-
+import { withBasePath } from "@/lib/utils";
+
+export const project = {
+  slug: "labops-portal",
+  title: "LabOps Management Portal",
+  client: "Atlas Research Clinic",
+  excerpt:
+    "Digitising lab requests, compliance, and instrumentation logs in a single portal delivered from prototype to production in weeks.",
+  services: ["48H Prototypes", "Web & Mobile Development", "Consulting & Digital Transformation"],
+  tags: ["Healthcare", "Compliance", "Operations"],
+  categories: ["Platform"],
+  timeline: "48 hours to prototype, 7 weeks to rollout",
+  status: "case-study",
+  hero: {
+    image: withBasePath("/images/projects/ether-labs-hero.svg"),
+    alt: "Lab operations management interface"
+  },
+  kpis: [
+    { label: "Ticket resolution", value: "-58%" },
+    { label: "Audit prep time", value: "-72%" }
+  ],
+  gallery: [],
+  publishedAt: "2024-02-28"
+};
+
+## Problem
+
+Atlas Research Clinic coordinated experiments through email threads, clipboards, and ad hoc spreadsheets. Compliance risk mounted and technicians spent more time updating logs than running assays.
+
+## Approach
+
+During a 48H sprint ACH mapped every lab ritual, prototyped a consolidated portal, and validated it with technicians. We connected to instrument APIs, designed SOP-driven workflows, and automated audit trails with immutable histories and access control.
+
+## Outcome
+
+The clinic now runs on LabOps: fewer manual updates, instant compliance exports, and happier teams. The product continues to expand with modules for inventory, reagent forecasting, and partner reporting--all built on the same foundation from our first prototype.
