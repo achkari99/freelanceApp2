@@ -1,104 +1,70 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { AnimatedHero } from "@/components/home/animated-hero";
+import { StagedHero } from "@/components/home/staged-hero";
+import { HeroFeaturedList, type HeroHighlightCard } from "@/components/home/hero-featured-list";
+import { ProcessSteps } from "@/components/home/process-steps";
+import { StagedServices } from "@/components/home/staged-services";
 import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/ui/reveal";
-import { clientLogos } from "@/data/clients";
-import { services } from "@/data/services";
-import { ServiceShowcase } from "@/components/home/service-showcase";
 import { testimonials } from "@/data/testimonials";
 import { projects } from "content/work";
+import type { ProjectSummary } from "@/types/project";
 
 const featuredProjects = projects.filter((project) => project.featured || project.status === "case-study").slice(0, 3);
+const featuredProjectSummaries: ProjectSummary[] = featuredProjects.map(({ body, ...project }) => project);
+
+const heroHighlightCards: HeroHighlightCard[] = [
+  ...featuredProjectSummaries.map((project, index) => ({
+    id: project.slug,
+    title: project.title,
+    client: project.client,
+    timeline: project.timeline,
+    excerpt: project.excerpt,
+    tags: project.tags,
+    href: `/work/${project.slug}`,
+    hoverTone: (["sky", "violet", "emerald"] as const)[index % 3]
+  })),
+  {
+    id: "ai-prototype-kits",
+    title: "AI prototype kits",
+    client: "RightMind Lab",
+    timeline: "48 hour build",
+    excerpt: "Pre-built conversational flows, data hooks, and UI shells we customize in a single sprint.",
+    tags: ["AI UX", "Rapid build", "Playbooks"],
+    href: "/services",
+    hoverTone: "violet"
+  },
+  {
+    id: "founder-sprint-labs",
+    title: "Founder sprint labs",
+    client: "Launch partners",
+    timeline: "1 week handoff",
+    excerpt: "Product strategy, prototype, and revenue experiments bundled so founders can pitch with confidence.",
+    tags: ["Product strategy", "Testing", "Pitch decks"],
+    href: "/start-a-project",
+    hoverTone: "amber"
+  },
+  {
+    id: "fractional-product-pod",
+    title: "Fractional product pod",
+    client: "Growth teams",
+    timeline: "Monthly slate",
+    excerpt: "Design, engineering, and AI ops on tap to extend your roadmap without hiring full-time.",
+    tags: ["Fractional team", "Roadmap", "AI ops"],
+    href: "/contact",
+    hoverTone: "emerald"
+  }
+];
 
 export default function HomePage() {
   return (
     <div className="space-y-24 pb-24">
-      <section className="relative overflow-hidden text-white">
-        <div className="absolute inset-0 z-0">
-          <AnimatedHero />
-        </div>
-        <div className="absolute inset-0 z-10 bg-gradient-to-b from-slate-950/70 via-slate-950/40 to-slate-950/10" aria-hidden />
-        <div className="relative z-20 mx-auto flex max-w-6xl flex-col gap-10 px-6 py-28 lg:flex-row lg:items-center lg:px-8">
-          <Reveal className="space-y-6 lg:w-2/3" direction="up">
-            <Badge className="border-white/30 bg-white/10 text-white backdrop-blur-sm">
-              <Sparkles className="mr-2 h-3.5 w-3.5" /> ACH | Better than AI and faster
-            </Badge>
-            <h1 className="font-display text-4xl leading-tight sm:text-5xl lg:text-6xl">
-              Your idea, our prototype in 48 hours.
-            </h1>
-            <p className="max-w-2xl text-lg text-slate-200">
-              We are ACH, the rapid-build unit inside RightMind Lab. In forty-eight hours we deliver clickable or coded prototypes for AI products, SaaS platforms, and mobile experiences, complete with architecture notes so you can scale with confidence.
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Button asChild size="lg">
-                <Link href="/start-a-project">
-                  Start your prototype for free
-                  <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
-                </Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="border-white/30 text-white hover:border-white/60 hover:bg-white/10">
-                <Link href="/services">
-                  Explore what we build
-                  <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
-                </Link>
-              </Button>
-            </div>
-          </Reveal>
-          <Reveal className="grid w-full gap-4 rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur lg:w-1/3" direction="up" delay={0.12}>
-            {featuredProjects.map((project, index) => (
-              <Reveal key={project.slug} delay={0.2 + index * 0.08} className="h-full">
-                <Link href={`/work/${project.slug}`} className="group block h-full rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:border-white/30 hover:bg-white/10">
-                  <p className="text-sm uppercase tracking-wide text-slate-200">{project.client}</p>
-                  <p className="mt-2 font-semibold text-white">{project.title}</p>
-                  <p className="mt-3 text-sm text-slate-200">{project.excerpt}</p>
-                  <div className="mt-4 inline-flex items-center text-sm font-semibold text-white">
-                    View build story
-                    <ArrowRight className="ml-2 h-4 w-4 transition group-hover:translate-x-1" aria-hidden />
-                  </div>
-                </Link>
-              </Reveal>
-            ))}
-          </Reveal>
-        </div>
-      </section>
-      <div className="section-divider" aria-hidden />
-
-      <section className="mx-auto max-w-6xl px-6 lg:px-8">
-        <Reveal className="flex flex-wrap items-center justify-between gap-4" direction="up">
-          <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">
-            Teams scaling with RightMind Lab
-          </h2>
-          <Link href="/our-work" className="text-sm font-semibold text-slate-700 transition hover:text-sky-600 dark:text-slate-200 dark:hover:text-sky-400">
-            See all results
-          </Link>
-        </Reveal>
-        <div className="mt-8 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-6">
-          {clientLogos.map((client, index) => (
-            <Reveal key={client.name} delay={index * 0.06} className="h-full">
-              <Link
-                href={client.url}
-                className="group inline-flex h-20 w-full items-center justify-center rounded-2xl border border-slate-200 bg-white/80 px-4 py-3 transition hover:border-slate-300 hover:bg-white/100 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/60 dark:hover:bg-slate-900"
-              >
-                <Image
-                  src={client.logo}
-                  alt={`${client.name} logo`}
-                  width={120}
-                  height={40}
-                  sizes="(min-width: 1024px) 120px, 96px"
-                  className="max-h-12 w-auto opacity-80 transition group-hover:opacity-100 group-hover:grayscale-0 grayscale"
-                />
-              </Link>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {services.map((service, index) => (
-        <ServiceShowcase key={service.slug} service={service} index={index} />
-      ))}
+      <StagedHero />
+      <HeroFeaturedList cards={heroHighlightCards} />
+      <ProcessSteps />
+      <StagedServices />
 
       <section className="mx-auto max-w-6xl px-6 lg:px-8">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
@@ -203,3 +169,4 @@ export default function HomePage() {
     </div>
   );
 }
+

@@ -3,8 +3,51 @@
 import * as React from "react";
 import { cn, preferReducedMotion, withBasePath } from "@/lib/utils";
 
-const VANTA_THREE_SRC = withBasePath("/animations/animation2.js");
-const VANTA_RINGS_SRC = withBasePath("/animations/animation3.js");
+const VANTA_EFFECTS = {
+  rings: {
+    threeSrc: withBasePath("/animations/animation2.js"),
+    effectSrc: withBasePath("/animations/animation3.js"),
+    factory: "RINGS" as const,
+    baseOptions: {
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200.0,
+      minWidth: 200.0,
+      scale: 1.0,
+      scaleMobile: 1.0,
+      backgroundAlpha: 0,
+      color: 0x1f9ef5
+    }
+  },
+  waves: {
+    threeSrc: withBasePath("/animations/waves-three.js"),
+    effectSrc: withBasePath("/animations/waves-effect.js"),
+    factory: "WAVES" as const,
+    baseOptions: {
+      mouseControls: false,
+      touchControls: false,
+      gyroControls: false,
+      minHeight: 200.0,
+      minWidth: 200.0,
+      scale: 1.0,
+      scaleMobile: 1.0,
+      backgroundAlpha: 0,
+      color: 0x0ea5e9,
+      shininess: 30.0,
+      waveHeight: 18.0,
+      waveSpeed: 0.75,
+      zoom: 0.8
+    }
+  }
+} satisfies Record<string, {
+  threeSrc: string;
+  effectSrc: string;
+  factory: string;
+  baseOptions: Record<string, unknown>;
+}>;
+
+type VantaEffectKey = keyof typeof VANTA_EFFECTS;
 
 type VantaInstance = {
   destroy?: () => void;
@@ -13,6 +56,7 @@ type VantaInstance = {
 type AnimatedHeroProps = {
   className?: string;
   options?: Record<string, unknown>;
+  effect?: VantaEffectKey;
 };
 
 const loadScript = (src: string) => {
@@ -56,11 +100,12 @@ const loadScript = (src: string) => {
   });
 };
 
-export function AnimatedHero({ className, options }: AnimatedHeroProps = {}) {
+export function AnimatedHero({ className, options, effect = "rings" }: AnimatedHeroProps = {}) {
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   const effectRef = React.useRef<VantaInstance | null>(null);
   const shouldReduceMotion = preferReducedMotion();
   const [hasEnteredView, setHasEnteredView] = React.useState(false);
+  const effectConfig = VANTA_EFFECTS[effect] ?? VANTA_EFFECTS.rings;
 
   React.useEffect(() => {
     const element = containerRef.current;
@@ -86,7 +131,7 @@ export function AnimatedHero({ className, options }: AnimatedHeroProps = {}) {
   }, []);
 
   React.useEffect(() => {
-    if (shouldReduceMotion || !hasEnteredView || effectRef.current || !containerRef.current) {
+    if (shouldReduceMotion || !hasEnteredView || !containerRef.current) {
       return;
     }
 
@@ -94,32 +139,26 @@ export function AnimatedHero({ className, options }: AnimatedHeroProps = {}) {
 
     const init = async () => {
       try {
-        await loadScript(VANTA_THREE_SRC);
-        await loadScript(VANTA_RINGS_SRC);
+        await loadScript(effectConfig.threeSrc);
+        await loadScript(effectConfig.effectSrc);
 
         if (isCancelled || !containerRef.current) {
           return;
         }
 
         const vanta = (window as unknown as {
-          VANTA?: { RINGS?: (options: Record<string, unknown>) => VantaInstance };
+          VANTA?: Record<string, (config: Record<string, unknown>) => VantaInstance>;
         }).VANTA;
 
-        if (vanta?.RINGS) {
-          const baseOptions: Record<string, unknown> = {
-            el: containerRef.current,
-            mouseControls: true,
-            touchControls: true,
-            gyroControls: false,
-            minHeight: 200.0,
-            minWidth: 200.0,
-            scale: 1.0,
-            scaleMobile: 1.0,
-            backgroundAlpha: 0,
-            color: 0x1f9ef5
-          };
+        const initializer = vanta?.[effectConfig.factory];
 
-          effectRef.current = vanta.RINGS({ ...baseOptions, ...(options ?? {}) });
+        if (initializer) {
+          const baseOptions = {
+            ...effectConfig.baseOptions,
+            el: containerRef.current
+          } satisfies Record<string, unknown>;
+
+          effectRef.current = initializer({ ...baseOptions, ...(options ?? {}) });
         }
       } catch (error) {
         console.error("Failed to initialize Vanta background", error);
@@ -135,7 +174,8 @@ export function AnimatedHero({ className, options }: AnimatedHeroProps = {}) {
         effectRef.current = null;
       }
     };
-  }, [hasEnteredView, options, shouldReduceMotion]);
+  }, [effect, effectConfig.effectSrc, effectConfig.factory, effectConfig.threeSrc, effectConfig.baseOptions, hasEnteredView, options, shouldReduceMotion]);
 
   return <div ref={containerRef} className={cn("pointer-events-none relative h-full w-full", className)} aria-hidden />;
 }
+
