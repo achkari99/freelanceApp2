@@ -200,14 +200,14 @@ export function StagedHero() {
 
     wheelTarget.addEventListener("wheel", handleWheel, { passive: false });
     keyTarget.addEventListener("keydown", handleKeyDown, { passive: false });
-    touchTarget.addEventListener("touchstart", handleTouchStart, { passive: false });
-    touchTarget.addEventListener("touchmove", handleTouchMove, { passive: false });
+    touchTarget.addEventListener("touchstart", handleTouchStart as EventListener, { passive: false });
+    touchTarget.addEventListener("touchmove", handleTouchMove as EventListener, { passive: false });
 
     return () => {
       wheelTarget.removeEventListener("wheel", handleWheel);
       keyTarget.removeEventListener("keydown", handleKeyDown);
-      touchTarget.removeEventListener("touchstart", handleTouchStart);
-      touchTarget.removeEventListener("touchmove", handleTouchMove);
+      touchTarget.removeEventListener("touchstart", handleTouchStart as EventListener);
+      touchTarget.removeEventListener("touchmove", handleTouchMove as EventListener);
     };
   }, [prefersReducedMotion, hideIndicator, stage]);
 
@@ -229,8 +229,8 @@ export function StagedHero() {
     function detach() {
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("keydown", handleKeyDown);
-      touchTarget.removeEventListener("touchstart", handleTouchStart);
-      touchTarget.removeEventListener("touchmove", handleTouchMove);
+      touchTarget.removeEventListener("touchstart", handleTouchStart as EventListener);
+      touchTarget.removeEventListener("touchmove", handleTouchMove as EventListener);
     }
 
     function releaseHold() {
@@ -315,8 +315,8 @@ export function StagedHero() {
 
     window.addEventListener("wheel", handleWheel, { passive: false });
     window.addEventListener("keydown", handleKeyDown, { passive: false });
-    touchTarget.addEventListener("touchstart", handleTouchStart, { passive: false });
-    touchTarget.addEventListener("touchmove", handleTouchMove, { passive: false });
+    touchTarget.addEventListener("touchstart", handleTouchStart as EventListener, { passive: false });
+    touchTarget.addEventListener("touchmove", handleTouchMove as EventListener, { passive: false });
 
     return detach;
   }, [prefersReducedMotion, stage]);
