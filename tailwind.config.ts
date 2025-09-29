@@ -1,4 +1,4 @@
-﻿import type { Config } from "tailwindcss";
+import type { Config } from "tailwindcss";
 import defaultTheme from "tailwindcss/defaultTheme";
 
 const config: Config = {
@@ -11,8 +11,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Inter var", ...defaultTheme.fontFamily.sans],
-        display: ["Cal Sans", ...defaultTheme.fontFamily.sans]
+        sans: ["Inter Variable", ...defaultTheme.fontFamily.sans],
+        display: ["Playfair Display", "Cal Sans", ...defaultTheme.fontFamily.serif]
       },
       colors: {
         background: "var(--background)",
