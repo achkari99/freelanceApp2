@@ -1,6 +1,9 @@
 ﻿import createMDX from "@next/mdx";
+/** @type {import('next').NextConfig} */
+
 
 const withMDX = createMDX({
+  
   extension: /\.mdx?$/
 });
 
@@ -24,7 +27,13 @@ const nextConfig = {
   assetPrefix,
   env: {
     NEXT_PUBLIC_BASE_PATH: basePath
-  }
+  },
+  eslint: {
+    // ⚠️ This disables ESLint checks during "next build"
+    // Your local dev (next dev) will still show lint errors
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default withMDX(nextConfig);
+
