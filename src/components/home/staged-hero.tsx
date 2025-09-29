@@ -144,51 +144,55 @@ export function StagedHero() {
       scheduleUnlock(nextStage);
     };
 
-    const handleWheel = (event: WheelEvent) => {
-      if (stageRef.current >= FINAL_STAGE || event.deltaY <= 0) {
+    const handleWheel: EventListener = (event) => {
+      const wheelEvent = event as WheelEvent;
+      if (stageRef.current >= FINAL_STAGE || wheelEvent.deltaY <= 0) {
         return;
       }
 
-      event.preventDefault();
-      event.stopPropagation();
+      wheelEvent.preventDefault();
+      wheelEvent.stopPropagation();
       hideIndicator();
       advanceStage();
     };
 
-    const handleKeyDown = (event: KeyboardEvent) => {
+    const handleKeyDown: EventListener = (event) => {
+      const keyboardEvent = event as KeyboardEvent;
       if (stageRef.current >= FINAL_STAGE) {
         return;
       }
 
-      if (["ArrowDown", "PageDown", " ", "Enter"].includes(event.key)) {
-        event.preventDefault();
+      if (["ArrowDown", "PageDown", " ", "Enter"].includes(keyboardEvent.key)) {
+        keyboardEvent.preventDefault();
         hideIndicator();
         advanceStage();
       }
     };
 
-    const handleTouchStart = (event: TouchEvent) => {
-      touchStartRef.current = event.touches[0]?.clientY ?? null;
+    const handleTouchStart: EventListener = (event) => {
+      const touchEvent = event as TouchEvent;
+      touchStartRef.current = touchEvent.touches[0]?.clientY ?? null;
     };
 
-    const handleTouchMove = (event: TouchEvent) => {
+    const handleTouchMove: EventListener = (event) => {
+      const touchEvent = event as TouchEvent;
       if (stageRef.current >= FINAL_STAGE) {
         return;
       }
 
       if (touchStartRef.current === null) {
-        touchStartRef.current = event.touches[0]?.clientY ?? null;
+        touchStartRef.current = touchEvent.touches[0]?.clientY ?? null;
         return;
       }
 
-      const currentY = event.touches[0]?.clientY ?? touchStartRef.current;
-      const deltaY = touchStartRef.current - currentY;
+      const currentY = touchEvent.touches[0]?.clientY ?? touchStartRef.current;
+      const deltaY = (touchStartRef.current ?? currentY) - currentY;
 
       if (deltaY <= 0 || Math.abs(deltaY) < TOUCH_THRESHOLD) {
         return;
       }
 
-      event.preventDefault();
+      touchEvent.preventDefault();
       hideIndicator();
       advanceStage();
       touchStartRef.current = null;
@@ -200,14 +204,14 @@ export function StagedHero() {
 
     wheelTarget.addEventListener("wheel", handleWheel, { passive: false });
     keyTarget.addEventListener("keydown", handleKeyDown, { passive: false });
-    touchTarget.addEventListener("touchstart", handleTouchStart as EventListener, { passive: false });
-    touchTarget.addEventListener("touchmove", handleTouchMove as EventListener, { passive: false });
+    touchTarget.addEventListener("touchstart", handleTouchStart, { passive: false });
+    touchTarget.addEventListener("touchmove", handleTouchMove, { passive: false });
 
     return () => {
       wheelTarget.removeEventListener("wheel", handleWheel);
       keyTarget.removeEventListener("keydown", handleKeyDown);
-      touchTarget.removeEventListener("touchstart", handleTouchStart as EventListener);
-      touchTarget.removeEventListener("touchmove", handleTouchMove as EventListener);
+      touchTarget.removeEventListener("touchstart", handleTouchStart);
+      touchTarget.removeEventListener("touchmove", handleTouchMove);
     };
   }, [prefersReducedMotion, hideIndicator, stage]);
 
@@ -224,77 +228,67 @@ export function StagedHero() {
     finalScrollDeltaRef.current = 0;
     touchStartRef.current = null;
 
-    const touchTarget: EventTarget = heroRef.current ?? document;
+    const touchTarget: Document | HTMLElement = heroRef.current ?? document;
 
-    function detach() {
-      window.removeEventListener("wheel", handleWheel);
-      window.removeEventListener("keydown", handleKeyDown);
-      touchTarget.removeEventListener("touchstart", handleTouchStart as EventListener);
-      touchTarget.removeEventListener("touchmove", handleTouchMove as EventListener);
-    }
-
-    function releaseHold() {
-      finalScrollHoldRef.current = false;
-      finalScrollDeltaRef.current = 0;
-      touchStartRef.current = null;
-      detach();
-    }
-
-    function handleWheel(event: WheelEvent) {
+    const handleWheel: EventListener = (event) => {
       if (!finalScrollHoldRef.current) {
         detach();
         return;
       }
 
-      if (event.deltaY <= 0) {
+      const wheelEvent = event as WheelEvent;
+      if (wheelEvent.deltaY <= 0) {
         return;
       }
 
-      finalScrollDeltaRef.current += event.deltaY;
+      finalScrollDeltaRef.current += wheelEvent.deltaY;
 
       if (finalScrollDeltaRef.current < FINAL_SCROLL_UNLOCK_DISTANCE) {
-        event.preventDefault();
-        event.stopPropagation();
+        wheelEvent.preventDefault();
+        wheelEvent.stopPropagation();
         return;
       }
 
-      event.preventDefault();
+      wheelEvent.preventDefault();
       releaseHold();
-    }
+    };
 
-    function handleKeyDown(event: KeyboardEvent) {
+    const handleKeyDown: EventListener = (event) => {
       if (!finalScrollHoldRef.current) {
         detach();
         return;
       }
 
-      if (["ArrowDown", "PageDown", " ", "Enter"].includes(event.key)) {
-        event.preventDefault();
+      const keyboardEvent = event as KeyboardEvent;
+      if (["ArrowDown", "PageDown", " ", "Enter"].includes(keyboardEvent.key)) {
+        keyboardEvent.preventDefault();
         releaseHold();
       }
-    }
+    };
 
-    function handleTouchStart(event: TouchEvent) {
+    const handleTouchStart: EventListener = (event) => {
       if (!finalScrollHoldRef.current) {
         detach();
         return;
       }
 
-      touchStartRef.current = event.touches[0]?.clientY ?? null;
-    }
+      const touchEvent = event as TouchEvent;
+      touchStartRef.current = touchEvent.touches[0]?.clientY ?? null;
+    };
 
-    function handleTouchMove(event: TouchEvent) {
+    const handleTouchMove: EventListener = (event) => {
       if (!finalScrollHoldRef.current) {
         detach();
         return;
       }
 
+      const touchEvent = event as TouchEvent;
       if (touchStartRef.current === null) {
-        touchStartRef.current = event.touches[0]?.clientY ?? null;
+        touchStartRef.current = touchEvent.touches[0]?.clientY ?? null;
         return;
       }
 
-      const currentY = event.touches[0]?.clientY ?? touchStartRef.current;
+      const currentY = touchEvent.touches[0]?.clientY ?? touchStartRef.current;
       const deltaY = (touchStartRef.current ?? currentY) - currentY;
 
       if (deltaY <= 0) {
@@ -304,19 +298,33 @@ export function StagedHero() {
       finalScrollDeltaRef.current += deltaY;
 
       if (finalScrollDeltaRef.current < FINAL_SCROLL_UNLOCK_DISTANCE) {
-        event.preventDefault();
+        touchEvent.preventDefault();
         touchStartRef.current = currentY;
         return;
       }
 
-      event.preventDefault();
+      touchEvent.preventDefault();
       releaseHold();
-    }
+    };
+
+    const detach = () => {
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("keydown", handleKeyDown);
+      touchTarget.removeEventListener("touchstart", handleTouchStart);
+      touchTarget.removeEventListener("touchmove", handleTouchMove);
+    };
+
+    const releaseHold = () => {
+      finalScrollHoldRef.current = false;
+      finalScrollDeltaRef.current = 0;
+      touchStartRef.current = null;
+      detach();
+    };
 
     window.addEventListener("wheel", handleWheel, { passive: false });
     window.addEventListener("keydown", handleKeyDown, { passive: false });
-    touchTarget.addEventListener("touchstart", handleTouchStart as EventListener, { passive: false });
-    touchTarget.addEventListener("touchmove", handleTouchMove as EventListener, { passive: false });
+    touchTarget.addEventListener("touchstart", handleTouchStart, { passive: false });
+    touchTarget.addEventListener("touchmove", handleTouchMove, { passive: false });
 
     return detach;
   }, [prefersReducedMotion, stage]);

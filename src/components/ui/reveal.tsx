@@ -34,17 +34,20 @@ export const Reveal = React.forwardRef<HTMLDivElement, RevealProps>(function Rev
   },
   ref
 ) {
-  const initial: Record<string, unknown> = { opacity: 0 };
-  if (direction === "up") initial.y = offset;
-  if (direction === "down") initial.y = -offset;
-  if (direction === "left") initial.x = offset;
-  if (direction === "right") initial.x = -offset;
-  if (blur) initial.filter = "blur(12px)";
+  const initial = React.useMemo(() => {
+    const target: Record<string, number | string> = { opacity: 0 };
+    if (direction === "up") target.y = offset;
+    if (direction === "down") target.y = -offset;
+    if (direction === "left") target.x = offset;
+    if (direction === "right") target.x = -offset;
+    if (blur) target.filter = "blur(12px)";
+    return target;
+  }, [direction, offset, blur]);
 
   return (
     <motion.div
       ref={ref}
-      initial={initial}
+      initial={initial as MotionDivProps["initial"]}
       whileInView={{ opacity: 1, x: 0, y: 0, filter: blur ? "blur(0px)" : undefined }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration, delay, ease }}
