@@ -45,7 +45,7 @@ export function StagedHero() {
     }
 
     const supportsScrollRestoration = "scrollRestoration" in window.history;
-    let previousRestoration: string | undefined;
+    let previousRestoration: History["scrollRestoration"] | undefined;
 
     if (supportsScrollRestoration) {
       previousRestoration = window.history.scrollRestoration;
@@ -442,3 +442,4 @@ export function StagedHero() {
     </section>
   );
 }
+

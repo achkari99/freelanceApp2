@@ -1,13 +1,13 @@
 import type { Project, ProjectSummary } from "@/types/project";
 
-import RightMindModelPage, { project as rightmindModel } from "./brightwave-platform.mdx";
-import SuperAIPage, { project as superAI } from "./north-beacon-redesign.mdx";
-import StockFlowPage, { project as stockFlow } from "./nova-commerce-launch.mdx";
-import LabOpsPage, { project as labOps } from "./ether-labs-sprint.mdx";
-import FounderFlowPage, { project as founderFlow } from "./voyage-fund-story.mdx";
-import SuperAIMobilePage, { project as superAiMobile } from "./sunset-fm-app.mdx";
-import LaunchPadPage, { project as launchPad } from "./atlas-supply-coming-soon.mdx";
-import InsightCopilotPage, { project as insightCopilot } from "./glacier-bio-coming-soon.mdx";
+import RightMindModelPage, { project as rightmindModel } from "./brightwave-platform";
+import SuperAIPage, { project as superAI } from "./north-beacon-redesign";
+import StockFlowPage, { project as stockFlow } from "./nova-commerce-launch";
+import LabOpsPage, { project as labOps } from "./ether-labs-sprint";
+import FounderFlowPage, { project as founderFlow } from "./voyage-fund-story";
+import SuperAIMobilePage, { project as superAiMobile } from "./sunset-fm-app";
+import LaunchPadPage, { project as launchPad } from "./atlas-supply-coming-soon";
+import InsightCopilotPage, { project as insightCopilot } from "./glacier-bio-coming-soon";
 
 const modules = [
   { project: rightmindModel, body: RightMindModelPage },
