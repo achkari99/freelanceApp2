@@ -194,20 +194,20 @@ export function StagedHero() {
       touchStartRef.current = null;
     };
 
-    const wheelTarget: EventTarget = window;
-    const keyTarget: EventTarget = window;
-    const touchTarget: EventTarget = heroRef.current ?? document;
+    const wheelTarget = window;
+    const keyTarget = window;
+    const touchTarget = heroRef.current ?? document;
 
-    wheelTarget.addEventListener?.("wheel", handleWheel, { passive: false });
-    keyTarget.addEventListener?.("keydown", handleKeyDown, { passive: false });
-    touchTarget.addEventListener?.("touchstart", handleTouchStart, { passive: false });
-    touchTarget.addEventListener?.("touchmove", handleTouchMove, { passive: false });
+    wheelTarget.addEventListener("wheel", handleWheel, { passive: false });
+    keyTarget.addEventListener("keydown", handleKeyDown, { passive: false });
+    touchTarget.addEventListener("touchstart", handleTouchStart, { passive: false });
+    touchTarget.addEventListener("touchmove", handleTouchMove, { passive: false });
 
     return () => {
-      wheelTarget.removeEventListener?.("wheel", handleWheel as EventListener);
-      keyTarget.removeEventListener?.("keydown", handleKeyDown as EventListener);
-      touchTarget.removeEventListener?.("touchstart", handleTouchStart as EventListener);
-      touchTarget.removeEventListener?.("touchmove", handleTouchMove as EventListener);
+      wheelTarget.removeEventListener("wheel", handleWheel);
+      keyTarget.removeEventListener("keydown", handleKeyDown);
+      touchTarget.removeEventListener("touchstart", handleTouchStart);
+      touchTarget.removeEventListener("touchmove", handleTouchMove);
     };
   }, [prefersReducedMotion, hideIndicator, stage]);
 
@@ -227,10 +227,10 @@ export function StagedHero() {
     const touchTarget: EventTarget = heroRef.current ?? document;
 
     function detach() {
-      window.removeEventListener("wheel", handleWheel as EventListener);
-      window.removeEventListener("keydown", handleKeyDown as EventListener);
-      touchTarget.removeEventListener("touchstart", handleTouchStart as EventListener);
-      touchTarget.removeEventListener("touchmove", handleTouchMove as EventListener);
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("keydown", handleKeyDown);
+      touchTarget.removeEventListener("touchstart", handleTouchStart);
+      touchTarget.removeEventListener("touchmove", handleTouchMove);
     }
 
     function releaseHold() {
