@@ -19,15 +19,6 @@ const nextConfig = {
   },
   transpilePackages: ["framer-motion"],
   pageExtensions: ["ts", "tsx", "mdx"],
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "**"
-      }
-    ],
-    unoptimized: true
-  },
   output: "export",
   basePath,
   assetPrefix,

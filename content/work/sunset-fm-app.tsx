@@ -1,4 +1,5 @@
 ﻿import { withBasePath } from "@/lib/utils";
+import type { Project } from "@/types/project";
 
 export const project = {
   slug: "super-ai-mobile",
@@ -20,7 +21,7 @@ export const project = {
   ],
   gallery: [],
   publishedAt: "2024-07-05"
-};
+} satisfies Omit<Project, "body">;
 
 export default function SunsetFmApp() {
   return (

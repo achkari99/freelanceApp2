@@ -190,7 +190,7 @@ export default function ServicesPage() {
 
 
 
-        <h1 className="font-display text-4xl tracking-tight text-slate-900 dark:text-white">Better than AI--and faster. Here's how we build.</h1>
+        <h1 className="font-display text-4xl tracking-tight text-slate-900 dark:text-white">Better than AI--and faster. Here&rsquo;s how we build.</h1>
 
 
 
@@ -531,6 +531,7 @@ export default function ServicesPage() {
 
 
 }
+
 
 
 

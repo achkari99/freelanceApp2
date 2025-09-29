@@ -1,4 +1,5 @@
 ﻿import { withBasePath } from "@/lib/utils";
+import type { Project } from "@/types/project";
 
 export const project = {
   slug: "stockflow-operations",
@@ -22,7 +23,7 @@ export const project = {
   ],
   gallery: [],
   publishedAt: "2024-06-02"
-};
+} satisfies Omit<Project, "body">;
 
 export default function NovaCommerceLaunch() {
   return (

@@ -1,4 +1,5 @@
 ﻿import { withBasePath } from "@/lib/utils";
+import type { Project } from "@/types/project";
 
 export const project = {
   slug: "founderflow-crm",
@@ -21,7 +22,7 @@ export const project = {
   ],
   gallery: [],
   publishedAt: "2024-06-18"
-};
+} satisfies Omit<Project, "body">;
 
 export default function VoyageFundStory() {
   return (

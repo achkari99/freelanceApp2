@@ -1,4 +1,5 @@
 ﻿import { withBasePath } from "@/lib/utils";
+import type { Project } from "@/types/project";
 
 export const project = {
   slug: "rightmind-model-recommender",
@@ -31,7 +32,7 @@ export const project = {
     }
   ],
   publishedAt: "2024-05-10"
-};
+} satisfies Omit<Project, "body">;
 
 export default function BrightwavePlatform() {
   return (

@@ -10,13 +10,10 @@ import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/ui/reveal";
 import { testimonials } from "@/data/testimonials";
 import { projects } from "content/work";
-import type { ProjectSummary } from "@/types/project";
 
 const featuredProjects = projects.filter((project) => project.featured || project.status === "case-study").slice(0, 3);
-const featuredProjectSummaries: ProjectSummary[] = featuredProjects.map(({ body, ...project }) => project);
-
 const heroHighlightCards: HeroHighlightCard[] = [
-  ...featuredProjectSummaries.map((project, index) => ({
+  ...featuredProjects.map(({ body: _body, ...project }, index) => ({
     id: project.slug,
     title: project.title,
     client: project.client,

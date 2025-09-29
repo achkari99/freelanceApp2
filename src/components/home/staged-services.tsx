@@ -86,7 +86,7 @@ export function StagedServices() {
     return () => {
       observer.disconnect();
     };
-  }, [prefersReducedMotion, services.length]);
+  }, [prefersReducedMotion]);
 
   const handleIndicatorClick = React.useCallback(
     (index: number) => {
@@ -267,3 +267,4 @@ function StaticService({ service, index }: { service: (typeof services)[number];
     </section>
   );
 }
+

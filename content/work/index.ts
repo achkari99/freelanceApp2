@@ -43,3 +43,4 @@ export const projectFilters = {
   services: Array.from(new Set(projects.flatMap((project) => project.services))).sort(),
   tags: Array.from(new Set(projects.flatMap((project) => project.tags))).sort()
 };
+

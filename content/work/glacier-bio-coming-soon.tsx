@@ -1,4 +1,5 @@
 ﻿import { withBasePath } from "@/lib/utils";
+import type { Project } from "@/types/project";
 
 export const project = {
   slug: "insight-copilot",
@@ -18,7 +19,7 @@ export const project = {
   kpis: [],
   gallery: [],
   publishedAt: "2024-10-12"
-};
+} satisfies Omit<Project, "body">;
 
 export default function GlacierBioComingSoon() {
   return (

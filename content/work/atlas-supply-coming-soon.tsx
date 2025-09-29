@@ -1,4 +1,5 @@
 ﻿import { withBasePath } from "@/lib/utils";
+import type { Project } from "@/types/project";
 
 export const project = {
   slug: "launchpad-workspace",
@@ -18,7 +19,7 @@ export const project = {
   kpis: [],
   gallery: [],
   publishedAt: "2024-09-30"
-};
+} satisfies Omit<Project, "body">;
 
 export default function AtlasSupplyComingSoon() {
   return (
