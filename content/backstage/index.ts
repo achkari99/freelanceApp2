@@ -1,8 +1,8 @@
 import type { BackstagePost, BackstagePostSummary } from "@/types/post";
 
-import OperatingPrinciples, { post as operatingPrinciples } from "./operating-principles.mdx";
-import StorytellingFramework, { post as storytellingFramework } from "./storytelling-framework.mdx";
-import WeeklyFieldNotes, { post as weeklyFieldNotes } from "./weekly-field-notes.mdx";
+import OperatingPrinciples, { post as operatingPrinciples } from "./operating-principles";
+import StorytellingFramework, { post as storytellingFramework } from "./storytelling-framework";
+import WeeklyFieldNotes, { post as weeklyFieldNotes } from "./weekly-field-notes";
 
 const modules = [
   { post: operatingPrinciples, body: OperatingPrinciples },
