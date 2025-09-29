@@ -1,10 +1,14 @@
-import createMDX from "@next/mdx"
+import createMDX from "@next/mdx";
 
 const withMDX = createMDX({
   extension: /\.mdx?$/
 });
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+const repoName = process.env.GITHUB_REPOSITORY?.split("/")?.[1];
+const isGithubPages = process.env.GITHUB_PAGES === "true" && !!repoName;
+const inferredBasePath = isGithubPages ? `/${repoName}` : "";
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? inferredBasePath;
+const assetPrefix = basePath ? `${basePath}/` : undefined;
 
 const nextConfig = {
   reactStrictMode: true,
@@ -26,7 +30,7 @@ const nextConfig = {
   },
   output: "export",
   basePath,
-  assetPrefix: basePath || undefined,
+  assetPrefix,
   env: {
     NEXT_PUBLIC_BASE_PATH: basePath
   }
