@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { motion, useReducedMotion as useFramerReducedMotion } from "framer-motion";
-import { ArrowRight, ChevronDown, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -32,6 +32,7 @@ export function StagedHero() {
 
   const finalScrollHoldRef = React.useRef(false);
   const finalScrollDeltaRef = React.useRef(0);
+  const indicatorDismissedRef = React.useRef(false);
 
   const isBaseStage = stage === 0;
 
@@ -90,11 +91,16 @@ export function StagedHero() {
     });
   }, []);
 
+  const markIndicatorDismissed = React.useCallback(() => {
+    indicatorDismissedRef.current = true;
+    hideIndicator();
+  }, [hideIndicator]);
+
   React.useEffect(() => {
     if (stage > 0) {
-      hideIndicator();
+      markIndicatorDismissed();
     }
-  }, [stage, hideIndicator]);
+  }, [stage, markIndicatorDismissed]);
 
   React.useEffect(() => {
     if (!showIndicator || prefersReducedMotion) {
@@ -102,15 +108,30 @@ export function StagedHero() {
     }
 
     const handleScroll = () => {
-      hideIndicator();
+      if (!indicatorDismissedRef.current && typeof window !== "undefined" && window.scrollY <= 2) {
+        return;
+      }
+      markIndicatorDismissed();
+    };
+
+    const handleKeyDown = () => {
+      markIndicatorDismissed();
+    };
+
+    const handlePointerDown = () => {
+      markIndicatorDismissed();
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("keydown", handleKeyDown, { passive: true });
+    window.addEventListener("pointerdown", handlePointerDown, { passive: true });
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("pointerdown", handlePointerDown);
     };
-  }, [showIndicator, prefersReducedMotion, hideIndicator]);
+  }, [showIndicator, prefersReducedMotion, markIndicatorDismissed]);
 
   React.useEffect(() => {
     if (typeof document === "undefined" || stage >= FINAL_STAGE) {
@@ -139,7 +160,7 @@ export function StagedHero() {
       }
 
       gateRef.current = true;
-      hideIndicator();
+      markIndicatorDismissed();
       setStage(nextStage);
       scheduleUnlock(nextStage);
     };
@@ -152,7 +173,7 @@ export function StagedHero() {
 
       wheelEvent.preventDefault();
       wheelEvent.stopPropagation();
-      hideIndicator();
+      markIndicatorDismissed();
       advanceStage();
     };
 
@@ -164,7 +185,7 @@ export function StagedHero() {
 
       if (["ArrowDown", "PageDown", " ", "Enter"].includes(keyboardEvent.key)) {
         keyboardEvent.preventDefault();
-        hideIndicator();
+        markIndicatorDismissed();
         advanceStage();
       }
     };
@@ -193,7 +214,7 @@ export function StagedHero() {
       }
 
       touchEvent.preventDefault();
-      hideIndicator();
+      markIndicatorDismissed();
       advanceStage();
       touchStartRef.current = null;
     };
@@ -334,15 +355,15 @@ export function StagedHero() {
   const bodyState = stage >= 3 ? "enter" : "initial";
 
   const handleIndicatorActivate = React.useCallback(() => {
-    hideIndicator();
+    markIndicatorDismissed();
     if (typeof window !== "undefined") {
       window.scrollBy({ top: window.innerHeight * 0.4, behavior: "smooth" });
     }
-  }, [hideIndicator]);
+  }, [markIndicatorDismissed]);
 
   const handlePrimaryClick = React.useCallback(() => {
-    hideIndicator();
-  }, [hideIndicator]);
+    markIndicatorDismissed();
+  }, [markIndicatorDismissed]);
 
   return (
     <section
@@ -429,25 +450,26 @@ export function StagedHero() {
         <motion.button
           type="button"
           onClick={handleIndicatorActivate}
-          aria-label="Scroll to unveil more"
-          className="group absolute bottom-10 left-6 z-30 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.35em] text-white/70 sm:left-10 lg:left-16"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 0.85, y: 0 }}
-          exit={{ opacity: 0, y: 12 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          aria-label="Scroll down"
+          className="group pointer-events-auto absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 rounded-full bg-white/12 px-6 py-2.5 text-sm font-semibold text-white/90 ring-1 ring-white/25 backdrop-blur transition hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400 dark:bg-white/20"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: prefersReducedMotion ? 1 : 0.95 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: prefersReducedMotion ? 0 : 0.45, ease: [0.25, 0.8, 0.25, 1] }}
         >
-          <span aria-hidden="true" className="select-none text-white/60">Scroll</span>
-          <motion.span
-            aria-hidden="true"
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 1.5, ease: "easeInOut", repeat: Infinity }}
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white group-hover:border-white/40"
-          >
-            <ChevronDown className="h-4 w-4" />
-          </motion.span>
+          <span className="text-sm">Scroll down &darr;</span>
         </motion.button>
       ) : null}
     </section>
   );
 }
+
+
+
+
+
+
+
+
+
 
