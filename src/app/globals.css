@@ -5,6 +5,7 @@
 :root {
   --background: 252 252 252;
   --foreground: 15 23 42;
+  --foreground-strong: 15 23 42;
   --muted: 148 163 184;
   --accent: 37 99 235;
   --radius: 0.9rem;
@@ -13,6 +14,7 @@
 .dark {
   --background: 10 12 25;
   --foreground: 241 245 249;
+  --foreground-strong: 248 250 252;
   --muted: 100 116 139;
   --accent: 96 165 250;
 }
@@ -25,6 +27,12 @@ body {
 
 ::selection {
   background-color: rgba(var(--accent), 0.25);
+}
+
+@layer utilities {
+  .text-foreground-strong {
+    color: rgb(var(--foreground-strong));
+  }
 }
 
 .prose img {

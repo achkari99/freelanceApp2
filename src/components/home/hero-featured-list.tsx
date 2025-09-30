@@ -114,7 +114,7 @@ export function HeroFeaturedList({ cards }: HeroFeaturedListProps) {
                   <span className="hidden h-1 w-1 rounded-full bg-slate-400 last:hidden dark:bg-slate-500 sm:block" aria-hidden />
                   <span className="text-slate-500 dark:text-slate-400">{card.timeline}</span>
                 </div>
-                <h3 className={"font-display text-2xl text-slate-900 transition " + tone.heading}>
+                <h3 className={`font-display text-2xl transition text-foreground-strong ${tone.heading}`}>
                   {card.title}
                 </h3>
                 <p className="text-sm text-slate-600 dark:text-slate-300">{card.excerpt}</p>

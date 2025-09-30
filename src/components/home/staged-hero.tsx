@@ -24,7 +24,7 @@ const FINAL_SCROLL_UNLOCK_DISTANCE = 140;
 export function StagedHero() {
   const prefersReducedMotion = useFramerReducedMotion() || preferReducedMotion();
   const [stage, setStage] = React.useState(prefersReducedMotion ? FINAL_STAGE : 0);
-  const [showIndicator, setShowIndicator] = React.useState(() => !prefersReducedMotion);
+  const [showScrollCue, setShowScrollCue] = React.useState(true);
   const stageRef = React.useRef(stage);
   const gateRef = React.useRef(false);
   const touchStartRef = React.useRef<number | null>(null);
@@ -32,7 +32,7 @@ export function StagedHero() {
 
   const finalScrollHoldRef = React.useRef(false);
   const finalScrollDeltaRef = React.useRef(0);
-  const indicatorDismissedRef = React.useRef(false);
+  const scrollCueDismissedRef = React.useRef(false);
 
   const isBaseStage = stage === 0;
 
@@ -65,7 +65,6 @@ export function StagedHero() {
   React.useEffect(() => {
     if (prefersReducedMotion) {
       setStage(FINAL_STAGE);
-      setShowIndicator(false);
       finalScrollHoldRef.current = false;
       finalScrollDeltaRef.current = 0;
     }
@@ -82,44 +81,39 @@ export function StagedHero() {
     }
   }, [stage, prefersReducedMotion]);
 
-  const hideIndicator = React.useCallback(() => {
-    setShowIndicator((previous) => {
-      if (!previous) {
-        return previous;
-      }
-      return false;
-    });
+  const dismissScrollCue = React.useCallback(() => {
+    if (scrollCueDismissedRef.current) {
+      return;
+    }
+
+    scrollCueDismissedRef.current = true;
+    setShowScrollCue(false);
   }, []);
 
-  const markIndicatorDismissed = React.useCallback(() => {
-    indicatorDismissedRef.current = true;
-    hideIndicator();
-  }, [hideIndicator]);
-
   React.useEffect(() => {
-    if (stage > 0) {
-      markIndicatorDismissed();
+    if (!prefersReducedMotion && stage > 0) {
+      dismissScrollCue();
     }
-  }, [stage, markIndicatorDismissed]);
+  }, [stage, prefersReducedMotion, dismissScrollCue]);
 
   React.useEffect(() => {
-    if (!showIndicator || prefersReducedMotion) {
+    if (!showScrollCue) {
       return;
     }
 
     const handleScroll = () => {
-      if (!indicatorDismissedRef.current && typeof window !== "undefined" && window.scrollY <= 2) {
+      if (!scrollCueDismissedRef.current && typeof window !== "undefined" && window.scrollY <= 2) {
         return;
       }
-      markIndicatorDismissed();
+      dismissScrollCue();
     };
 
     const handleKeyDown = () => {
-      markIndicatorDismissed();
+      dismissScrollCue();
     };
 
     const handlePointerDown = () => {
-      markIndicatorDismissed();
+      dismissScrollCue();
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -131,7 +125,7 @@ export function StagedHero() {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("pointerdown", handlePointerDown);
     };
-  }, [showIndicator, prefersReducedMotion, markIndicatorDismissed]);
+  }, [showScrollCue, dismissScrollCue]);
 
   React.useEffect(() => {
     if (typeof document === "undefined" || stage >= FINAL_STAGE) {
@@ -160,7 +154,7 @@ export function StagedHero() {
       }
 
       gateRef.current = true;
-      markIndicatorDismissed();
+      dismissScrollCue();
       setStage(nextStage);
       scheduleUnlock(nextStage);
     };
@@ -173,7 +167,7 @@ export function StagedHero() {
 
       wheelEvent.preventDefault();
       wheelEvent.stopPropagation();
-      markIndicatorDismissed();
+      dismissScrollCue();
       advanceStage();
     };
 
@@ -185,7 +179,7 @@ export function StagedHero() {
 
       if (["ArrowDown", "PageDown", " ", "Enter"].includes(keyboardEvent.key)) {
         keyboardEvent.preventDefault();
-        markIndicatorDismissed();
+        dismissScrollCue();
         advanceStage();
       }
     };
@@ -214,7 +208,7 @@ export function StagedHero() {
       }
 
       touchEvent.preventDefault();
-      markIndicatorDismissed();
+      dismissScrollCue();
       advanceStage();
       touchStartRef.current = null;
     };
@@ -234,7 +228,7 @@ export function StagedHero() {
       touchTarget.removeEventListener("touchstart", handleTouchStart);
       touchTarget.removeEventListener("touchmove", handleTouchMove);
     };
-  }, [prefersReducedMotion, hideIndicator, stage]);
+  }, [prefersReducedMotion, dismissScrollCue, stage]);
 
   React.useEffect(() => {
     if (
@@ -354,16 +348,16 @@ export function StagedHero() {
   const headlineState = stage >= 2 ? "enter" : "initial";
   const bodyState = stage >= 3 ? "enter" : "initial";
 
-  const handleIndicatorActivate = React.useCallback(() => {
-    markIndicatorDismissed();
+  const handleScrollCueActivate = React.useCallback(() => {
+    dismissScrollCue();
     if (typeof window !== "undefined") {
       window.scrollBy({ top: window.innerHeight * 0.4, behavior: "smooth" });
     }
-  }, [markIndicatorDismissed]);
+  }, [dismissScrollCue]);
 
   const handlePrimaryClick = React.useCallback(() => {
-    markIndicatorDismissed();
-  }, [markIndicatorDismissed]);
+    dismissScrollCue();
+  }, [dismissScrollCue]);
 
   return (
     <section
@@ -446,16 +440,19 @@ export function StagedHero() {
         </motion.div>
       </motion.div>
 
-      {showIndicator ? (
+      {showScrollCue ? (
         <motion.button
           type="button"
-          onClick={handleIndicatorActivate}
+          onClick={handleScrollCueActivate}
           aria-label="Scroll down"
-          className="group pointer-events-auto absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 rounded-full bg-white/12 px-6 py-2.5 text-sm font-semibold text-white/90 ring-1 ring-white/25 backdrop-blur transition hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400 dark:bg-white/20"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: prefersReducedMotion ? 1 : 0.95 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: prefersReducedMotion ? 0 : 0.45, ease: [0.25, 0.8, 0.25, 1] }}
+          className="group pointer-events-auto absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 rounded-full bg-white/12 px-5 py-2 text-sm font-semibold text-white/90 ring-1 ring-white/25 backdrop-blur transition hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400 dark:bg-white/15"
+          initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 6 }}
+          animate={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: [0, -6, 0] }}
+          transition={
+            prefersReducedMotion
+              ? { duration: 0.2 }
+              : { duration: 1.8, ease: [0.45, 0, 0.55, 1], repeat: Infinity }
+          }
         >
           <span className="text-sm">Scroll down &darr;</span>
         </motion.button>
