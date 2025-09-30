@@ -5,6 +5,7 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
+
 import { siteConfig } from "@/lib/site-config";
 import { ThemeToggle } from "./theme-toggle";
 import { cn } from "@/lib/utils";
@@ -13,6 +14,8 @@ export function SiteHeader() {
   const pathname = usePathname();
   const [isOpen, setOpen] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
+
+  const navigationItems = React.useMemo(() => [{ href: "/", label: "Main" }, ...siteConfig.navigation], []);
 
   React.useEffect(() => {
     setOpen(false);
@@ -33,32 +36,41 @@ export function SiteHeader() {
   );
 
   const CTA = siteConfig.actions[0];
+  const isCTAActive = pathname === CTA?.href;
 
   return (
     <header className={headerClasses}>
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-4 lg:px-8">
-        <Link href="/" className="flex items-center gap-2 font-display text-lg tracking-tight">
-          <span aria-hidden className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-sky-500 text-sm font-semibold text-white shadow-[0_10px_30px_-20px_rgba(14,165,233,0.8)]">
-            ACH
-          </span>
-          <span className="leading-none">{siteConfig.name}</span>
-          <span className="sr-only">Return home</span>
-        </Link>
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
-          {siteConfig.navigation.map((item) => {
-            const isActive = pathname === item.href;
+      <div className="flex w-full items-center gap-4 px-6 py-4 md:px-10 lg:px-12">
+        <div className="flex flex-shrink-0 items-center gap-3">
+          <Link href="/" className="flex items-center gap-2 font-display text-lg tracking-tight">
+            <span
+              aria-hidden
+              className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-sky-500 text-sm font-semibold text-white shadow-[0_10px_30px_-20px_rgba(14,165,233,0.8)]"
+            >
+              ACH
+            </span>
+            <span className="leading-none">{siteConfig.name}</span>
+            <span className="sr-only">Return home</span>
+          </Link>
+        </div>
+
+        <nav className="hidden flex-1 flex-wrap items-center justify-center gap-2 md:flex" aria-label="Primary">
+          {navigationItems.map((item) => {
+            const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(`${item.href}/`));
+            const isLabNotes = item.href === "/backstage";
+            const linkClasses = cn(
+              "relative inline-flex min-h-[2.5rem] items-center justify-center rounded-full px-4 py-2 text-sm font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500",
+              "text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white",
+              isActive &&
+                (isLabNotes
+                  ? "bg-sky-600 text-white shadow-[0_18px_50px_-30px_rgba(37,99,235,0.6)] dark:bg-sky-500"
+                  : "text-slate-900 dark:text-white")
+            );
+
             return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "relative rounded-full px-4 py-2 text-sm font-medium text-slate-600 transition hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:text-slate-300 dark:hover:text-white",
-                  isActive && "text-slate-900 dark:text-white"
-                )}
-                aria-current={isActive ? "page" : undefined}
-              >
+              <Link key={item.href} href={item.href} className={linkClasses} aria-current={isActive ? "page" : undefined}>
                 <span>{item.label}</span>
-                {isActive ? (
+                {isActive && !isLabNotes ? (
                   <motion.span
                     layoutId="header-active-pill"
                     initial={{ opacity: 0, scale: 0.9 }}
@@ -72,11 +84,18 @@ export function SiteHeader() {
             );
           })}
         </nav>
-        <div className="flex items-center gap-3">
+
+        <div className="flex flex-shrink-0 items-center gap-3">
           {CTA ? (
             <Link
               href={CTA.href}
-              className="hidden rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 md:inline-flex"
+              className={cn(
+                "hidden rounded-full px-4 py-2 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 md:inline-flex",
+                isCTAActive
+                  ? "bg-sky-600 text-white shadow-[0_18px_55px_-28px_rgba(37,99,235,0.55)] hover:bg-sky-500 dark:bg-sky-500 dark:hover:bg-sky-400"
+                  : "bg-slate-900 text-white shadow-sm hover:bg-slate-700 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200"
+              )}
+              aria-current={isCTAActive ? "page" : undefined}
             >
               {CTA.label}
             </Link>
@@ -103,6 +122,7 @@ export function SiteHeader() {
           </button>
         </div>
       </div>
+
       <AnimatePresence>
         {isOpen ? (
           <motion.nav
@@ -112,16 +132,18 @@ export function SiteHeader() {
             exit={{ height: 0, opacity: 0 }}
             className="md:hidden"
           >
-            <ul className="flex flex-col gap-1 border-t border-slate-200 bg-[rgb(var(--background))] px-6 py-4 dark:border-slate-800">
-              {siteConfig.navigation.map((item) => {
-                const isActive = pathname === item.href;
+            <ul className="flex flex-col gap-1 border-t border-slate-200 bg-[rgb(var(--background))] px-6 py-4 dark:border-slate-800 md:px-10 lg:px-12">
+              {navigationItems.map((item) => {
+                const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(`${item.href}/`));
+                const isLabNotes = item.href === "/backstage";
                 return (
                   <li key={item.href}>
                     <Link
                       href={item.href}
                       className={cn(
-                        "block rounded-lg px-4 py-2 text-base font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white",
-                        isActive && "bg-slate-900/5 text-slate-900 dark:bg-white/10 dark:text-white"
+                        "block rounded-lg px-4 py-2 text-base font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500",
+                        "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white",
+                        isActive && (isLabNotes ? "bg-sky-600 text-white dark:bg-sky-500" : "bg-slate-900/5 text-slate-900 dark:bg-white/10 dark:text-white")
                       )}
                       aria-current={isActive ? "page" : undefined}
                     >
@@ -134,7 +156,13 @@ export function SiteHeader() {
                 {CTA ? (
                   <Link
                     href={CTA.href}
-                    className="block rounded-lg bg-slate-900 px-4 py-2 text-base font-semibold text-white hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-300"
+                    className={cn(
+                      "block rounded-lg px-4 py-2 text-base font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500",
+                      isCTAActive
+                        ? "bg-sky-600 text-white hover:bg-sky-500 dark:bg-sky-500 dark:hover:bg-sky-400"
+                        : "bg-slate-900 text-white hover:bg-slate-700 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200"
+                    )}
+                    aria-current={isCTAActive ? "page" : undefined}
                   >
                     {CTA.label}
                   </Link>
