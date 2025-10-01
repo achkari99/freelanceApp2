@@ -2,7 +2,7 @@ import "./globals.css";
 
 
 
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import Script from "next/script";
 
@@ -25,6 +25,12 @@ import "@/lib/fonts";
 import { siteConfig } from "@/lib/site-config";
 
 
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover"
+};
 
 export const metadata: Metadata = {
 
@@ -136,11 +142,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
           <GlobalWavesBackground />
 
-          <div className="flex min-h-screen flex-col">
+          <div className="flex min-h-screen flex-col pb-safe">
 
             <SiteHeader />
 
-            <main id="main" className="flex-1">
+            <main id="main" className="flex-1 pt-safe">
 
               {children}
 

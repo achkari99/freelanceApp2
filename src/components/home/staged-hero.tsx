@@ -362,12 +362,12 @@ export function StagedHero() {
   return (
     <section
       ref={heroRef}
-      className="relative flex h-screen w-full overflow-hidden bg-slate-950 px-6 py-20 text-white sm:px-10 lg:px-16"
+      className="relative flex min-h-[100svh] w-full overflow-hidden bg-slate-950 px-safe pb-20 pt-24 text-white sm:px-8 sm:pb-24 lg:px-16 pt-safe pb-safe"
       aria-label="Hero"
     >
       {stage >= 1 ? (
         <motion.div
-          className="pointer-events-none absolute inset-y-0 right-0 z-0 w-full sm:w-4/5 lg:w-2/3 xl:w-1/2"
+          className="pointer-events-none absolute inset-y-0 right-0 z-0 hidden w-full max-w-4xl sm:block sm:w-4/5 lg:w-2/3 xl:w-1/2"
           variants={{
             initial: { x: "-18%", opacity: 0, scale: 0.94 },
             enter: { x: "0%", opacity: 1, scale: 1 }
@@ -380,7 +380,7 @@ export function StagedHero() {
       ) : null}
 
       <motion.div
-        className="relative z-20 flex h-full w-full max-w-5xl flex-col justify-center gap-10 py-10 sm:gap-12 sm:py-12 lg:py-0"
+        className="relative z-20 mx-auto flex h-full w-full max-w-5xl flex-col justify-center gap-10 py-6 sm:gap-12 sm:py-12 lg:py-16"
         variants={{
           initial: { opacity: 0, x: -80 },
           enter: { opacity: 1, x: 0 }
@@ -390,7 +390,7 @@ export function StagedHero() {
         style={{ opacity: isBaseStage ? 0 : undefined }}
       >
         <motion.div
-          className="flex flex-col gap-8 text-left"
+          className="flex flex-col gap-6 text-left sm:gap-8"
           variants={{
             initial: { opacity: 0, x: -40 },
             enter: { opacity: 1, x: 0 }
@@ -401,13 +401,13 @@ export function StagedHero() {
           <Badge className="w-max border-white/30 bg-white/10 text-white backdrop-blur">
             <Sparkles className="mr-2 h-3.5 w-3.5" /> ACH | Better than AI and faster
           </Badge>
-          <h1 className="font-display text-4xl leading-tight sm:text-5xl lg:text-6xl">
+          <h1 className="font-display text-3xl leading-tight sm:text-5xl lg:text-6xl">
             Your idea, our prototype in 48 hours.
           </h1>
         </motion.div>
 
         <motion.div
-          className="flex max-w-2xl flex-col gap-8 text-left"
+          className="flex max-w-xl flex-col gap-6 text-left sm:max-w-2xl sm:gap-8"
           variants={{
             initial: { opacity: 0, y: 56 },
             enter: { opacity: 1, y: 0 }
@@ -415,10 +415,10 @@ export function StagedHero() {
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           animate={bodyState}
         >
-          <p className="text-lg text-slate-200">
+          <p className="text-base text-slate-200 sm:text-lg">
             We are ACH, the rapid-build unit inside RightMind Lab. In forty-eight hours we deliver clickable or coded prototypes for AI products, SaaS platforms, and mobile experiences, complete with architecture notes so you can scale with confidence.
           </p>
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
             <Button asChild size="lg">
               <Link href="/start-a-project" onClick={handlePrimaryClick}>
                 Start your prototype for free

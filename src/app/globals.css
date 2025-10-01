@@ -33,6 +33,21 @@ body {
   .text-foreground-strong {
     color: rgb(var(--foreground-strong));
   }
+
+  @supports (padding: max(0px)) {
+    .pt-safe {
+      padding-top: max(env(safe-area-inset-top), 0px);
+    }
+
+    .pb-safe {
+      padding-bottom: max(env(safe-area-inset-bottom), 0px);
+    }
+
+    .px-safe {
+      padding-left: max(env(safe-area-inset-left), 1rem);
+      padding-right: max(env(safe-area-inset-right), 1rem);
+    }
+  }
 }
 
 .prose img {
