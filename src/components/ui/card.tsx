@@ -4,12 +4,11 @@ import * as React from "react";
 import {
   motion,
   useAnimationControls,
-  useReducedMotion as useFramerReducedMotion,
   type PanInfo,
   type Transition
 } from "framer-motion";
 
-import { cn, preferReducedMotion } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 const DURATIONS = {
   hover: 0.18,
@@ -94,8 +93,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(function Card(
   } = props;
 
   const controls = useAnimationControls();
-  const prefersReducedMotion = useFramerReducedMotion() || preferReducedMotion();
-  const shouldAnimate = interactive && !prefersReducedMotion;
+  const shouldAnimate = interactive;
 
   const internalRef = React.useRef<HTMLDivElement | null>(null);
   const pointerWithinRef = React.useRef(false);
