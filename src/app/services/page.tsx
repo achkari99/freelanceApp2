@@ -266,7 +266,7 @@ export default function ServicesPage() {
 
 
 
-                <Badge>{service.slug.replace("-", " ")}</Badge>
+                <Badge data-card-motion-item="chip">{service.slug.replace("-", " ")}</Badge>
 
 
 

@@ -55,12 +55,20 @@ export function ServiceShowcase({ service, index }: ServiceShowcaseProps) {
             <div className="flex flex-col gap-6">
               <div className="inline-flex items-center gap-3">
                 {Icon ? (
-                  <span className={`flex h-12 w-12 items-center justify-center rounded-full text-slate-900 dark:text-white ${accent}`}>
+                  <span
+                    data-card-motion-item="avatar"
+                    className={`flex h-12 w-12 items-center justify-center rounded-full text-slate-900 dark:text-white ${accent}`}
+                  >
                     <Icon className="h-6 w-6" aria-hidden />
                   </span>
                 ) : null}
                 <div>
-                  <Badge className="mb-3 bg-slate-100 text-slate-700 dark:bg-slate-900 dark:text-slate-300">{service.teaser}</Badge>
+                  <Badge
+                    data-card-motion-item="chip"
+                    className="mb-3 bg-slate-100 text-slate-700 dark:bg-slate-900 dark:text-slate-300"
+                  >
+                    {service.teaser}
+                  </Badge>
                   <h3 className="font-display text-3xl text-slate-900 dark:text-white">{service.name}</h3>
                 </div>
               </div>
@@ -73,7 +81,10 @@ export function ServiceShowcase({ service, index }: ServiceShowcaseProps) {
                   </li>
                 ))}
               </ul>
-              <div className="flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-slate-400">
+              <div
+                data-card-motion-item="progress"
+                className="flex items-center gap-3 text-xs uppercase tracking-[0.2em] text-slate-400"
+              >
                 <span>ACH</span>
                 <span className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
                 <span>48H</span>
