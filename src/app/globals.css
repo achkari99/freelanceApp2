@@ -71,3 +71,102 @@ body {
   background: linear-gradient(180deg, rgba(15, 23, 42, 0.45) 0%, rgba(15, 23, 42, 0.1) 50%, rgba(15, 23, 42, 0) 100%);
   pointer-events: none;
 }
+
+.Card {
+  --dur-hover: 180ms;
+  --dur-active: 100ms;
+  --dur-drag: 120ms;
+  --dur-settle: 220ms;
+  --easing-standard: cubic-bezier(0.22, 1, 0.36, 1);
+  --easing-spring: cubic-bezier(0.33, 1, 0.68, 1);
+  --card-shadow-rest: 0 12px 24px rgba(15, 23, 42, 0.08), 0 6px 18px rgba(15, 23, 42, 0.06);
+  --card-shadow-lift: 0 16px 36px rgba(15, 23, 42, 0.12), 0 10px 22px rgba(15, 23, 42, 0.08);
+  --card-shadow-active: 0 22px 48px rgba(15, 23, 42, 0.16), 0 12px 28px rgba(15, 23, 42, 0.12);
+  --card-shadow-drag: 0 28px 56px rgba(15, 23, 42, 0.18), 0 16px 36px rgba(15, 23, 42, 0.14);
+  --card-focus-ring: rgba(56, 189, 248, 0.45);
+  --card-item-distance: 6px;
+  --card-item-delay: 60ms;
+  position: relative;
+}
+
+.dark .Card {
+  --card-shadow-rest: 0 12px 26px rgba(5, 10, 25, 0.65), 0 6px 18px rgba(5, 12, 30, 0.5);
+  --card-shadow-lift: 0 18px 40px rgba(6, 12, 28, 0.72), 0 10px 26px rgba(6, 12, 28, 0.58);
+  --card-shadow-active: 0 24px 52px rgba(5, 10, 25, 0.8), 0 12px 32px rgba(5, 10, 25, 0.64);
+  --card-shadow-drag: 0 28px 60px rgba(4, 9, 22, 0.86), 0 16px 38px rgba(4, 9, 22, 0.7);
+  --card-focus-ring: rgba(125, 211, 252, 0.45);
+}
+
+.Card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow: 0 0 0 0 var(--card-focus-ring);
+  transform: scale(0.985);
+  transition: opacity var(--dur-hover) var(--easing-standard), transform var(--dur-hover) var(--easing-standard);
+}
+
+.Card[data-card-focus="true"]::after {
+  opacity: 1;
+  transform: scale(1);
+  box-shadow: 0 0 0 2px var(--card-focus-ring);
+}
+
+.Card[data-card-motion="reduced"] {
+  transition: none !important;
+  animation: none !important;
+}
+
+.Card[data-card-motion="reduced"]::after {
+  transition: none;
+}
+
+.Card [data-card-motion-item] {
+  --card-item-distance: var(--card-item-distance, 6px);
+  --card-item-delay: var(--card-item-delay, 60ms);
+  opacity: 0.94;
+  transform: translate3d(0, 0, 0);
+  transition:
+    transform 140ms var(--easing-standard),
+    opacity 140ms var(--easing-standard);
+  transition-delay: 0ms;
+  will-change: transform, opacity;
+}
+
+.Card[data-card-state="hover"] [data-card-motion-item],
+.Card[data-card-state="focus"] [data-card-motion-item] {
+  opacity: 1;
+  transform: translate3d(0, calc(-1 * var(--card-item-distance)), 0);
+  transition-delay: var(--card-item-delay);
+}
+
+.Card[data-card-state="active"] [data-card-motion-item],
+.Card[data-card-state="drag"] [data-card-motion-item] {
+  opacity: 1;
+  transform: translate3d(0, calc(-1 * (var(--card-item-distance) + 2px)), 0);
+  transition-duration: var(--dur-active);
+  transition-delay: calc(var(--card-item-delay) * 0.6);
+}
+
+.Card[data-card-state="settle"] [data-card-motion-item] {
+  transition-duration: var(--dur-settle);
+  transition-delay: calc(var(--card-item-delay) * 0.4);
+}
+
+.Card[data-card-motion="reduced"] [data-card-motion-item] {
+  transition: none;
+  transform: none !important;
+  opacity: 1;
+}
+
+[data-card-dropzone][data-card-dropzone-active="true"] {
+  box-shadow: inset 0 0 0 1px rgba(56, 189, 248, 0.35);
+  transition: box-shadow var(--dur-hover) var(--easing-standard);
+}
+
+.dark [data-card-dropzone][data-card-dropzone-active="true"] {
+  box-shadow: inset 0 0 0 1px rgba(125, 211, 252, 0.35);
+}
