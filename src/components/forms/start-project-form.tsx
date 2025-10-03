@@ -844,7 +844,7 @@ function InputField({
   registration: UseFormRegisterReturn;
   autoComplete?: string;
   inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
-  enterKeyHint?: string;
+  enterKeyHint?: React.InputHTMLAttributes<HTMLInputElement>["enterKeyHint"];
 }) {
 
 
@@ -1034,7 +1034,7 @@ const fieldMeta: Partial<
       type?: string;
       autoComplete?: string;
       inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
-      enterKeyHint?: string;
+      enterKeyHint?: React.InputHTMLAttributes<HTMLInputElement>["enterKeyHint"];
     }
   >
 > = {
@@ -1136,6 +1136,7 @@ const placeholderCopy: Partial<Record<keyof StartProjectPayload, string>> = {
 
 
 };
+
 
 
 

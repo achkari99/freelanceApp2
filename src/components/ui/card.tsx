@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import type { ComponentPropsWithoutRef } from "react";
 import {
   motion,
   useAnimationControls,
@@ -11,10 +12,11 @@ import { cn } from "@/lib/utils";
 
 type MotionDivProps = ComponentPropsWithoutRef<typeof motion.div>;
 
-export type CardProps = Omit<MotionDivProps, "drag" | "initial" | "animate" | "whileHover" | "whileTap" | "variants" | "transition"> & {
+export type CardProps = Omit<MotionDivProps, "drag" | "initial" | "animate" | "whileHover" | "whileTap" | "variants" | "transition" | "children"> & {
   disabled?: boolean;
   selected?: boolean;
   draggable?: boolean;
+  children?: React.ReactNode;
 };
 
 export type CardState = "rest" | "hover" | "focus" | "press" | "drag" | "disabled";
@@ -362,3 +364,8 @@ export function Card({
 export function CardPlaceholder({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return <div className={cn("card-placeholder", className)} aria-hidden {...props} />;
 }
+
+
+
+
+
