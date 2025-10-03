@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import * as React from "react";
 import { motion, useReducedMotion as useFramerReducedMotion } from "framer-motion";
@@ -54,6 +54,7 @@ type JiraHeroInstance = {
   destroy?: () => void;
   pause?: () => void;
   play?: () => void;
+  runScenario?: () => Promise<void>;
 };
 
 type JiraHeroModule = {
@@ -65,6 +66,14 @@ export function StagedServices() {
   const [activeIndex, setActiveIndex] = React.useState(0);
   const serviceRefs = React.useRef<(HTMLElement | null)[]>([]);
   const heroRef = React.useRef<HTMLDivElement | null>(null);
+  const heroHeading = (
+    <div className="services-hero-heading">
+      <span className="services-hero-heading__eyebrow">Live workflow</span>
+      <h2 className="services-hero-heading__title">In-flight sprint tracker</h2>
+      <p className="services-hero-heading__body">Follow commits, QA approvals, and handoffs as our team keeps your delivery moving on schedule.</p>
+    </div>
+  );
+
 
   React.useEffect(() => {
     if (prefersReducedMotion) {
@@ -152,7 +161,8 @@ export function StagedServices() {
           <StaticService key={service.slug} service={service} index={index} />
         ))}
 
-        <section id="services-hero" aria-hidden="true" data-role="decorative">
+        <section id="services-hero" data-role="decorative">
+          {heroHeading}
           <div ref={heroRef} data-jira-hero-root />
         </section>
 
@@ -212,7 +222,8 @@ export function StagedServices() {
           />
         ))}
       </div>
-      <section id="services-hero" aria-hidden="true" data-role="decorative">
+      <section id="services-hero" data-role="decorative">
+        {heroHeading}
         <div ref={heroRef} data-jira-hero-root />
       </section>
     </section>
@@ -318,8 +329,3 @@ function StaticService({ service, index }: { service: (typeof services)[number];
     </section>
   );
 }
-
-
-
-
-

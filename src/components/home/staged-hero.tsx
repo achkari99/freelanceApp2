@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { motion, useReducedMotion as useFramerReducedMotion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, ChevronsDown, Sparkles } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -380,7 +380,7 @@ export function StagedHero() {
       ) : null}
 
       <motion.div
-        className="relative z-20 mx-auto flex h-full w-full max-w-5xl flex-col justify-center gap-10 py-6 sm:gap-12 sm:py-12 lg:py-16"
+        className="relative z-20 flex h-full w-full max-w-6xl flex-col items-start justify-center gap-10 px-6 py-8 sm:gap-12 sm:px-8 sm:py-12 lg:px-0 lg:py-14"
         variants={{
           initial: { opacity: 0, x: -80 },
           enter: { opacity: 1, x: 0 }
@@ -441,21 +441,51 @@ export function StagedHero() {
       </motion.div>
 
       {showScrollCue ? (
+
         <motion.button
+
           type="button"
+
           onClick={handleScrollCueActivate}
+
           aria-label="Scroll down"
-          className="group pointer-events-auto absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2 rounded-full bg-white/12 px-5 py-2 text-sm font-semibold text-white/90 ring-1 ring-white/25 backdrop-blur transition hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400 dark:bg-white/15"
-          initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 6 }}
-          animate={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: [0, -6, 0] }}
-          transition={
+
+          className="group pointer-events-auto absolute bottom-20 sm:bottom-24 left-1/2 z-30 flex -translate-x-1/2 items-center gap-3 rounded-full border border-white/20 bg-white/10 px-5 py-2 text-sm font-medium text-white/80 shadow-lg backdrop-blur transition hover:bg-white/16 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400 dark:bg-white/20"
+
+          initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 8 }}
+
+          animate={
+
             prefersReducedMotion
-              ? { duration: 0.2 }
-              : { duration: 1.8, ease: [0.45, 0, 0.55, 1], repeat: Infinity }
+
+              ? { opacity: 1, y: 0 }
+
+              : { opacity: 1, y: [0, -8, 0], scale: [1, 1.04, 1] }
+
           }
+
+          transition={
+            prefersReducedMotion 
+            ? { duration: 0.2 }
+            : { duration: 2.1, ease: [0.45, 0, 0.55, 1], repeat: Infinity, repeatDelay: 0.2 }
+          }
+
         >
-          <span className="text-sm">Scroll down &darr;</span>
+
+          <span className="relative flex h-9 w-9 items-center justify-center rounded-full bg-white/15 text-white transition duration-300 group-hover:bg-white/25">
+
+            <ChevronsDown className="h-5 w-5" aria-hidden />
+
+            <span className="absolute inset-0 rounded-full border border-white/30 opacity-50" />
+
+            <span className="absolute -inset-2 rounded-full bg-white/10 opacity-0 transition group-hover:opacity-40" />
+
+          </span>
+
+          <span className="pr-1 text-sm font-medium tracking-wide text-white/80">Scroll to explore</span>
+
         </motion.button>
+
       ) : null}
     </section>
   );
