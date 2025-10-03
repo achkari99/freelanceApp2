@@ -13,16 +13,21 @@ import { projects } from "content/work";
 
 const featuredProjects = projects.filter((project) => project.featured || project.status === "case-study").slice(0, 3);
 const heroHighlightCards: HeroHighlightCard[] = [
-  ...featuredProjects.map(({ body: _body, ...project }, index) => ({
-    id: project.slug,
-    title: project.title,
-    client: project.client,
-    timeline: project.timeline,
-    excerpt: project.excerpt,
-    tags: project.tags,
-    href: `/work/${project.slug}`,
-    hoverTone: (["sky", "violet", "emerald"] as const)[index % 3]
-  })),
+  ...featuredProjects.map((projectEntry, index) => {
+    const { body: _unusedBody, ...project } = projectEntry;
+    void _unusedBody;
+
+    return {
+      id: project.slug,
+      title: project.title,
+      client: project.client,
+      timeline: project.timeline,
+      excerpt: project.excerpt,
+      tags: project.tags,
+      href: `/work/${project.slug}`,
+      hoverTone: (["sky", "violet", "emerald"] as const)[index % 3]
+    };
+  }),
   {
     id: "ai-prototype-kits",
     title: "AI prototype kits",

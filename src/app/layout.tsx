@@ -1,5 +1,6 @@
-import "./globals.css";
+﻿import "./globals.css";
 
+import "@/styles/jiraHero.css";
 
 
 import type { Metadata, Viewport } from "next";

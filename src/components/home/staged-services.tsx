@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import { motion, useReducedMotion as useFramerReducedMotion } from "framer-motion";
@@ -50,10 +50,21 @@ const accentRings: Record<string, string> = {
   rose: "ring-rose-300/35 shadow-[0_40px_90px_rgba(244,114,182,0.22)]"
 };
 
+type JiraHeroInstance = {
+  destroy?: () => void;
+  pause?: () => void;
+  play?: () => void;
+};
+
+type JiraHeroModule = {
+  initJiraHero: (root: HTMLElement, options?: { forceReduceMotion?: boolean }) => JiraHeroInstance;
+};
+
 export function StagedServices() {
   const prefersReducedMotion = useFramerReducedMotion() || preferReducedMotion();
   const [activeIndex, setActiveIndex] = React.useState(0);
   const serviceRefs = React.useRef<(HTMLElement | null)[]>([]);
+  const heroRef = React.useRef<HTMLDivElement | null>(null);
 
   React.useEffect(() => {
     if (prefersReducedMotion) {
@@ -88,6 +99,38 @@ export function StagedServices() {
     };
   }, [prefersReducedMotion]);
 
+  React.useEffect(() => {
+    const node = heroRef.current;
+    if (!node) {
+      return;
+    }
+
+    let disposed: JiraHeroInstance | null = null;
+    let cancelled = false;
+
+    void import("@/animations/jiraHero")
+      .then((module: JiraHeroModule) => {
+        if (cancelled || !heroRef.current) {
+          return;
+        }
+
+        disposed = module.initJiraHero(heroRef.current, {
+          forceReduceMotion: Boolean(prefersReducedMotion)
+        });
+      })
+      .catch((error) => {
+        if (process.env.NODE_ENV !== "production") {
+          console.error("Failed to initialize Jira hero animation", error);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+      disposed?.destroy?.();
+      disposed = null;
+    };
+  }, [prefersReducedMotion]);
+
   const handleIndicatorClick = React.useCallback(
     (index: number) => {
       if (prefersReducedMotion) {
@@ -108,6 +151,11 @@ export function StagedServices() {
         {services.map((service, index) => (
           <StaticService key={service.slug} service={service} index={index} />
         ))}
+
+        <section id="services-hero" aria-hidden="true" data-role="decorative">
+          <div ref={heroRef} data-jira-hero-root />
+        </section>
+
       </div>
     );
   }
@@ -164,6 +212,9 @@ export function StagedServices() {
           />
         ))}
       </div>
+      <section id="services-hero" aria-hidden="true" data-role="decorative">
+        <div ref={heroRef} data-jira-hero-root />
+      </section>
     </section>
   );
 }
@@ -267,4 +318,8 @@ function StaticService({ service, index }: { service: (typeof services)[number];
     </section>
   );
 }
+
+
+
+
 
