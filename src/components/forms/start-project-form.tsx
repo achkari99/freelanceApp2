@@ -1225,6 +1225,8 @@ const fieldMeta: Partial<
   timeline: { enterKeyHint: "next" },
   budget: { inputMode: "numeric", enterKeyHint: "next" },
   hear: { autoComplete: "off", enterKeyHint: "next" },
+  phone: { type: "tel", inputMode: "tel", autoComplete: "tel", enterKeyHint: "next" },
+  nationality: { autoComplete: "off", enterKeyHint: "next" },
   slackChannel: { autoComplete: "off", enterKeyHint: "done" }
 };
 
@@ -1262,6 +1264,14 @@ const labelCopy: Record<keyof StartProjectPayload, string> = {
 
 
   hear: "How did you hear about us?",
+
+
+
+  phone: "Phone (optional)",
+
+
+
+  nationality: "Nationality (optional)",
 
 
 
@@ -1310,6 +1320,14 @@ const placeholderCopy: Partial<Record<keyof StartProjectPayload, string>> = {
 
 
   hear: "Referred by RightMind Lab, event, or partner",
+
+
+
+  phone: "+212 600 000 000",
+
+
+
+  nationality: "Moroccan",
 
 
 
