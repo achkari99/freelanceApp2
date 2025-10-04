@@ -22,7 +22,6 @@ const nextConfig = {
   },
   transpilePackages: ["framer-motion"],
   pageExtensions: ["ts", "tsx", "mdx"],
-  output: "export",
   basePath,
   assetPrefix,
   env: {

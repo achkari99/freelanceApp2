@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 
 
@@ -1307,11 +1307,11 @@ const placeholderCopy: Partial<Record<keyof StartProjectPayload, string>> = {
 
 
 
-  timeline: "Within 2 weeks",
+  timeline: "DD/MM/YYYY or 'As soon as possible'",
 
 
 
-  budget: "$10k-$40k",
+  budget: "$... to $...",
 
 
 
