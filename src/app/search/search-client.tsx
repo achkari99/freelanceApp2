@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import * as React from "react";
 import Link from "next/link";
@@ -67,8 +67,8 @@ export function SearchClient({ items }: SearchClientProps) {
         <h1 className="font-display text-4xl tracking-tight text-slate-900 dark:text-white">Search our work</h1>
         <p className="text-sm text-slate-600 dark:text-slate-300">
           Explore published build stories, service offerings, and backstage notes. Looking for something specific? Email
-          <a href="mailto:achiibanayaa36@gmail.com" className="ml-1 text-sky-600 hover:underline dark:text-sky-400">
-            achiibanayaa36@gmail.com
+          <a href="mailto:aa03abm05@gmail.com" className="ml-1 text-sky-600 hover:underline dark:text-sky-400">
+            aa03abm05@gmail.com
           </a>
           .
         </p>

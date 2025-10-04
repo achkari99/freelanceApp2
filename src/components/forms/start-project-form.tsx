@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 
 
@@ -26,7 +26,7 @@ import { services } from "@/data/services";
 
 
 
-import { startProjectSchema, type StartProjectPayload } from "@/lib/validation";
+import { startProjectSchema, type StartProjectPayload, PROJECT_REPORT_ACCEPTED_EXTENSIONS, PROJECT_REPORT_ACCEPTED_MIME_TYPES, PROJECT_REPORT_MAX_SIZE_BYTES } from "@/lib/validation";
 
 
 
@@ -78,7 +78,7 @@ const steps: { id: string; title: string; description: string; fields: (keyof St
 
 
 
-    fields: ["services", "budget", "description"]
+    fields: ["services", "budget", "description", "projectReport"]
 
 
 
@@ -111,6 +111,9 @@ const steps: { id: string; title: string; description: string; fields: (keyof St
 
 
 ];
+
+const PROJECT_REPORT_MAX_SIZE_MB = Math.round(PROJECT_REPORT_MAX_SIZE_BYTES / (1024 * 1024));
+
 
 
 
@@ -167,6 +170,10 @@ export function StartProjectForm() {
 
 
       description: "",
+
+
+
+      projectReport: null,
 
 
 
@@ -246,22 +253,30 @@ export function StartProjectForm() {
 
 
 
+            const formData = new FormData();
+      formData.append("name", payload.name);
+      formData.append("email", payload.email);
+      formData.append("company", payload.company);
+      formData.append("timeline", payload.timeline);
+      payload.services.forEach((service) => {
+        formData.append("services", service);
+      });
+      formData.append("budget", payload.budget);
+      formData.append("description", payload.description);
+      if (payload.projectReport) {
+        formData.append("projectReport", payload.projectReport);
+      }
+      if (payload.hear) {
+        formData.append("hear", payload.hear);
+      }
+      if (payload.slackChannel) {
+        formData.append("slackChannel", payload.slackChannel);
+      }
+      formData.append("slackInvite", payload.slackInvite ? "true" : "false");
+
       const response = await fetch("/api/start-project", {
-
-
-
         method: "POST",
-
-
-
-        headers: { "Content-Type": "application/json" },
-
-
-
-        body: JSON.stringify(payload)
-
-
-
+        body: formData
       });
 
 
@@ -647,6 +662,22 @@ function Field({ name }: FieldProps) {
 
 
 
+    case "projectReport":
+
+
+
+      return (
+
+
+
+        <ProjectReportField error={errors[name]?.message as string | undefined} />
+
+
+
+      );
+
+
+
     case "services":
 
 
@@ -825,6 +856,140 @@ function Field({ name }: FieldProps) {
 
 
 
+function ProjectReportField({ error }: { error?: string }) {
+  const { register, setValue, watch } = useFormContext<StartProjectPayload>();
+  const file = watch("projectReport");
+  const inputRef = React.useRef<HTMLInputElement | null>(null);
+  const [progress, setProgress] = React.useState(0);
+
+  const { name, onBlur, ref } = register("projectReport");
+
+  const acceptValue = React.useMemo(
+    () => [...PROJECT_REPORT_ACCEPTED_EXTENSIONS, ...PROJECT_REPORT_ACCEPTED_MIME_TYPES].join(","),
+    []
+  );
+
+  React.useEffect(() => {
+    setProgress(file ? 100 : 0);
+  }, [file]);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0] ?? null;
+    setValue("projectReport", selectedFile, {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true
+    });
+  };
+
+  const handleRemove = () => {
+    setValue("projectReport", null, {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true
+    });
+
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+  };
+
+  const helperText = `Upload a single PDF, DOC, DOCX, or ZIP (max ${PROJECT_REPORT_MAX_SIZE_MB} MB).`;
+
+  return (
+    <div className="space-y-3 md:col-span-2">
+      <div className="space-y-1">
+        <label className="text-sm font-semibold text-slate-700 dark:text-slate-200" htmlFor="projectReport">
+          {labelCopy.projectReport}
+        </label>
+        <p className="text-sm text-slate-500 dark:text-slate-300">{helperText}</p>
+      </div>
+
+      <div
+        className={`flex flex-col gap-3 rounded-2xl border-2 border-dashed p-6 transition ${
+          error
+            ? "border-rose-400 bg-rose-50/70 dark:border-rose-500/80 dark:bg-rose-950/40"
+            : "border-slate-200 bg-white/60 dark:border-slate-700 dark:bg-slate-900/40"
+        }`}
+      >
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            onClick={() => inputRef.current?.click()}
+            className="inline-flex items-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-400 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:border-slate-600 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-slate-500"
+          >
+            Choose file
+          </button>
+          <span className="text-sm text-slate-500 dark:text-slate-300">Drag & drop or browse your files.</span>
+        </div>
+
+        <input
+          id="projectReport"
+          type="file"
+          accept={acceptValue}
+          name={name}
+          ref={(node) => {
+            ref(node);
+            inputRef.current = node;
+          }}
+          onBlur={onBlur}
+          onChange={handleFileChange}
+          className="sr-only"
+        />
+
+        {progress > 0 ? (
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+              <span>Ready to send</span>
+              <span>{progress}%</span>
+            </div>
+            <div className="h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800" aria-hidden>
+              <div className="h-full bg-sky-500 transition-all" style={{ width: `${progress}%` }} />
+            </div>
+          </div>
+        ) : null}
+
+        {file ? (
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="inline-flex max-w-full items-center gap-2 rounded-full bg-slate-900/10 px-3 py-1 text-sm font-medium text-slate-700 dark:bg-slate-100/10 dark:text-slate-200">
+              <span className="truncate" title={file.name}>
+                {file.name}
+              </span>
+              <span className="text-xs text-slate-500 dark:text-slate-400">{formatFileSize(file.size)}</span>
+            </span>
+            <button
+              type="button"
+              onClick={handleRemove}
+              className="text-sm font-medium text-rose-600 transition hover:text-rose-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rose-500"
+            >
+              Remove
+            </button>
+          </div>
+        ) : null}
+      </div>
+
+      {error ? <p className="text-xs text-rose-500">{error}</p> : null}
+    </div>
+  );
+}
+
+function formatFileSize(bytes: number) {
+  if (!Number.isFinite(bytes) || bytes <= 0) {
+    return "0 B";
+  }
+
+  const megabytes = bytes / (1024 * 1024);
+  if (megabytes >= 1) {
+    return `${megabytes.toFixed(1)} MB`;
+  }
+
+  const kilobytes = bytes / 1024;
+  if (kilobytes >= 1) {
+    return `${Math.round(kilobytes)} KB`;
+  }
+
+  return `${bytes} B`;
+}
 function InputField({
   id,
   label,
@@ -1076,6 +1241,7 @@ const labelCopy: Record<keyof StartProjectPayload, string> = {
 
 
   description: "What are you hoping to achieve?",
+  projectReport: "Project report",
 
 
 
@@ -1107,7 +1273,7 @@ const placeholderCopy: Partial<Record<keyof StartProjectPayload, string>> = {
 
 
 
-  email: "amal@rightmindpartner.com",
+  email: "aa03abm05@gmail.com",
 
 
 
@@ -1136,6 +1302,10 @@ const placeholderCopy: Partial<Record<keyof StartProjectPayload, string>> = {
 
 
 };
+
+
+
+
 
 
 

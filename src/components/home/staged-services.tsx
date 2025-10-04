@@ -74,7 +74,6 @@ export function StagedServices() {
     </div>
   );
 
-
   React.useEffect(() => {
     if (prefersReducedMotion) {
       return;
@@ -156,7 +155,7 @@ export function StagedServices() {
 
   if (prefersReducedMotion) {
     return (
-      <div className="space-y-16 bg-slate-950 py-24 text-white">
+      <div className="space-y-16 bg-slate-950 pt-24 pb-40 text-white">
         {services.map((service, index) => (
           <StaticService key={service.slug} service={service} index={index} />
         ))}
@@ -165,13 +164,12 @@ export function StagedServices() {
           {heroHeading}
           <div ref={heroRef} data-jira-hero-root />
         </section>
-
       </div>
     );
   }
 
   return (
-    <section className="relative flex w-full flex-col bg-slate-950 px-6 py-24 text-white sm:px-10">
+    <section className="relative flex w-full flex-col bg-slate-950 px-6 pt-24 pb-40 text-white sm:px-10 lg:pb-48">
       <motion.header
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -222,6 +220,8 @@ export function StagedServices() {
           />
         ))}
       </div>
+
+
       <section id="services-hero" data-role="decorative">
         {heroHeading}
         <div ref={heroRef} data-jira-hero-root />
@@ -329,3 +329,6 @@ function StaticService({ service, index }: { service: (typeof services)[number];
     </section>
   );
 }
+
+
+

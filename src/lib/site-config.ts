@@ -1,4 +1,4 @@
-﻿const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://rightmindlab.com/ach";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://rightmindlab.com/ach";
 
 export const siteConfig = {
   name: "ACH | 48H Prototype",
@@ -9,7 +9,7 @@ export const siteConfig = {
   links: {
     twitter: "https://twitter.com/rightmindlab",
     linkedin: "https://www.linkedin.com/company/rightmind-lab",
-    email: "achiibanayaa36@gmail.com"
+    email: "aa03abm05@gmail.com"
   },
   navigation: [
     { href: "/our-work", label: "Results" },

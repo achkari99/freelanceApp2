@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import Link from "next/link";
@@ -450,7 +450,7 @@ export function StagedHero() {
 
           aria-label="Scroll down"
 
-          className="group pointer-events-auto absolute bottom-20 sm:bottom-24 left-1/2 z-30 flex -translate-x-1/2 items-center gap-3 rounded-full border border-white/20 bg-white/10 px-5 py-2 text-sm font-medium text-white/80 shadow-lg backdrop-blur transition hover:bg-white/16 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400 dark:bg-white/20"
+          className="group pointer-events-auto absolute bottom-32 sm:bottom-40 left-1/2 z-30 flex -translate-x-1/2 flex-col items-center justify-center gap-2 sm:flex-row sm:gap-3 rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-medium text-center text-white/80 shadow-lg backdrop-blur transition hover:bg-white/16 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-400 dark:bg-white/20"
 
           initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 8 }}
 
@@ -482,7 +482,7 @@ export function StagedHero() {
 
           </span>
 
-          <span className="pr-1 text-sm font-medium tracking-wide text-white/80">Scroll to explore</span>
+          <span className="text-sm font-medium tracking-wide text-white/80 sm:pl-1">Scroll to explore</span>
 
         </motion.button>
 

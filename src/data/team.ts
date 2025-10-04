@@ -38,7 +38,7 @@ export const team: TeamMember[] = [
     ],
     links: [
       { label: "LinkedIn", href: "https://www.linkedin.com/in/achkari-mohamed" },
-      { label: "Email", href: "mailto:achiibanayaa36@gmail.com" }
+      { label: "Email", href: "mailto:aa03abm05@gmail.com" }
     ]
   },
   {

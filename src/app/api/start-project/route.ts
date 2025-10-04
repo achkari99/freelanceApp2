@@ -1,19 +1,30 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { ZodError } from "zod";
-import { startProjectSchema } from "@/lib/validation";
+import { startProjectSchema, type StartProjectPayload } from "@/lib/validation";
 
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   try {
-    const data = await request.json();
-    const payload = startProjectSchema.parse(data);
+    const formData = await request.formData();
+    const payload = startProjectSchema.parse({
+      name: getString(formData, "name"),
+      email: getString(formData, "email"),
+      company: getString(formData, "company"),
+      timeline: getString(formData, "timeline"),
+      services: getStringArray(formData, "services"),
+      budget: getString(formData, "budget"),
+      description: getString(formData, "description"),
+      projectReport: getFile(formData, "projectReport"),
+      hear: getOptionalString(formData, "hear"),
+      slackChannel: getOptionalString(formData, "slackChannel"),
+      slackInvite: getBoolean(formData, "slackInvite", true)
+    });
 
-    const summary = `New project inquiry from ${payload.name} (${payload.company})\nEmail: ${payload.email}\nTimeline: ${payload.timeline}\nServices: ${payload.services.join(", ")}\nBudget: ${payload.budget}\nHow they heard: ${payload.hear ?? "n/a"}\nSlack channel: ${payload.slackChannel ?? "n/a"}\nInvite us to Slack: ${payload.slackInvite ? "Yes" : "No"}`;
-
-    const emailSent = await sendEmail(summary, payload.description);
-    const slackPosted = await postToSlack(summary, payload.description);
+    const summary = buildSummary(payload);
+    const emailSent = await sendEmail(payload, summary);
+    const slackPosted = await postToSlack(payload, summary);
 
     return NextResponse.json({ ok: true, emailSent, slackPosted });
   } catch (error) {
@@ -25,7 +36,52 @@ export async function POST(request: Request) {
   }
 }
 
-async function sendEmail(summary: string, description: string) {
+function getString(formData: FormData, key: string) {
+  const value = formData.get(key);
+  return typeof value === "string" ? value : "";
+}
+
+function getOptionalString(formData: FormData, key: string) {
+  const value = formData.get(key);
+  if (typeof value !== "string") {
+    return undefined;
+  }
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : undefined;
+}
+
+function getBoolean(formData: FormData, key: string, fallback: boolean) {
+  const value = formData.get(key);
+  if (typeof value !== "string") {
+    return fallback;
+  }
+  return value === "true" || value === "on";
+}
+
+function getStringArray(formData: FormData, key: string) {
+  return formData
+    .getAll(key)
+    .flatMap((value) => (typeof value === "string" && value.trim().length > 0 ? [value] : []));
+}
+
+function getFile(formData: FormData, key: string) {
+  const value = formData.get(key);
+  if (value instanceof File && value.size > 0) {
+    return value;
+  }
+  return null;
+}
+
+function buildSummary(payload: StartProjectPayload) {
+  const services = payload.services.join(", ");
+  const projectReport = payload.projectReport
+    ? `${payload.projectReport.name} (${formatFileSize(payload.projectReport.size)})`
+    : "Not provided";
+
+  return `New project inquiry from ${payload.name} (${payload.company})\nEmail: ${payload.email}\nTimeline: ${payload.timeline}\nServices: ${services}\nBudget: ${payload.budget}\nHow they heard: ${payload.hear ?? "n/a"}\nSlack channel: ${payload.slackChannel ?? "n/a"}\nInvite us to Slack: ${payload.slackInvite ? "Yes" : "No"}\nProject report: ${projectReport}`;
+}
+
+async function sendEmail(payload: StartProjectPayload, summary: string) {
   const host = process.env.SMTP_HOST;
   const port = process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : undefined;
   const user = process.env.SMTP_USER;
@@ -44,22 +100,38 @@ async function sendEmail(summary: string, description: string) {
     auth: { user, pass }
   });
 
+  const attachments =
+    payload.projectReport && payload.projectReport.size > 0
+      ? [
+          {
+            filename: payload.projectReport.name,
+            content: Buffer.from(await payload.projectReport.arrayBuffer()),
+            contentType: payload.projectReport.type || undefined
+          }
+        ]
+      : [];
+
   await transporter.sendMail({
     from,
     to,
     subject: "New project inquiry",
-    text: `${summary}\n\nProject details:\n${description}`,
-    html: `<pre style="font-family: ui-monospace, SFMono-Regular, SFMono, Menlo, Monaco, Consolas, \'Liberation Mono\', \'Courier New\', monospace; white-space: pre-wrap;">${summary}\n\nProject details:\n${description}</pre>`
+    text: `${summary}\n\nProject details:\n${payload.description}`,
+    html: `<pre style="font-family: ui-monospace, SFMono-Regular, SFMono, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; white-space: pre-wrap;">${summary}\n\nProject details:\n${payload.description}</pre>`,
+    attachments: attachments.length ? attachments : undefined
   });
 
   return true;
 }
 
-async function postToSlack(summary: string, description: string) {
+async function postToSlack(payload: StartProjectPayload, summary: string) {
   const webhook = process.env.SLACK_WEBHOOK_URL;
   if (!webhook) {
     return false;
   }
+
+  const projectReportLine = payload.projectReport
+    ? `*Project report*: ${payload.projectReport.name} (${formatFileSize(payload.projectReport.size)})`
+    : "*Project report*: Not provided";
 
   try {
     const body = {
@@ -76,7 +148,14 @@ async function postToSlack(summary: string, description: string) {
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `*Project description*\n${description}`
+            text: `*Project description*\n${payload.description}`
+          }
+        },
+        {
+          type: "section",
+          text: {
+            type: "mrkdwn",
+            text: projectReportLine
           }
         }
       ]
@@ -100,3 +179,20 @@ async function postToSlack(summary: string, description: string) {
   }
 }
 
+function formatFileSize(bytes: number) {
+  if (!Number.isFinite(bytes) || bytes <= 0) {
+    return "0 B";
+  }
+
+  const megabytes = bytes / (1024 * 1024);
+  if (megabytes >= 1) {
+    return `${megabytes.toFixed(1)} MB`;
+  }
+
+  const kilobytes = bytes / 1024;
+  if (kilobytes >= 1) {
+    return `${Math.round(kilobytes)} KB`;
+  }
+
+  return `${bytes} B`;
+}

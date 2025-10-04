@@ -1,4 +1,4 @@
-﻿import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { projects, projectFilters } from "content/work";
 import { backstagePosts } from "content/backstage";
 import { services } from "@/data/services";
@@ -41,12 +41,13 @@ describe("content integrity", () => {
   it("validates a sample start project submission", () => {
     const result = startProjectSchema.safeParse({
       name: "Jordan Rivera",
-      email: "jordan@example.com",
+      email: "aa03abm05@gmail.com",
       company: "Example Co",
       timeline: "June",
       services: [services[0]?.name ?? "Product Strategy"],
       budget: "$60k--$90k",
       description: "Launching a new product line and need strategy through launch.",
+      projectReport: null,
       hear: "Referral",
       slackChannel: "#launch",
       slackInvite: true
