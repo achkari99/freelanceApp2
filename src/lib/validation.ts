@@ -59,3 +59,32 @@ export const startProjectSchema = z.object({
 });
 
 export type StartProjectPayload = z.infer<typeof startProjectSchema>;
+
+
+export const projectReportUploadSchema = z
+  .object({
+    path: z.string(),
+    url: z.string().url().nullable(),
+    name: z.string(),
+    size: z.number().nonnegative(),
+    type: z.string().nullable().optional()
+  })
+  .nullable();
+
+export const startProjectApiSchema = z.object({
+  name: z.string().min(2, "Tell us your name"),
+  email: z.string().email("Enter a valid email"),
+  company: z.string().min(2, "Provide your company or team"),
+  timeline: z.string().min(2, "Select a timeline"),
+  services: z.array(z.string()).min(1, "Select at least one focus area"),
+  budget: z.string().min(2, "Share a budget range"),
+  description: z.string().min(10, "Add a bit more detail"),
+  hear: z.string().optional().nullable(),
+  phone: z.string().trim().optional().nullable(),
+  nationality: z.string().trim().optional().nullable(),
+  slackChannel: z.string().optional().nullable(),
+  slackInvite: z.boolean(),
+  projectReport: projectReportUploadSchema
+});
+
+export type StartProjectApiPayload = z.infer<typeof startProjectApiSchema>;

@@ -1,10 +1,6 @@
 ﻿"use client";
 
-
-
-
-
-
+import { createClient } from '@supabase/supabase-js';
 
 import * as React from "react";
 
@@ -34,8 +30,59 @@ import { startProjectSchema, type StartProjectPayload, PROJECT_REPORT_ACCEPTED_E
 
 
 
-const steps: { id: string; title: string; description: string; fields: (keyof StartProjectPayload)[] }[] = [
+const SUPABASE_BUCKET = "project reports";
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
+const supabaseClient = SUPABASE_URL && SUPABASE_ANON_KEY
+  ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: { persistSession: false }
+    })
+  : null;
+
+function sanitizeObjectName(name: string) {
+  return name.replace(/[^a-zA-Z0-9._-]/g, "_");
+}
+
+async function uploadProjectReport(file: File) {
+  if (!supabaseClient) {
+    throw new Error("Supabase client is not configured");
+  }
+
+  const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+  const random = typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+    ? crypto.randomUUID()
+    : Math.random().toString(36).slice(2);
+  const safeName = sanitizeObjectName(file.name);
+  const objectPath = `requests/${timestamp}-${random}-${safeName}`;
+
+  const { error: uploadError } = await supabaseClient
+    .storage
+    .from(SUPABASE_BUCKET)
+    .upload(objectPath, file, {
+      contentType: file.type || "application/octet-stream",
+      upsert: false
+    });
+
+  if (uploadError) {
+    throw new Error(uploadError.message);
+  }
+
+  const { data: publicUrlData } = supabaseClient
+    .storage
+    .from(SUPABASE_BUCKET)
+    .getPublicUrl(objectPath);
+
+  return {
+    path: objectPath,
+    url: publicUrlData?.publicUrl ?? null,
+    name: file.name,
+    size: file.size,
+    type: file.type
+  };
+}
+
+const steps: { id: string; title: string; description: string; fields: (keyof StartProjectPayload)[] }[] = [ 
 
 
   {
@@ -1336,6 +1383,10 @@ const placeholderCopy: Partial<Record<keyof StartProjectPayload, string>> = {
 
 
 };
+
+
+
+
 
 
 
