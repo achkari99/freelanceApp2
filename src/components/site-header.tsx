@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 
 import { siteConfig } from "@/lib/site-config";
-import { ThemeToggle } from "./theme-toggle";
 import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
@@ -139,7 +138,7 @@ export function SiteHeader() {
           })}
         </nav>
 
-        <div className="flex flex-shrink-0 items-center gap-3">
+        <div className="ml-auto flex flex-shrink-0 items-center gap-3">
           {CTA ? (
             <Link
               href={CTA.href}
@@ -154,7 +153,6 @@ export function SiteHeader() {
               {CTA.label}
             </Link>
           ) : null}
-          <ThemeToggle />
           <button
             type="button"
             ref={mobileTriggerRef}
@@ -247,3 +245,9 @@ export function SiteHeader() {
     </header>
   );
 }
+
+
+
+
+
+

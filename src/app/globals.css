@@ -3,32 +3,23 @@
 @tailwind utilities;
 
 :root {
-  --background: 252 252 252;
-  --foreground: 15 23 42;
-  --foreground-strong: 15 23 42;
-  --muted: 148 163 184;
-  --accent: 37 99 235;
+  --background: 10 12 25;
+  --foreground: 241 245 249;
+  --foreground-strong: 248 250 252;
+  --muted: 100 116 139;
+  --accent: 96 165 250;
   --radius: 0.9rem;
   --dur-hover: 0.18s;
   --dur-drag: 0.12s;
   --dur-settle: 0.22s;
   --easing-standard: cubic-bezier(0.22, 1, 0.36, 1);
   --easing-spring: cubic-bezier(0.33, 1, 0.68, 1);
-  --card-shadow-color: rgba(15, 23, 42, 0.28);
-  --card-shadow-color-strong: rgba(15, 23, 42, 0.4);
-  --card-focus-ring: rgba(12, 102, 228, 0.5);
-}
-
-.dark {
-  --background: 10 12 25;
-  --foreground: 241 245 249;
-  --foreground-strong: 248 250 252;
-  --muted: 100 116 139;
-  --accent: 96 165 250;
   --card-shadow-color: rgba(2, 6, 23, 0.38);
   --card-shadow-color-strong: rgba(2, 6, 23, 0.52);
   --card-focus-ring: rgba(191, 219, 254, 0.62);
 }
+
+
 
 html {
   overflow-x: hidden;
@@ -36,6 +27,8 @@ html {
 
 body {
   overflow-x: hidden;
+  font-size: clamp(0.95rem, 0.22vw + 0.95rem, 1.1rem);
+  line-height: 1.6;
   font-family: theme("fontFamily.sans"), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background-color: rgb(var(--background));
   color: rgb(var(--foreground));
@@ -46,6 +39,67 @@ body {
 }
 
 @layer utilities {
+  .layout-shell {
+    width: min(100%, clamp(64rem, 88vw, 1200px));
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: clamp(1.25rem, 1.8vw + 0.8rem, 4rem);
+    padding-right: clamp(1.25rem, 1.8vw + 0.8rem, 4rem);
+  }
+
+  .layout-shell-narrow {
+    width: min(100%, clamp(52rem, 88vw, 1040px));
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: clamp(1.25rem, 1.8vw + 0.8rem, 3.5rem);
+    padding-right: clamp(1.25rem, 1.8vw + 0.8rem, 3.5rem);
+  }
+
+  @supports (padding: max(0px)) {
+    .layout-shell,
+    .layout-shell-narrow {
+      padding-left: max(env(safe-area-inset-left), clamp(1.1rem, 1.6vw + 0.7rem, 4rem));
+      padding-right: max(env(safe-area-inset-right), clamp(1.1rem, 1.6vw + 0.7rem, 4rem));
+    }
+  }
+
+  @media (max-width: 414px) {
+    .layout-shell,
+    .layout-shell-narrow {
+      padding-left: max(env(safe-area-inset-left), clamp(0.95rem, 2.5vw + 0.6rem, 1.5rem));
+      padding-right: max(env(safe-area-inset-right), clamp(0.95rem, 2.5vw + 0.6rem, 1.5rem));
+    }
+  }
+
+  .fluid-display-xl {
+    font-size: clamp(2.4rem, 4vw + 1.9rem, 4.6rem);
+    line-height: clamp(1.05, 0.2vw + 1.02, 1.12);
+  }
+
+  .fluid-display-lg {
+    font-size: clamp(1.9rem, 3vw + 1.4rem, 3.3rem);
+    line-height: clamp(1.08, 0.22vw + 1.04, 1.16);
+  }
+
+  .fluid-display-md {
+    font-size: clamp(1.5rem, 2.2vw + 1.1rem, 2.5rem);
+    line-height: clamp(1.15, 0.18vw + 1.1, 1.24);
+  }
+
+  .fluid-body-lg {
+    font-size: clamp(1.05rem, 0.6vw + 0.95rem, 1.28rem);
+    line-height: 1.7;
+  }
+
+  .fluid-body {
+    font-size: clamp(0.98rem, 0.45vw + 0.88rem, 1.1rem);
+    line-height: 1.7;
+  }
+
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
   .text-foreground-strong {
     color: rgb(var(--foreground-strong));
   }
@@ -225,5 +279,11 @@ body {
     gap: clamp(18px, 3vw, 40px);
   }
 }
+
+
+
+
+
+
 
 

@@ -1,0 +1,101 @@
+Passionate lifelong learner with hands-on software development and leadership experience.
+Excellent communicator skilled at using AI and prompt engineering to triple results. Enthusiastic
+about data analytics and turning insights into impactful solutions.ACHKARI BEGDOURI MOHAMED
+Morocco, Tanger |  achkarimohamed1999@gmail.com | linkedin.com/in/mohamed-achkari-b-/
+SOFTWARE & WEB DEVELOPER
+Sep2023 - Oct 2023 Faculty Registration Team – Leader
+Directed the rollout of a new digital enrollment system for incoming students, overseeing all
+stages from planning to execution.
+Coordinated cross-functional team workflows and ensured seamless communication
+between students and administration.
+Delivered a smooth, accurate, and accessible registration experience, enhancing
+satisfaction and efficiency.
+Strengthened skills in digital transformation, problem-solving, and academic team
+management.Sep 2023 - Sep 2024 InfoM4th Computer Science Club – President
+Led the club’s strategic vision and execution, including spearheading the development and
+launch of the official club website. Coordinated a diverse team to deliver key initiatives,
+fostered effective communication, and secured partnerships with companies and
+organizations to expand the club’s reach. This role honed my leadership, project
+management, and technical skills in software development and collaboration.PROFESSIONAL EXPERIENCESUMMARY
+Mars 2025 - Present Freelance Developer
+Design and develop full-stack web and desktop applications tailored to client needs.
+Deliver functional prototypes within 48 hours to validate concepts quickly.
+Build modern, responsive user interfaces with strong UI/UX focus.
+Provide custom software solutions (management systems, AI-powered tools, automation).
+Offer SaaS (Software as a Service) and IaaS (Infrastructure as a Service) solutions for
+scalable and cloud-based projects.
+Collaborate with clients to ensure fast, precise, and professional results.
+InfoM4th Computer Science Club Website
+ Led the end-to-end development of the club’s official site using HTML, CSS, JavaScript, and
+PHP. Implemented responsive design, dynamic content management, and integrated member
+registration and event calendars to enhance student engagement.
+Gaming News Platform
+Designed and built a full-stack gaming news portal featuring real-time article feeds, user
+comments, and a rating system. Utilized PHP and MySQL for the backend API, and modern
+HTML/CSS with JavaScript for a responsive, interactive frontend.
+PROJECTS
+Futuristic Mini Browser
+Developed a custom browser prototype in Java and C++, embedding the Chromium engine and
+integrating AI-powered features. Focused on performance optimization and an extensible plugin
+architecture
+RightMind Lab Collection
+1.RightMind – AI Model Recommendation
+Built a web tool that recommends the best AI models based on benchmark analytics.
+Users input a prompt and receive the top 4 model suggestions depending on preferences
+(quality, pricing, speed).
+Supports custom benchmark data for more tailored recommendations.
+   2.RightMind – Supe AI
+Developed a multi-model orchestration system.
+Prompts are decomposed into subtasks, each matched to the best-performing AI model using
+benchmark analysis.
+Supports integration of user-provided API keys for model selection.
+Delivers optimized responses by combining multiple specialized models.
+   3.RightMind – QUANTUM.DEV
+Designed a futuristic digital services platform with an immersive, game-like experience.
+Visitors explore company or individual service offerings through interactive design and hidden
+easter eggs.
+Blends business presentation with entertainment for a unique user journey.
+SKILLS
+       Technical Skills
+Programming Languages: Java, JavaScript, C, C++, PHP, HTML, CSS
+SQL and Database Management
+Website Development
+Prompt Engineering
+Large Language Models (LLMs)
+AI Solutions Design
+Technical Documentation
+        Professional / Business Skills
+Digital Transformation
+Project Management
+Strategic Partnerships
+        Interpersonal & Cognitive Skills
+Analytical Thinking
+Problem-Solving
+Communication and Collaboration
+Team Leadership
+Adaptability
+Continuous Learning
+        Languages
+Arabic (Native)
+French (Fluent)
+English (Fluent)
+B a c h e l o r ' s  d e g r e e  i n  c o m p u t e r  s c i e n c e
+Faculty of Science Tetouan, University abdelmalek essaadi
+Minor in software development, Data analytics and prompt engineering
+EDUCATION
+Certifications: President & Leadership Excellence (InfoM4th), Certificate of Achievement in New
+Student Registration (FS-Tetouan), Intermediate C Programming Certification (StudySection)
+hobbies : 
+1. Competitive Programming Competitions: Participating in algorithmic challenges to hone problem-
+solving and coding speed.
+2.Tech News & Blogs: Regularly reading technology blogs and news to stay current with industry
+trends.
+3.Competitive Gaming: Strategizing in multiplayer games to enhance teamwork and quick decision-
+making.
+4.Hiking & Adventure Sports: Exploring nature trails and pushing physical limits through rock climbing
+and trail running.
+5.Digital Photography: Capturing dynamic landscapes and event moments, with a focus on
+storytelling through images.
+6.Public Speaking & Workshops: Leading tech talks and workshops on AI and software development
+at university events.
+ADDITIONAL INFORMATION

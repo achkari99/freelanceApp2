@@ -376,7 +376,10 @@ function buildScene(root) {
     headingsRow.appendChild(headingCell);
 
     const columnEl = createElement("div", "jira-hero__column kanban-col", { "data-col": column.key });
+    const mobileTitle = createElement("div", "jira-hero__column-mobile-title");
+    mobileTitle.textContent = column.title;
     const listEl = createElement("div", "jira-hero__stack list");
+    columnEl.appendChild(mobileTitle);
     columnEl.appendChild(listEl);
     columnsWrap.appendChild(columnEl);
 

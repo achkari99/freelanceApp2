@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(48 32) rotate(50) scale(148)">
+      <stop stop-color="#1E40AF"/>
+      <stop offset="1" stop-color="#0F172A"/>
+    </radialGradient>
+    <linearGradient id="torso" x1="40" y1="92" x2="120" y2="152" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38BDF8" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#0EA5E9" stop-opacity="0.8"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="144" height="144" rx="72" fill="url(#bg)"/>
+  <circle cx="80" cy="70" r="32" fill="#F8FAFC" fill-opacity="0.9"/>
+  <path d="M44 132C49 108 61 96 80 96C99 96 111 108 116 132" fill="url(#torso)"/>
+  <path d="M52 128C60 110 70 104 80 104C90 104 100 110 108 128" stroke="#E0F2FE" stroke-width="6" stroke-linecap="round"/>
+  <text x="80" y="78" text-anchor="middle" font-family="'Inter', 'Segoe UI', sans-serif" font-size="28" font-weight="600" fill="#0F172A">MA</text>
+</svg>

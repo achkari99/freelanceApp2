@@ -1,4 +1,4 @@
-﻿import "./globals.css";
+import "./globals.css";
 
 import "@/styles/jiraHero.css";
 
@@ -17,7 +17,6 @@ import { SiteHeader } from "@/components/site-header";
 
 import { ScrollProgressBar } from "@/components/scroll-progress";
 
-import { ThemeProvider } from "@/components/theme-provider";
 
 import { GlobalWavesBackground } from "@/components/global-waves-background";
 
@@ -34,7 +33,8 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-
+  themeColor: "#0a0c19",
+  colorScheme: "dark",
   metadataBase: new URL(siteConfig.url),
 
   title: {
@@ -131,13 +131,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
 
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
 
       <body className="min-h-screen bg-[rgb(var(--background))] text-[rgb(var(--foreground))] antialiased">
 
         <SkipLink />
-
-        <ThemeProvider>
 
           <ScrollProgressBar />
 
@@ -156,8 +154,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <SiteFooter />
 
           </div>
-
-        </ThemeProvider>
 
         <Analytics />
 
@@ -190,4 +186,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   );
 
 }
+
+
 

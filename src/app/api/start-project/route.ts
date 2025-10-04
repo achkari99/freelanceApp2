@@ -1,9 +1,15 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { Buffer } from "node:buffer";
+import { createClient } from "@supabase/supabase-js";
+import { randomUUID } from "node:crypto";
 import { ZodError } from "zod";
 import { startProjectSchema, type StartProjectPayload } from "@/lib/validation";
 
 export const runtime = "nodejs";
+
+const PROJECT_REPORT_BUCKET = "project reports";
+const CLIENT_REQUESTS_TABLE = "clients requests data";
 
 export async function POST(request: Request) {
   try {
@@ -22,11 +28,63 @@ export async function POST(request: Request) {
       slackInvite: getBoolean(formData, "slackInvite", true)
     });
 
-    const summary = buildSummary(payload);
-    const emailSent = await sendEmail(payload, summary);
-    const slackPosted = await postToSlack(payload, summary);
+    const supabase = createSupabaseClient();
 
-    return NextResponse.json({ ok: true, emailSent, slackPosted });
+    let projectReportBuffer: Buffer | null = null;
+    let projectReportPath: string | null = null;
+    let projectReportUrl: string | null = null;
+
+    if (payload.projectReport) {
+      projectReportBuffer = Buffer.from(await payload.projectReport.arrayBuffer());
+      const objectName = createStorageObjectName(payload.projectReport.name);
+      const { data: uploadData, error: uploadError } = await supabase
+        .storage
+        .from(PROJECT_REPORT_BUCKET)
+        .upload(objectName, projectReportBuffer, {
+          contentType: payload.projectReport.type || "application/octet-stream",
+          upsert: false
+        });
+
+      if (uploadError) {
+        throw new Error(`Supabase storage upload failed: ${uploadError.message}`);
+      }
+
+      projectReportPath = uploadData?.path ?? objectName;
+      const { data: publicUrlData } = supabase
+        .storage
+        .from(PROJECT_REPORT_BUCKET)
+        .getPublicUrl(projectReportPath);
+      projectReportUrl = publicUrlData?.publicUrl ?? null;
+    }
+
+    const { error: insertError } = await supabase.from(CLIENT_REQUESTS_TABLE).insert({
+      "full name": payload.name,
+      email: payload.email,
+      "company or team": payload.company,
+      "focus area": payload.services.join(", "),
+      "budget range": payload.budget,
+      paragraph: payload.description,
+      hear: payload.hear,
+      phone: payload.phone ?? null,
+      nationality: payload.nationality ?? null,
+      created_at: new Date().toISOString()
+    });
+
+    if (insertError) {
+      throw new Error(`Supabase insert failed: ${insertError.message}`);
+    }
+
+    const summary = buildSummary(payload, { projectReportUrl });
+    const emailSent = await sendEmail(payload, summary, projectReportBuffer);
+    const slackPosted = await postToSlack(payload, summary, { projectReportUrl });
+
+    return NextResponse.json({
+      ok: true,
+      emailSent,
+      slackPosted,
+      projectReportPath,
+      projectReportUrl
+    });
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json({ ok: false, issues: error.issues }, { status: 422 });
@@ -72,16 +130,18 @@ function getFile(formData: FormData, key: string) {
   return null;
 }
 
-function buildSummary(payload: StartProjectPayload) {
+function buildSummary(payload: StartProjectPayload, options?: { projectReportUrl?: string | null }) {
   const services = payload.services.join(", ");
-  const projectReport = payload.projectReport
+  const projectReport = options?.projectReportUrl
+    ? `${payload.projectReport?.name ?? "Uploaded file"} (${options.projectReportUrl})`
+    : payload.projectReport
     ? `${payload.projectReport.name} (${formatFileSize(payload.projectReport.size)})`
     : "Not provided";
 
-  return `New project inquiry from ${payload.name} (${payload.company})\nEmail: ${payload.email}\nTimeline: ${payload.timeline}\nServices: ${services}\nBudget: ${payload.budget}\nHow they heard: ${payload.hear ?? "n/a"}\nSlack channel: ${payload.slackChannel ?? "n/a"}\nInvite us to Slack: ${payload.slackInvite ? "Yes" : "No"}\nProject report: ${projectReport}`;
+  return `New project inquiry from ${payload.name} (${payload.company})\nEmail: ${payload.email}\nTimeline: ${payload.timeline}\nServices: ${services}\nBudget: ${payload.budget}\nHow they heard: ${payload.hear ?? "n/a"}\nPhone: ${payload.phone ?? "n/a"}\nNationality: ${payload.nationality ?? "n/a"}\nSlack channel: ${payload.slackChannel ?? "n/a"}\nInvite us to Slack: ${payload.slackInvite ? "Yes" : "No"}\nProject report: ${projectReport}`;
 }
 
-async function sendEmail(payload: StartProjectPayload, summary: string) {
+async function sendEmail(payload: StartProjectPayload, summary: string, projectReportBuffer: Buffer | null) {
   const host = process.env.SMTP_HOST;
   const port = process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : undefined;
   const user = process.env.SMTP_USER;
@@ -101,11 +161,11 @@ async function sendEmail(payload: StartProjectPayload, summary: string) {
   });
 
   const attachments =
-    payload.projectReport && payload.projectReport.size > 0
+    projectReportBuffer && payload.projectReport
       ? [
           {
             filename: payload.projectReport.name,
-            content: Buffer.from(await payload.projectReport.arrayBuffer()),
+            content: projectReportBuffer,
             contentType: payload.projectReport.type || undefined
           }
         ]
@@ -123,13 +183,15 @@ async function sendEmail(payload: StartProjectPayload, summary: string) {
   return true;
 }
 
-async function postToSlack(payload: StartProjectPayload, summary: string) {
+async function postToSlack(payload: StartProjectPayload, summary: string, options?: { projectReportUrl?: string | null }) {
   const webhook = process.env.SLACK_WEBHOOK_URL;
   if (!webhook) {
     return false;
   }
 
-  const projectReportLine = payload.projectReport
+  const projectReportLine = options?.projectReportUrl
+    ? `*Project report*: ${options.projectReportUrl}`
+    : payload.projectReport
     ? `*Project report*: ${payload.projectReport.name} (${formatFileSize(payload.projectReport.size)})`
     : "*Project report*: Not provided";
 
@@ -179,6 +241,24 @@ async function postToSlack(payload: StartProjectPayload, summary: string) {
   }
 }
 
+function createSupabaseClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!url || !key) {
+    throw new Error("Supabase credentials are not configured");
+  }
+
+  return createClient(url, key, { auth: { persistSession: false } });
+}
+
+function createStorageObjectName(filename: string) {
+  const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+  const random = randomUUID();
+  const safe = filename.replace(/[^a-zA-Z0-9._-]/g, "_");
+  return `requests/${timestamp}-${random}-${safe}`;
+}
+
 function formatFileSize(bytes: number) {
   if (!Number.isFinite(bytes) || bytes <= 0) {
     return "0 B";
@@ -196,3 +276,6 @@ function formatFileSize(bytes: number) {
 
   return `${bytes} B`;
 }
+
+
+

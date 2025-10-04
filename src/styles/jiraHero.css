@@ -300,6 +300,27 @@
   background: linear-gradient(90deg, rgba(96, 149, 255, 0.65), transparent);
 }
 
+
+#services-hero .jira-hero__column-mobile-title {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+  font-size: 0.68rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(198, 214, 255, 0.75);
+}
+
+#services-hero .jira-hero__column-mobile-title::before {
+  content: "";
+  display: inline-block;
+  width: 22px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(96, 149, 255, 0.65), transparent);
+}
+
 #services-hero .jira-hero__columns {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -627,6 +648,16 @@
   will-change: transform;
 }
 
+@media (max-width: 768px) {
+  #services-hero .jira-hero__columns-head {
+    display: none;
+  }
+
+  #services-hero .jira-hero__column-mobile-title {
+    display: flex;
+  }
+}
+
 @media (max-width: 1100px) {
   #services-hero .jira-hero__board {
     overflow-x: auto;
@@ -677,8 +708,3 @@
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   }
 }
-
-
-
-
-

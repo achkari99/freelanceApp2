@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 
 
@@ -102,7 +102,7 @@ const steps: { id: string; title: string; description: string; fields: (keyof St
 
 
 
-    fields: ["hear", "slackChannel", "slackInvite"]
+    fields: ["hear", "phone", "nationality", "slackChannel", "slackInvite"]
 
 
 
@@ -210,21 +210,21 @@ export function StartProjectForm() {
 
 
   const nextStep = async () => {
-
-
-
-    const valid = await form.trigger(currentStep.fields);
-
-
+    const nextFields = steps[step]?.fields ?? [];
+    const valid = await form.trigger(nextFields);
 
     if (!valid) return;
 
+    if (status !== "idle") {
+      setStatus("idle");
+    }
 
-
-    setStep((prev) => Math.min(prev + 1, steps.length - 1));
-
-
-
+    await new Promise<void>((resolve) => {
+      setTimeout(() => {
+        setStep((prev) => Math.min(prev + 1, steps.length - 1));
+        resolve();
+      }, 0);
+    });
   };
 
 
@@ -242,9 +242,6 @@ export function StartProjectForm() {
 
 
   const onSubmit = async (payload: StartProjectPayload) => {
-
-
-
     setStatus("submitting");
 
 
@@ -268,6 +265,12 @@ export function StartProjectForm() {
       }
       if (payload.hear) {
         formData.append("hear", payload.hear);
+      }
+      if (payload.phone) {
+        formData.append("phone", payload.phone);
+      }
+      if (payload.nationality) {
+        formData.append("nationality", payload.nationality);
       }
       if (payload.slackChannel) {
         formData.append("slackChannel", payload.slackChannel);
@@ -337,6 +340,19 @@ export function StartProjectForm() {
 
 
 
+  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (step < steps.length - 1) {
+      await nextStep();
+      return;
+    }
+
+    const submitHandler = form.handleSubmit(onSubmit);
+    await submitHandler(event);
+  };
+
   return (
 
 
@@ -346,7 +362,7 @@ export function StartProjectForm() {
 
 
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={handleFormSubmit}
         className="space-y-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-xl dark:border-slate-800 dark:bg-slate-900 sm:p-8"
       >
 
@@ -1302,6 +1318,7 @@ const placeholderCopy: Partial<Record<keyof StartProjectPayload, string>> = {
 
 
 };
+
 
 
 

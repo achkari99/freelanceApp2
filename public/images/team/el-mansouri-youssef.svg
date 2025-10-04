@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(36 24) rotate(45) scale(158)">
+      <stop stop-color="#0F766E"/>
+      <stop offset="1" stop-color="#022C22"/>
+    </radialGradient>
+    <linearGradient id="torso" x1="44" y1="94" x2="124" y2="150" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#34D399" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#0EA5E9" stop-opacity="0.85"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="144" height="144" rx="72" fill="url(#bg)"/>
+  <circle cx="80" cy="68" r="31" fill="#ECFDF5" fill-opacity="0.95"/>
+  <path d="M46 132C51 108 63 98 80 98C97 98 109 108 114 132" fill="url(#torso)"/>
+  <path d="M54 126C62 110 70 106 80 106C90 106 98 110 106 126" stroke="#CCFBF1" stroke-width="6" stroke-linecap="round"/>
+  <text x="80" y="76" text-anchor="middle" font-family="'Inter', 'Segoe UI', sans-serif" font-size="28" font-weight="600" fill="#022C22">YE</text>
+</svg>

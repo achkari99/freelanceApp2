@@ -1,4 +1,4 @@
-﻿import { z } from "zod";
+import { z } from "zod";
 
 export const PROJECT_REPORT_ACCEPTED_EXTENSIONS = [
   ".pdf",
@@ -15,7 +15,7 @@ export const PROJECT_REPORT_ACCEPTED_MIME_TYPES = [
   "application/x-zip-compressed"
 ] as const;
 
-export const PROJECT_REPORT_MAX_SIZE_BYTES = 25 * 1024 * 1024;
+export const PROJECT_REPORT_MAX_SIZE_BYTES = 50 * 1024 * 1024;
 
 const projectReportFileSchema = z.instanceof(File).superRefine((file, ctx) => {
   const name = file.name.toLowerCase();
@@ -32,7 +32,7 @@ const projectReportFileSchema = z.instanceof(File).superRefine((file, ctx) => {
   if (file.size > PROJECT_REPORT_MAX_SIZE_BYTES) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      message: "File size must be 25 MB or less."
+      message: "File size must be 50 MB or less."
     });
   }
 });
@@ -52,6 +52,8 @@ export const startProjectSchema = z.object({
   description: z.string().min(10, "Add a bit more detail"),
   projectReport: projectReportSchema,
   hear: z.string().optional(),
+  phone: z.string().trim().optional(),
+  nationality: z.string().trim().optional(),
   slackChannel: z.string().optional(),
   slackInvite: z.boolean().default(true)
 });
