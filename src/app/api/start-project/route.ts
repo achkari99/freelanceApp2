@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { createClient } from "@supabase/supabase-js";
 import { ZodError } from "zod";
@@ -48,7 +48,7 @@ export async function POST(request: Request) {
 function buildSummary(payload: StartProjectApiPayload) {
   const services = payload.services.join(", ");
   const projectReport = payload.projectReport
-    ? `${payload.projectReport.name} (${formatFileSize(payload.projectReport.size)})${payload.projectReport.url ? ` � ${payload.projectReport.url}` : ""}`
+    ? `${payload.projectReport.name} (${formatFileSize(payload.projectReport.size)})${payload.projectReport.url ? ` — ${payload.projectReport.url}` : ""}`
     : "Not provided";
 
   return `New project inquiry from ${payload.name} (${payload.company})\nEmail: ${payload.email}\nTimeline: ${payload.timeline}\nServices: ${services}\nBudget: ${payload.budget}\nHow they heard: ${payload.hear ?? "n/a"}\nPhone: ${payload.phone ?? "n/a"}\nNationality: ${payload.nationality ?? "n/a"}\nSlack channel: ${payload.slackChannel ?? "n/a"}\nInvite us to Slack: ${payload.slackInvite ? "Yes" : "No"}\nProject report: ${projectReport}`;
@@ -170,3 +170,4 @@ function formatFileSize(bytes: number) {
 
   return `${bytes} B`;
 }
+

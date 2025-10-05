@@ -78,8 +78,13 @@ async function uploadProjectReport(file: File) {
     url: publicUrlData?.publicUrl ?? null,
     name: file.name,
     size: file.size,
-    type: file.type
+    type: file.type || null
   };
+}
+
+function toNullableString(value?: string | null) {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : null;
 }
 
 const steps: { id: string; title: string; description: string; fields: (keyof StartProjectPayload)[] }[] = [ 
@@ -226,6 +231,15 @@ export function StartProjectForm() {
 
       hear: "",
 
+      phone: "",
+
+
+
+      nationality: "",
+
+
+
+
 
 
       slackChannel: "",
@@ -297,36 +311,34 @@ export function StartProjectForm() {
 
 
 
-            const formData = new FormData();
-      formData.append("name", payload.name);
-      formData.append("email", payload.email);
-      formData.append("company", payload.company);
-      formData.append("timeline", payload.timeline);
-      payload.services.forEach((service) => {
-        formData.append("services", service);
-      });
-      formData.append("budget", payload.budget);
-      formData.append("description", payload.description);
-      if (payload.projectReport) {
-        formData.append("projectReport", payload.projectReport);
-      }
-      if (payload.hear) {
-        formData.append("hear", payload.hear);
-      }
-      if (payload.phone) {
-        formData.append("phone", payload.phone);
-      }
-      if (payload.nationality) {
-        formData.append("nationality", payload.nationality);
-      }
-      if (payload.slackChannel) {
-        formData.append("slackChannel", payload.slackChannel);
-      }
-      formData.append("slackInvite", payload.slackInvite ? "true" : "false");
+      const reportMetadata = payload.projectReport ? await uploadProjectReport(payload.projectReport) : null;
+
+
+
+      const body = {
+        name: payload.name,
+        email: payload.email,
+        company: payload.company,
+        timeline: payload.timeline,
+        services: payload.services,
+        budget: payload.budget,
+        description: payload.description,
+        hear: toNullableString(payload.hear),
+        phone: toNullableString(payload.phone),
+        nationality: toNullableString(payload.nationality),
+        slackChannel: toNullableString(payload.slackChannel),
+        slackInvite: payload.slackInvite,
+        projectReport: reportMetadata
+      };
+
+
 
       const response = await fetch("/api/start-project", {
         method: "POST",
-        body: formData
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
       });
 
 
@@ -656,6 +668,14 @@ function Field({ name }: FieldProps) {
 
 
     case "hear":
+
+
+
+    case "phone":
+
+
+
+    case "nationality":
 
 
 
@@ -1383,7 +1403,6 @@ const placeholderCopy: Partial<Record<keyof StartProjectPayload, string>> = {
 
 
 };
-
 
 
 
