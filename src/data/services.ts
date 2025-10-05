@@ -48,6 +48,23 @@ export const services: Service[] = [
     background: "emerald"
   },
   {
+    slug: "software-development",
+    name: "Software Development",
+    teaser: "End-to-end delivery of resilient platforms and integrations.",
+    description:
+      "We design modular architectures, harden delivery pipelines, and leave maintainable codebases that scale with your roadmap.",
+    deliverables: [
+      "Architecture & technical specifications",
+      "Modular feature implementation",
+      "Automated QA & DevOps workflows",
+      "Knowledge transfer & onboarding"
+    ],
+    icon: "Code",
+    accent: "cyan",
+    animation: "fullstack",
+    background: "fullstack"
+  },
+  {
     slug: "ui-ux-design",
     name: "UI/UX Design",
     teaser: "Design-first interfaces that convert, delight, and scale with you.",
@@ -58,6 +75,23 @@ export const services: Service[] = [
     accent: "amber",
     animation: "design",
     background: "amber"
+  },
+  {
+    slug: "saas-iaas-launches",
+    name: "SaaS / IaaS Launches",
+    teaser: "Operationalize cloud-native products with multi-tenant tooling.",
+    description:
+      "We configure subscription infrastructure, metering, and support layers so you can ship managed services with confidence.",
+    deliverables: [
+      "Tenant-aware cloud architecture",
+      "Billing & metering integrations",
+      "Observability & SLO dashboards",
+      "Runbooks and escalation workflows"
+    ],
+    icon: "Cloud",
+    accent: "indigo",
+    animation: "ai",
+    background: "ai"
   },
   {
     slug: "consulting-transformation",

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Brain, Compass, Layers, Palette, Rocket } from "lucide-react";
+import { Brain, Cloud, Code, Compass, Layers, Palette, Rocket } from "lucide-react";
 
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -16,7 +16,9 @@ const iconMap = {
   Brain,
   Layers,
   Palette,
-  Compass
+  Compass,
+  Code,
+  Cloud
 };
 
 const accentClasses: Record<string, string> = {
@@ -24,7 +26,9 @@ const accentClasses: Record<string, string> = {
   violet: "bg-violet-500/10 text-violet-600 dark:text-violet-300",
   emerald: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-300",
   amber: "bg-amber-500/10 text-amber-600 dark:text-amber-300",
-  rose: "bg-rose-500/10 text-rose-600 dark:text-rose-300"
+  rose: "bg-rose-500/10 text-rose-600 dark:text-rose-300",
+  cyan: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-300",
+  indigo: "bg-indigo-500/10 text-indigo-600 dark:text-indigo-300"
 };
 
 const sectionTones = [

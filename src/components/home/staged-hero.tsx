@@ -416,7 +416,7 @@ export function StagedHero() {
           animate={bodyState}
         >
           <p className="text-base text-slate-200 sm:text-lg">
-            We are ACH, the rapid-build unit inside RightMind Lab. In forty-eight hours we deliver clickable or coded prototypes for AI products, SaaS platforms, and mobile experiences, complete with architecture notes so you can scale with confidence.
+            We are ACH, the rapid-build unit inside RightMind Lab. In forty-eight hours we deliver a working prototype, then stay on to ship AI solutions, custom software development, SaaS / IaaS launches, web and mobile experiences, premium UI/UX, and transformation consulting—complete with architecture, DevOps, and playbooks so you can scale with confidence.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
             <Button asChild size="lg">

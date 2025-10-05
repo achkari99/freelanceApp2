@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion, useReducedMotion as useFramerReducedMotion } from "framer-motion";
-import { Brain, Compass, Layers, Lightbulb, Palette, Rocket } from "lucide-react";
+import { Brain, Cloud, Code, Compass, Layers, Lightbulb, Palette, Rocket } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { services } from "@/data/services";
@@ -15,7 +15,9 @@ const iconMap = {
   Layers,
   Palette,
   Compass,
-  Lightbulb
+  Lightbulb,
+  Code,
+  Cloud
 };
 
 const accentGradients: Record<string, string> = {
@@ -23,7 +25,9 @@ const accentGradients: Record<string, string> = {
   violet: "from-violet-500/20 via-slate-950 to-slate-950",
   emerald: "from-emerald-500/20 via-slate-950 to-slate-950",
   amber: "from-amber-500/20 via-slate-950 to-slate-950",
-  rose: "from-rose-500/20 via-slate-950 to-slate-950"
+  rose: "from-rose-500/20 via-slate-950 to-slate-950",
+  cyan: "from-cyan-500/20 via-slate-950 to-slate-950",
+  indigo: "from-indigo-500/20 via-slate-950 to-slate-950"
 };
 
 const accentBadges: Record<string, string> = {
@@ -31,7 +35,9 @@ const accentBadges: Record<string, string> = {
   violet: "bg-violet-500/10 text-violet-300",
   emerald: "bg-emerald-500/10 text-emerald-300",
   amber: "bg-amber-500/10 text-amber-300",
-  rose: "bg-rose-500/10 text-rose-300"
+  rose: "bg-rose-500/10 text-rose-300",
+  cyan: "bg-cyan-500/10 text-cyan-300",
+  indigo: "bg-indigo-500/10 text-indigo-300"
 };
 
 const accentIndicators: Record<string, string> = {
@@ -39,7 +45,9 @@ const accentIndicators: Record<string, string> = {
   violet: "bg-violet-400",
   emerald: "bg-emerald-400",
   amber: "bg-amber-400",
-  rose: "bg-rose-400"
+  rose: "bg-rose-400",
+  cyan: "bg-cyan-400",
+  indigo: "bg-indigo-400"
 };
 
 const accentRings: Record<string, string> = {
@@ -47,7 +55,9 @@ const accentRings: Record<string, string> = {
   violet: "ring-violet-300/35 shadow-[0_40px_90px_rgba(167,139,250,0.22)]",
   emerald: "ring-emerald-300/35 shadow-[0_40px_90px_rgba(16,185,129,0.22)]",
   amber: "ring-amber-300/35 shadow-[0_40px_90px_rgba(251,191,36,0.22)]",
-  rose: "ring-rose-300/35 shadow-[0_40px_90px_rgba(244,114,182,0.22)]"
+  rose: "ring-rose-300/35 shadow-[0_40px_90px_rgba(244,114,182,0.22)]",
+  cyan: "ring-cyan-300/35 shadow-[0_40px_90px_rgba(34,211,238,0.22)]",
+  indigo: "ring-indigo-300/35 shadow-[0_40px_90px_rgba(129,140,248,0.22)]"
 };
 
 type JiraHeroInstance = {
