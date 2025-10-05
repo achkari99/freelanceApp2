@@ -41,7 +41,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: false, issues: error.issues }, { status: 422 });
     }
     console.error("Start project submission failed", error);
-    return NextResponse.json({ ok: false }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ ok: false, message }, { status: 500 });
   }
 }
 

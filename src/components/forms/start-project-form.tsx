@@ -344,10 +344,19 @@ export function StartProjectForm() {
 
 
       if (!response.ok) {
+        let message = "Failed to submit";
+        try {
+          const errorBody = await response.json();
+          if (typeof errorBody?.message === "string" && errorBody.message.trim()) {
+            message = errorBody.message;
+          }
+        } catch (jsonError) {
+          console.error("Failed to parse start-project error response", jsonError);
+        }
 
 
 
-        throw new Error("Failed to submit");
+        throw new Error(message);
 
 
 
