@@ -2,12 +2,13 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 
 import { siteConfig } from "@/lib/site-config";
-import { cn } from "@/lib/utils";
+import { cn, withBasePath } from "@/lib/utils";
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -96,12 +97,14 @@ export function SiteHeader() {
       <div className="flex w-full items-center gap-4 px-safe pb-4 pt-4 pt-safe sm:px-6 md:px-10 lg:px-12">
         <div className="flex flex-shrink-0 items-center gap-3">
           <Link href="/" className="flex items-center gap-2 font-display text-lg tracking-tight">
-            <span
-              aria-hidden
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-sky-500 text-sm font-semibold text-white shadow-[0_10px_30px_-20px_rgba(14,165,233,0.8)]"
-            >
-              ACH
-            </span>
+            <Image
+              src={withBasePath("/logo.png")}
+              alt="ACH"
+              width={120}
+              height={120}
+              priority
+              className="h-10 w-auto"
+            />
             <span className="leading-none">{siteConfig.name}</span>
             <span className="sr-only">Return home</span>
           </Link>

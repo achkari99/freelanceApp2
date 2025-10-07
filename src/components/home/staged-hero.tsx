@@ -23,6 +23,37 @@ const FINAL_SCROLL_UNLOCK_DISTANCE = 140;
 
 export function StagedHero() {
   const prefersReducedMotion = useFramerReducedMotion() || preferReducedMotion();
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    const handleChange = (event: MediaQueryListEvent) => {
+      setIsMobile(event.matches);
+    };
+
+    setIsMobile(mediaQuery.matches);
+
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", handleChange);
+      return () => mediaQuery.removeEventListener("change", handleChange);
+    }
+
+    mediaQuery.addListener(handleChange);
+    return () => mediaQuery.removeListener(handleChange);
+  }, []);
+
+  if (isMobile) {
+    return <MobileHero prefersReducedMotion={prefersReducedMotion} />;
+  }
+
+  return <DesktopStagedHero prefersReducedMotion={prefersReducedMotion} />;
+}
+
+function DesktopStagedHero({ prefersReducedMotion }: { prefersReducedMotion: boolean }) {
   const [stage, setStage] = React.useState(prefersReducedMotion ? FINAL_STAGE : 0);
   const [showScrollCue, setShowScrollCue] = React.useState(true);
   const stageRef = React.useRef(stage);
@@ -499,4 +530,43 @@ export function StagedHero() {
 
 
 
+
+
+
+function MobileHero({ prefersReducedMotion: _prefersReducedMotion }: { prefersReducedMotion: boolean }) {
+  void _prefersReducedMotion;
+  return (
+    <section className="relative isolate flex min-h-[520px] w-full flex-col justify-center overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(37,148,255,0.28),_transparent_65%),_radial-gradient(circle_at_bottom,_rgba(15,71,172,0.45),_rgba(7,16,35,0.95))] px-6 py-16 text-white sm:px-10">
+      <div className="absolute inset-0 opacity-55" aria-hidden>
+        <div className="absolute left-0 top-0 h-64 w-64 translate-x-[-35%] translate-y-[-25%] rounded-full bg-sky-500/40 blur-3xl" />
+        <div className="absolute right-0 bottom-0 h-72 w-72 translate-x-[20%] translate-y-[35%] rounded-full bg-cyan-400/30 blur-3xl" />
+      </div>
+      <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-col gap-8 text-left">
+        <Badge className="w-max border-white/30 bg-white/10 text-white backdrop-blur">
+          <Sparkles className="mr-2 h-3.5 w-3.5" /> ACH | Better than AI and faster
+        </Badge>
+        <h1 className="font-display text-3xl leading-tight sm:text-4xl">
+          Your idea, our prototype in 48 hours.
+        </h1>
+        <p className="text-base text-slate-100/85 sm:text-lg">
+          We are ACH, the rapid-build unit inside RightMind Lab. In forty-eight hours we deliver a working prototype, then stay on to ship AI solutions, custom software development, SaaS / IaaS launches, premium UI/UX, and transformation consulting - complete with architecture, DevOps, and playbooks so you can scale with confidence.
+        </p>
+        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+          <Button asChild size="lg">
+            <Link href="/start-a-project">
+              Start your prototype for free
+              <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
+            </Link>
+          </Button>
+          <Button asChild variant="outline" size="lg" className="border-white/30 text-white hover:border-white/60 hover:bg-white/10">
+            <Link href="/services">
+              Explore what we build
+              <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
+            </Link>
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+}
 

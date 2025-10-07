@@ -50,6 +50,54 @@ const accentIndicators: Record<string, string> = {
   indigo: "bg-indigo-400"
 };
 
+type WorkflowTask = {
+  title: string;
+  tag: string;
+  owner: string;
+  eta: string;
+  initials: string;
+};
+
+type WorkflowColumn = {
+  title: string;
+  accent: keyof typeof accentIndicators;
+  chipClass: string;
+  tasks: WorkflowTask[];
+};
+
+const WORKFLOW_COLUMNS: WorkflowColumn[] = [
+  {
+    title: "Plan",
+    accent: "sky",
+    chipClass: "jira-chip--blue",
+    tasks: [
+      { title: "Kickoff sync & success metrics", tag: "Plan", owner: "Strategy", eta: "Today - 09:00", initials: "AT" },
+      { title: "Requirements storyboard", tag: "Plan", owner: "Product", eta: "Today - 10:15", initials: "MB" },
+      { title: "Technical spike checklist", tag: "Plan", owner: "Engineering", eta: "Today - 11:00", initials: "SW" }
+    ]
+  },
+  {
+    title: "In progress",
+    accent: "emerald",
+    chipClass: "jira-chip--green",
+    tasks: [
+      { title: "Interactive prototype build", tag: "In progress", owner: "Design", eta: "Today - 13:30", initials: "JR" },
+      { title: "API scaffold + auth", tag: "In progress", owner: "Engineering", eta: "Today - 15:00", initials: "NL" },
+      { title: "QA smoke scenarios", tag: "In progress", owner: "QA", eta: "Today - 16:15", initials: "KP" }
+    ]
+  },
+  {
+    title: "Review",
+    accent: "violet",
+    chipClass: "jira-chip--purple",
+    tasks: [
+      { title: "Client walkthrough & notes", tag: "Review", owner: "Client", eta: "Tomorrow - 09:30", initials: "RM" },
+      { title: "Revision bundle", tag: "Review", owner: "Design", eta: "Tomorrow - 11:00", initials: "LS" },
+      { title: "Launch roadmap", tag: "Review", owner: "Delivery", eta: "Tomorrow - 14:00", initials: "DG" }
+    ]
+  }
+];
+
 const accentRings: Record<string, string> = {
   sky: "ring-sky-300/35 shadow-[0_40px_90px_rgba(56,189,248,0.22)]",
   violet: "ring-violet-300/35 shadow-[0_40px_90px_rgba(167,139,250,0.22)]",
@@ -60,22 +108,10 @@ const accentRings: Record<string, string> = {
   indigo: "ring-indigo-300/35 shadow-[0_40px_90px_rgba(129,140,248,0.22)]"
 };
 
-type JiraHeroInstance = {
-  destroy?: () => void;
-  pause?: () => void;
-  play?: () => void;
-  runScenario?: () => Promise<void>;
-};
-
-type JiraHeroModule = {
-  initJiraHero: (root: HTMLElement, options?: { forceReduceMotion?: boolean }) => JiraHeroInstance;
-};
-
 export function StagedServices() {
   const prefersReducedMotion = useFramerReducedMotion() || preferReducedMotion();
   const [activeIndex, setActiveIndex] = React.useState(0);
   const serviceRefs = React.useRef<(HTMLElement | null)[]>([]);
-  const heroRef = React.useRef<HTMLDivElement | null>(null);
   const heroHeading = (
     <div className="services-hero-heading">
       <span className="services-hero-heading__eyebrow">Live workflow</span>
@@ -84,6 +120,51 @@ export function StagedServices() {
     </div>
   );
 
+
+  const workflowBoard = (
+    <div className="jira-hero">
+      <div className="jira-hero__frame">
+        <div className="jira-hero__board" role="list">
+          <div className="jira-hero__columns-head">
+            {WORKFLOW_COLUMNS.map((column) => (
+              <span key={`${column.title}-head`} className="jira-hero__column-title">
+                {column.title}
+              </span>
+            ))}
+          </div>
+          <div className="jira-hero__columns">
+            {WORKFLOW_COLUMNS.map((column) => {
+              const indicatorTone = accentIndicators[column.accent] ?? "bg-sky-400";
+              return (
+                <div key={column.title} className="jira-hero__column">
+                  <span className="jira-hero__column-mobile-title">{column.title}</span>
+                  <div className="jira-hero__column-title">
+                    <span className={`h-2 w-2 rounded-full ${indicatorTone}`} aria-hidden />
+                    <span>{column.title}</span>
+                  </div>
+                  <div className="jira-hero__stack">
+                    {column.tasks.map((task) => (
+                      <article key={`${column.title}-${task.title}`} className="jira-card" data-elevation="1">
+                        <div className="jira-card__heading">{task.title}</div>
+                        <div className="jira-chip-row">
+                          <span className={`jira-chip ${column.chipClass}`}>{task.tag}</span>
+                          <span className="jira-pill">{task.owner}</span>
+                        </div>
+                        <div className="jira-card__meta">
+                          <span>{task.eta}</span>
+                          <span className="jira-avatar">{task.initials}</span>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   React.useEffect(() => {
     if (prefersReducedMotion) {
@@ -118,38 +199,6 @@ export function StagedServices() {
     };
   }, [prefersReducedMotion]);
 
-  React.useEffect(() => {
-    const node = heroRef.current;
-    if (!node) {
-      return;
-    }
-
-    let disposed: JiraHeroInstance | null = null;
-    let cancelled = false;
-
-    void import("@/animations/jiraHero")
-      .then((module: JiraHeroModule) => {
-        if (cancelled || !heroRef.current) {
-          return;
-        }
-
-        disposed = module.initJiraHero(heroRef.current, {
-          forceReduceMotion: Boolean(prefersReducedMotion)
-        });
-      })
-      .catch((error) => {
-        if (process.env.NODE_ENV !== "production") {
-          console.error("Failed to initialize Jira hero animation", error);
-        }
-      });
-
-    return () => {
-      cancelled = true;
-      disposed?.destroy?.();
-      disposed = null;
-    };
-  }, [prefersReducedMotion]);
-
   const handleIndicatorClick = React.useCallback(
     (index: number) => {
       if (prefersReducedMotion) {
@@ -173,7 +222,7 @@ export function StagedServices() {
 
         <section id="services-hero" data-role="decorative">
           {heroHeading}
-          <div ref={heroRef} data-jira-hero-root />
+          {workflowBoard}
         </section>
 
       </div>
@@ -234,7 +283,7 @@ export function StagedServices() {
       </div>
       <section id="services-hero" data-role="decorative">
         {heroHeading}
-        <div ref={heroRef} data-jira-hero-root />
+        {workflowBoard}
       </section>
     </section>
   );
