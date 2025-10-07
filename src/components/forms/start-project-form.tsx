@@ -1375,7 +1375,7 @@ const placeholderCopy: Partial<Record<keyof StartProjectPayload, string>> = {
 
 
 
-  email: "aa03abm05@gmail.com",
+  email: "ach.48hprototype@rightmind-labs.online",
 
 
 

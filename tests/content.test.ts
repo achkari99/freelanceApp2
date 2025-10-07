@@ -41,7 +41,7 @@ describe("content integrity", () => {
   it("validates a sample start project submission", () => {
     const result = startProjectSchema.safeParse({
       name: "Jordan Rivera",
-      email: "aa03abm05@gmail.com",
+      email: "ach.48hprototype@rightmind-labs.online",
       company: "Example Co",
       timeline: "June",
       services: [services[0]?.name ?? "Product Strategy"],

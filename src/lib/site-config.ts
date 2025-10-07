@@ -9,12 +9,12 @@ export const siteConfig = {
   links: {
     twitter: "https://twitter.com/rightmindlab",
     linkedin: "https://www.linkedin.com/company/rightmind-lab",
-    email: "aa03abm05@gmail.com"
+    email: "ach.48hprototype@rightmind-labs.online"
   },
   navigation: [
     { href: "/our-work", label: "Results" },
     { href: "/services", label: "Services" },
-    { href: "/about", label: "About" },
+    { href: "/about", label: "About Us" },
     { href: "/backstage", label: "Lab Notes" },
     { href: "/contact", label: "Contact" },
     { href: "/search", label: "Search" }

@@ -155,7 +155,7 @@ export default function HomePage() {
               Share what you are building and we will schedule a kickoff within hours. You will receive strategy notes, design assets, and a working prototype you can demo or pitch immediately.
             </p>
             <p className="text-sm text-slate-300">
-              Prefer email? Reach us directly at <a className="underline" href="mailto:aa03abm05@gmail.com">aa03abm05@gmail.com</a>.
+              Prefer email? Reach us directly at <a className="underline" href="mailto:ach.48hprototype@rightmind-labs.online">ach.48hprototype@rightmind-labs.online</a>.
             </p>
           </Reveal>
           <Reveal className="flex flex-col gap-4 sm:flex-row" direction="up" delay={0.12}>
