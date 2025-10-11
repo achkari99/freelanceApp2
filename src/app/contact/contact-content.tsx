@@ -27,8 +27,8 @@ function useSilkyScroll(parallaxRef: RefObject<HTMLElement>, parallaxFactor = -0
     let target = window.scrollY;
     let current = window.scrollY;
     let frame = 0;
-    const ease = 0.14;
-    const snapThreshold = 0.25;
+    const ease = 0.1;
+    const snapThreshold = 0.22;
     const scrollingElement = document.scrollingElement ?? document.documentElement;
 
     const applyParallax = (scrollPosition: number) => {
@@ -79,7 +79,7 @@ function useSilkyScroll(parallaxRef: RefObject<HTMLElement>, parallaxFactor = -0
 
       event.preventDefault();
 
-      const velocityBoost = Math.abs(baseDelta) > 32 ? 1.24 : 0.86;
+      const velocityBoost = Math.abs(baseDelta) > 32 ? 1.12 : 0.74;
       target = clamp(target + baseDelta * velocityBoost);
       requestUpdate();
     };
@@ -213,4 +213,3 @@ export default function ContactContent() {
     </div>
   );
 }
-
