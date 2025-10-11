@@ -6,23 +6,16 @@ import Link from "next/link";
 
 
 
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 
 
 import { Badge } from "@/components/ui/badge";
-
-
-
 import { Button } from "@/components/ui/button";
-
-
-
 import { Card } from "@/components/ui/card";
-
-
-
 import { services } from "@/data/services";
+
+
 
 
 
@@ -242,85 +235,36 @@ export default function ServicesPage() {
 
 
 
-      <section className="mt-16 grid gap-6 md:grid-cols-2">
+      <section className="mt-12 space-y-8">
 
+        <div className="space-y-4 text-center md:text-left md:space-y-5">
+          <h2 className="font-display text-3xl text-slate-900 dark:text-white">What we build</h2>
+          <p className="text-sm text-slate-600 dark:text-slate-300">
+            ACH squads cover AI orchestration, rapid prototyping, software engineering, and launch-readiness in a single run. Explore the services we adapt to every build.
+          </p>
+        </div>
 
-
-        {services.map((service) => (
-
-
-
-          <Card key={service.slug} id={service.slug}>
-
-
-
-            <div className="space-y-4">
-
-
-
-              <div className="flex items-center justify-between">
-
-
-
-                <h2 className="font-display text-2xl text-slate-900 dark:text-white">{service.name}</h2>
-
-
-
-                <Badge>{service.slug.replace("-", " ")}</Badge>
-
-
-
+        <div className="grid gap-6 md:grid-cols-2">
+          {services.map((service) => (
+            <Card key={service.slug} id={service.slug}>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="font-display text-2xl text-slate-900 dark:text-white">{service.name}</h2>
+                  <Badge>{service.slug.replace("-", " ")}</Badge>
+                </div>
+                <p className="text-sm text-slate-600 dark:text-slate-300">{service.description}</p>
+                <ul className="grid gap-2 text-sm text-slate-500 dark:text-slate-300">
+                  {service.deliverables.map((item) => (
+                    <li key={item} className="inline-flex items-center gap-2">
+                      <span className="mt-1 inline-block h-2 w-2 rounded-full bg-sky-500" aria-hidden />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
-
-
-
-              <p className="text-sm text-slate-600 dark:text-slate-300">{service.description}</p>
-
-
-
-              <ul className="grid gap-2 text-sm text-slate-500 dark:text-slate-300">
-
-
-
-                {service.deliverables.map((item) => (
-
-
-
-                  <li key={item} className="inline-flex items-center gap-2">
-
-
-
-                    <CheckCircle2 className="h-4 w-4 text-sky-500" aria-hidden />
-
-
-
-                    {item}
-
-
-
-                  </li>
-
-
-
-                ))}
-
-
-
-              </ul>
-
-
-
-            </div>
-
-
-
-          </Card>
-
-
-
-        ))}
-
-
+            </Card>
+          ))}
+        </div>
 
       </section>
 
@@ -531,6 +475,7 @@ export default function ServicesPage() {
 
 
 }
+
 
 
 

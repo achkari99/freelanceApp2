@@ -1,121 +1,47 @@
 'use client';
 
-import { useEffect, useRef, type RefObject } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { siteConfig } from "@/lib/site-config";
+import { useSilkyScrollListener } from "@/components/providers/silky-scroll-provider";
 
 const GradualBlur = dynamic(() => import("~/gradual_blur"), {
   ssr: false
 });
 
-function useSilkyScroll(parallaxRef: RefObject<HTMLElement>, parallaxFactor = -0.05) {
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const reduceMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (reduceMotionQuery.matches) {
-      const parallaxNode = parallaxRef.current;
-      if (parallaxNode) {
-        parallaxNode.style.transform = "translate3d(0, 0, 0)";
-      }
-      return;
-    }
-
-    let target = window.scrollY;
-    let current = window.scrollY;
-    let frame = 0;
-    const ease = 0.1;
-    const snapThreshold = 0.22;
-    const scrollingElement = document.scrollingElement ?? document.documentElement;
-
-    const applyParallax = (scrollPosition: number) => {
-      const parallaxNode = parallaxRef.current;
-      if (parallaxNode) {
-        parallaxNode.style.transform = `translate3d(0, ${scrollPosition * parallaxFactor}px, 0)`;
-      }
-    };
-
-    const clamp = (value: number) => {
-      const maxScroll = scrollingElement.scrollHeight - window.innerHeight;
-      return Math.max(0, Math.min(value, maxScroll >= 0 ? maxScroll : 0));
-    };
-
-    const update = () => {
-      const clampedTarget = clamp(target);
-      current += (clampedTarget - current) * ease;
-
-      if (Math.abs(clampedTarget - current) < snapThreshold) {
-        current = clampedTarget;
-      }
-
-      window.scrollTo(0, current);
-      applyParallax(current);
-
-      if (Math.abs(clampedTarget - current) > snapThreshold) {
-        frame = window.requestAnimationFrame(update);
-      } else {
-        frame = 0;
-      }
-    };
-
-    const requestUpdate = () => {
-      if (frame === 0) {
-        frame = window.requestAnimationFrame(update);
-      }
-    };
-
-    const onWheel = (event: WheelEvent) => {
-      if (event.ctrlKey) return;
-
-      const baseDelta =
-        event.deltaMode === WheelEvent.DOM_DELTA_PIXEL
-          ? event.deltaY
-          : event.deltaMode === WheelEvent.DOM_DELTA_LINE
-            ? event.deltaY * 16
-            : event.deltaY * window.innerHeight;
-
-      event.preventDefault();
-
-      const velocityBoost = Math.abs(baseDelta) > 32 ? 1.12 : 0.74;
-      target = clamp(target + baseDelta * velocityBoost);
-      requestUpdate();
-    };
-
-    const onScroll = () => {
-      if (frame !== 0) return;
-      target = current = window.scrollY;
-      applyParallax(current);
-    };
-
-    const onResize = () => {
-      target = clamp(target);
-      requestUpdate();
-    };
-
-    applyParallax(window.scrollY);
-    window.addEventListener("wheel", onWheel, { passive: false });
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onResize, { passive: true });
-
-    return () => {
-      window.removeEventListener("wheel", onWheel);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onResize);
-      if (frame !== 0) {
-        window.cancelAnimationFrame(frame);
-      }
-    };
-  }, [parallaxRef, parallaxFactor]);
-}
-
 export default function ContactContent() {
   const emailHref = `mailto:${siteConfig.links.email}`;
   const gradientPanelRef = useRef<HTMLDivElement>(null);
+  const parallaxFactor = -0.05;
+  const parallaxEnabledRef = useRef(false);
 
-  useSilkyScroll(gradientPanelRef, -0.05);
+  const handleScroll = useCallback(
+    (scrollY: number) => {
+      const node = gradientPanelRef.current;
+      if (!node || !parallaxEnabledRef.current) return;
+      node.style.transform = `translate3d(0, ${scrollY * parallaxFactor}px, 0)`;
+    },
+    [parallaxFactor]
+  );
+
+  const silkyEnabled = useSilkyScrollListener(handleScroll);
+
+  useEffect(() => {
+    parallaxEnabledRef.current = silkyEnabled;
+    const node = gradientPanelRef.current;
+    if (!node) return;
+
+    if (!silkyEnabled) {
+      node.style.transform = "translate3d(0, 0, 0)";
+      return;
+    }
+
+    node.style.transform = `translate3d(0, ${window.scrollY * parallaxFactor}px, 0)`;
+  }, [parallaxFactor, silkyEnabled]);
+
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#09031a] text-[#f1f3ff]">

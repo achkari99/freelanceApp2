@@ -8,6 +8,7 @@ import { ArrowRight, ChevronsDown, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AnimatedHero } from "@/components/home/animated-hero";
+import { useSilkyScrollControl } from "@/components/providers/silky-scroll-provider";
 import { preferReducedMotion } from "@/lib/utils";
 
 const FINAL_STAGE = 3;
@@ -64,8 +65,28 @@ function DesktopStagedHero({ prefersReducedMotion }: { prefersReducedMotion: boo
   const finalScrollHoldRef = React.useRef(false);
   const finalScrollDeltaRef = React.useRef(0);
   const scrollCueDismissedRef = React.useRef(false);
+  const silkyHoldReleaseRef = React.useRef<(() => void) | null>(null);
 
   const isBaseStage = stage === 0;
+  const { acquireHold } = useSilkyScrollControl();
+
+  const releaseSilkyHold = React.useCallback(() => {
+    if (silkyHoldReleaseRef.current) {
+      silkyHoldReleaseRef.current();
+      silkyHoldReleaseRef.current = null;
+    }
+  }, []);
+
+  const ensureSilkyHold = React.useCallback(() => {
+    if (prefersReducedMotion) {
+      releaseSilkyHold();
+      return;
+    }
+
+    if (!silkyHoldReleaseRef.current) {
+      silkyHoldReleaseRef.current = acquireHold();
+    }
+  }, [acquireHold, prefersReducedMotion, releaseSilkyHold]);
 
   React.useEffect(() => {
     stageRef.current = stage;
@@ -94,12 +115,20 @@ function DesktopStagedHero({ prefersReducedMotion }: { prefersReducedMotion: boo
   }, []);
 
   React.useEffect(() => {
+    ensureSilkyHold();
+    return () => {
+      releaseSilkyHold();
+    };
+  }, [ensureSilkyHold, releaseSilkyHold]);
+
+  React.useEffect(() => {
     if (prefersReducedMotion) {
       setStage(FINAL_STAGE);
       finalScrollHoldRef.current = false;
       finalScrollDeltaRef.current = 0;
+      releaseSilkyHold();
     }
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, releaseSilkyHold]);
 
   React.useEffect(() => {
     if (prefersReducedMotion) {
@@ -365,6 +394,7 @@ function DesktopStagedHero({ prefersReducedMotion }: { prefersReducedMotion: boo
       finalScrollDeltaRef.current = 0;
       touchStartRef.current = null;
       detach();
+      releaseSilkyHold();
     };
 
     window.addEventListener("wheel", handleWheel, { passive: false });
@@ -373,7 +403,7 @@ function DesktopStagedHero({ prefersReducedMotion }: { prefersReducedMotion: boo
     touchTarget.addEventListener("touchmove", handleTouchMove, { passive: false });
 
     return detach;
-  }, [prefersReducedMotion, stage]);
+  }, [prefersReducedMotion, releaseSilkyHold, stage]);
 
   const ringsState = stage >= 1 ? "enter" : "initial";
   const headlineState = stage >= 2 ? "enter" : "initial";

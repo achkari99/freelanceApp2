@@ -23,6 +23,7 @@ import { GlobalWavesBackground } from "@/components/global-waves-background";
 import "@/lib/fonts";
 
 import { siteConfig } from "@/lib/site-config";
+import { SilkyScrollProvider } from "@/components/providers/silky-scroll-provider";
 
 
 
@@ -134,30 +135,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className="dark" suppressHydrationWarning>
 
       <body className="min-h-screen bg-[rgb(var(--background))] text-[rgb(var(--foreground))] antialiased">
-
-        <SkipLink />
-
+        <SilkyScrollProvider>
+          <SkipLink />
           <ScrollProgressBar />
-
           <GlobalWavesBackground />
-
           <div className="flex min-h-screen flex-col pb-safe">
-
             <SiteHeader />
-
             <main id="main" className="flex-1 pt-safe">
-
               {children}
-
             </main>
-
             <SiteFooter />
-
           </div>
-
-        <Analytics />
-
-        <Script type="module" src="/featherchat/featherchat.js" strategy="afterInteractive" />
+          <Analytics />
 
         <Script id="ld-json" type="application/ld+json" strategy="afterInteractive">
 
@@ -181,8 +170,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         />
 
-        <feather-chat app-name="ACH | 48H Prototype" welcome="Hi! Need help with your project?" theme="auto" endpoint={process.env.NEXT_PUBLIC_FEATHERCHAT_ENDPOINT ?? "/api/featherchat"}></feather-chat>
 
+        </SilkyScrollProvider>
       </body>
 
     </html>
