@@ -29,12 +29,12 @@ import { siteConfig } from "@/lib/site-config";
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  viewportFit: "cover"
+  viewportFit: "cover",
+  themeColor: "#0a0c19",
+  colorScheme: "dark"
 };
 
 export const metadata: Metadata = {
-  themeColor: "#0a0c19",
-  colorScheme: "dark",
   metadataBase: new URL(siteConfig.url),
 
   title: {
@@ -157,6 +157,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <Analytics />
 
+        <Script type="module" src="/featherchat/featherchat.js" strategy="afterInteractive" />
+
         <Script id="ld-json" type="application/ld+json" strategy="afterInteractive">
 
           {JSON.stringify(jsonLd)}
@@ -178,6 +180,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
 
         />
+
+        <feather-chat app-name="ACH | 48H Prototype" welcome="Hi! Need help with your project?" theme="auto" endpoint={process.env.NEXT_PUBLIC_FEATHERCHAT_ENDPOINT ?? "/api/featherchat"}></feather-chat>
 
       </body>
 

@@ -1,10 +1,26 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
-import { team, getTeamMemberBySlug } from "@/data/team";
+import MagicBento, { type BentoCardProps } from "~/bento";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { getTeamMemberBySlug, team } from "@/data/team";
+
+const labHighlights = [
+  "48-hour strike teams blend product, design, and engineering so ideas ship fast.",
+  "We weave AI copilots and automation into every prototype from day zero.",
+  "Casablanca HQ with leads distributed across North America and Europe."
+] as const;
+
+const Lanyard = dynamic(() => import("~/3ala9a"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-[280px] w-full rounded-3xl border border-slate-800/50 bg-slate-900/40" />
+  )
+});
 
 interface LeadershipPageProps {
   params: { slug: string };
@@ -23,7 +39,7 @@ export function generateMetadata({ params }: LeadershipPageProps): Metadata {
   }
 
   return {
-    title: `${member.name} · ACH Leadership`,
+    title: `${member.name} - ACH Leadership`,
     description: member.bio,
     openGraph: {
       title: member.name,
@@ -48,88 +64,245 @@ export default function LeadershipProfilePage({ params }: LeadershipPageProps) {
   }
 
   const profile = member;
+  const [leadParagraph, ...restSummary] = profile.summary;
+  const narrative = restSummary.length > 0 ? restSummary : leadParagraph ? [leadParagraph] : [];
+  const highlightEntries = profile.highlights;
+  const firstName = profile.name.split(" ")[0] ?? profile.name;
 
-  return (
-    <div className="mx-auto max-w-5xl px-6 py-16 lg:px-8">
-      <Link
-        href="/about"
-        className="text-sm font-semibold text-slate-600 transition hover:text-sky-600 dark:text-slate-300 dark:hover:text-sky-300"
-      >
-        ← Back to About
-      </Link>
+  const specialtyLine = profile.specialties.slice(0, 2).join(" • ");
+  const badgeFooter = specialtyLine || profile.location;
+  const accent = "#38bdf8";
 
-      <header className="mt-8 flex flex-col gap-8 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900 md:flex-row md:items-center md:justify-between">
-        <div className="flex flex-1 flex-col items-center gap-6 text-center md:flex-row md:items-start md:text-left">
-          <div className="h-32 w-32 overflow-hidden rounded-full border border-slate-200 shadow-sm dark:border-slate-700">
-            <Image src={profile.avatar} alt={profile.name} width={160} height={160} className="h-full w-full object-cover" />
-          </div>
-          <div className="space-y-3">
-            <div className="space-y-1">
-              <h1 className="font-display text-3xl text-slate-900 dark:text-white">{profile.name}</h1>
-              <p className="text-sm uppercase tracking-wide text-sky-600 dark:text-sky-300">{profile.role}</p>
+  const cards: BentoCardProps[] = [
+    {
+      label: "Lab Leadership",
+      gridColumn: "span 2",
+      gridRow: "span 2",
+      style: {
+        aspectRatio: "auto",
+        minHeight: "320px",
+        background: "linear-gradient(135deg, rgba(8,17,36,0.95), rgba(11,57,84,0.7))",
+        borderColor: "rgba(148, 163, 184, 0.25)"
+      },
+      body: (
+        <div className="flex h-full flex-col justify-between gap-6">
+          <div className="flex flex-col items-center gap-5 text-center sm:flex-row sm:items-start sm:text-left">
+            <div className="h-24 w-24 overflow-hidden rounded-full border border-white/20 shadow-lg">
+              <Image src={profile.avatar} alt={profile.name} width={160} height={160} className="h-full w-full object-cover" />
             </div>
-            <div className="flex flex-wrap justify-center gap-2 md:justify-start">
-              <Badge>{profile.location}</Badge>
-              {profile.specialties.map((specialty) => (
-                <Badge key={specialty}>{specialty}</Badge>
+            <div className="space-y-3">
+              <h2 className="font-display text-2xl text-white">{profile.name}</h2>
+              <p className="text-xs uppercase tracking-[0.35em] text-sky-300">{profile.role}</p>
+              <div className="flex flex-wrap justify-center gap-2 sm:justify-start">
+                <Badge className="border-white/20 bg-white/10 text-white">{profile.location}</Badge>
+                {profile.specialties.map((specialty) => (
+                  <Badge key={specialty} className="border-white/20 bg-white/10 text-white">
+                    {specialty}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          </div>
+          {profile.links?.length ? (
+            <div className="flex flex-wrap justify-center gap-3 sm:justify-start">
+              {profile.links.map((item) => (
+                <Button
+                  key={item.label}
+                  asChild
+                  variant="outline"
+                  className="border-white/30 bg-white/5 text-white transition hover:border-sky-400 hover:text-sky-200"
+                >
+                  <Link
+                    href={item.href}
+                    target={item.href.startsWith("http") ? "_blank" : undefined}
+                    rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+                  >
+                    {item.label}
+                  </Link>
+                </Button>
               ))}
             </div>
-          </div>
+          ) : null}
         </div>
-        {profile.links?.length ? (
-          <div className="flex flex-col gap-3 md:items-end">
-            {profile.links.map((item) => (
-              <Button key={item.label} asChild variant="outline">
-                <Link
-                  href={item.href}
-                  target={item.href.startsWith("http") ? "_blank" : undefined}
-                  rel={item.href.startsWith("http") ? "noreferrer" : undefined}
-                >
-                  {item.label}
-                </Link>
-              </Button>
-            ))}
+      )
+    },
+    {
+      label: "Lab Credentials",
+      gridColumn: "span 2",
+      gridRow: "span 2",
+      style: {
+        aspectRatio: "auto",
+        minHeight: "320px",
+        background: "radial-gradient(circle at top, rgba(56,189,248,0.28), transparent 60%), rgba(6,8,20,0.92)",
+        borderColor: "rgba(56, 189, 248, 0.3)"
+      },
+      body: (
+        <div className="flex h-full w-full flex-col items-center justify-between gap-6">
+          <div className="w-full flex-1">
+            <Lanyard
+              height="100%"
+              width="100%"
+              className="h-[260px] w-full"
+              badgeTitle={profile.name}
+              badgeSubtitle={profile.role}
+              badgeFooter={badgeFooter}
+              accentColor={accent}
+            />
           </div>
-        ) : null}
-      </header>
-
-      <section className="mt-12 space-y-4">
-        {profile.summary.map((paragraph, index) => (
-          <p key={index} className="text-base text-slate-600 dark:text-slate-300">
-            {paragraph}
+          <p className="text-center text-[0.65rem] uppercase tracking-[0.4em] text-slate-300">
+            ACH 48H badge • drag to explore
           </p>
-        ))}
-      </section>
-
-      <section className="mt-16 space-y-6">
-        <h2 className="font-display text-2xl text-slate-900 dark:text-white">Recent Highlights</h2>
-        <div className="grid gap-6 md:grid-cols-2">
-          {profile.highlights.map((highlight) => (
-            <article
-              key={highlight.title}
-              className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900"
-            >
-              <h3 className="font-semibold text-slate-900 dark:text-white">{highlight.title}</h3>
-              <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">{highlight.description}</p>
-            </article>
-          ))}
         </div>
-      </section>
-
-      <section className="mt-16 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <h2 className="font-display text-2xl text-slate-900 dark:text-white">Build with {profile.name.split(" ")[0]}</h2>
-        <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">
-          Share your idea and we will scope the first 48 hours together. Expect a clear plan, a working prototype, and the proof you need to rally the room.
-        </p>
-        <div className="mt-6 flex flex-wrap gap-3">
-          <Button asChild>
-            <Link href="/start-a-project">Start a project</Link>
-          </Button>
-          <Button asChild variant="outline">
-            <Link href="/contact">Talk to the lab</Link>
-          </Button>
+      )
+    },
+    {
+      label: "Field Notes",
+      gridColumn: "span 4",
+      style: {
+        aspectRatio: "auto",
+        minHeight: "260px",
+        background: "linear-gradient(135deg, rgba(9,12,24,0.95), rgba(14,26,45,0.8))",
+        borderColor: "rgba(99, 102, 241, 0.25)"
+      },
+      body: (
+        <div className="flex h-full flex-col justify-between gap-4 text-slate-100">
+          <div className="space-y-3 text-sm leading-relaxed text-slate-200">
+            {narrative.length ? (
+              narrative.map((paragraph, index) => (
+                <p key={index} className="text-sm leading-relaxed text-slate-100/85">
+                  {paragraph}
+                </p>
+              ))
+            ) : leadParagraph ? (
+              <p className="text-sm text-slate-200">{leadParagraph}</p>
+            ) : (
+              <p className="text-sm text-slate-200">
+                {profile.name} helps ACH deliver production-grade prototypes within 48 hours, then scales them into resilient platforms.
+              </p>
+            )}
+          </div>
+          <span className="text-xs uppercase tracking-[0.35em] text-slate-400">Workflow rituals</span>
         </div>
-      </section>
+      )
+    },
+    {
+      label: "Recent Highlights",
+      gridColumn: "span 2",
+      gridRow: "span 2",
+      style: {
+        aspectRatio: "auto",
+        minHeight: "300px",
+        background: "linear-gradient(135deg, rgba(12,20,40,0.9), rgba(20,70,90,0.75))",
+        borderColor: "rgba(56, 189, 248, 0.25)"
+      },
+      body: (
+        <div className="flex h-full flex-col justify-between gap-4">
+          {highlightEntries.length ? (
+            <ul className="space-y-3">
+              {highlightEntries.map((highlight) => (
+                <li key={highlight.title} className="rounded-xl border border-white/10 bg-white/5 p-4 text-left">
+                  <p className="text-sm font-semibold text-white">{highlight.title}</p>
+                  <p className="mt-2 text-xs text-slate-200">{highlight.description}</p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-sm text-slate-200">Shipping highlights will appear here soon.</p>
+          )}
+          <span className="text-xs uppercase tracking-[0.35em] text-slate-400">48H shipping log</span>
+        </div>
+      )
+    },
+    {
+      label: "Lab Principles",
+      gridColumn: "span 2",
+      style: {
+        aspectRatio: "auto",
+        minHeight: "220px",
+        background: "linear-gradient(135deg, rgba(9,13,26,0.9), rgba(30,41,59,0.75))",
+        borderColor: "rgba(148, 163, 184, 0.2)"
+      },
+      body: (
+        <div className="flex h-full flex-col justify-between gap-3 text-sm text-slate-200">
+          <ul className="space-y-3">
+            {labHighlights.map((item) => (
+              <li key={item} className="flex items-start gap-3">
+                <span className="mt-1 h-1.5 w-1.5 flex-none rounded-full bg-sky-300" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+          <span className="text-xs uppercase tracking-[0.35em] text-slate-400">Inside the 48H lab</span>
+        </div>
+      )
+    },
+    {
+      label: `Build with ${firstName}`,
+      gridColumn: "span 2",
+      style: {
+        aspectRatio: "auto",
+        minHeight: "220px",
+        background: "linear-gradient(135deg, rgba(56,189,248,0.15), rgba(12,74,110,0.65))",
+        borderColor: "rgba(56, 189, 248, 0.35)"
+      },
+      body: (
+        <div className="flex h-full flex-col justify-between gap-4 text-slate-100">
+          <p className="text-sm leading-relaxed text-slate-100">
+            Kick off a 48-hour sprint with ACH and {firstName}. Expect a working prototype, environment playbooks,
+            and the proof you need to rally the room.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Button asChild size="sm" className="bg-sky-500 text-white hover:bg-sky-400">
+              <Link href="/start-a-project">Start a project</Link>
+            </Button>
+            <Button asChild size="sm" variant="outline" className="border-white/40 text-white hover:border-sky-300">
+              <Link href="/contact">Talk to the lab</Link>
+            </Button>
+          </div>
+        </div>
+      )
+    }
+  ];
+
+  return (
+    <div className="relative overflow-hidden bg-slate-950">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-[-15%] top-[-25%] h-[380px] w-[380px] rounded-full bg-sky-500/20 blur-[160px]" />
+        <div className="absolute right-[-10%] top-[30%] h-[340px] w-[340px] rounded-full bg-cyan-500/25 blur-[160px]" />
+        <div className="absolute bottom-[-25%] left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-slate-900/70 blur-[180px]" />
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-6xl px-6 py-16 lg:px-8">
+        <Link
+          href="/about"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-300 transition hover:text-sky-300"
+        >
+          <ArrowLeft className="h-4 w-4" aria-hidden />
+          Back to About
+        </Link>
+
+        <div className="mt-10 max-w-3xl space-y-4 text-white">
+          <Badge className="w-max border-white/20 bg-white/10 text-white/90 backdrop-blur">ACH Leadership</Badge>
+          <h1 className="font-display text-4xl tracking-tight">{profile.name}</h1>
+          <p className="text-base text-slate-200">
+            {leadParagraph ??
+              `${profile.name} anchors ACH’s 48H prototype lab—pairing strategy, design, and engineering to ship production-grade proof on pace.`}
+          </p>
+        </div>
+
+        <div className="mt-12 flex justify-center">
+          <MagicBento
+            cards={cards}
+            enableStars={false}
+            enableSpotlight
+            enableBorderGlow
+            enableTilt
+            glowColor="56,189,248"
+            gridClassName="w-full"
+            useDefaultLayout={false}
+          />
+        </div>
+      </div>
     </div>
   );
 }
