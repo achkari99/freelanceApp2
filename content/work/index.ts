@@ -10,6 +10,8 @@ import LaunchPadPage, { project as launchPad } from "./atlas-supply-coming-soon"
 import InsightCopilotPage, { project as insightCopilot } from "./glacier-bio-coming-soon";
 import ArtisanBakeryShowcasePage, { project as artisanBakery } from "./artisan-bakery-showcase";
 import BoulangerieOrderingExperiencePage, { project as boulangerieOrdering } from "./boulangerie-ordering-experience";
+import VacationTrackerDashboardPage, { project as vacationTracker } from "./vacation-tracker-dashboard";
+import AIOrchestratorConsolePage, { project as aiOrchestrator } from "./ai-orchestrator-console";
 
 const modules = [
   { project: rightmindModel, body: RightMindModelPage },
@@ -21,7 +23,9 @@ const modules = [
   { project: launchPad, body: LaunchPadPage },
   { project: insightCopilot, body: InsightCopilotPage },
   { project: artisanBakery, body: ArtisanBakeryShowcasePage },
-  { project: boulangerieOrdering, body: BoulangerieOrderingExperiencePage }
+  { project: boulangerieOrdering, body: BoulangerieOrderingExperiencePage },
+  { project: vacationTracker, body: VacationTrackerDashboardPage },
+  { project: aiOrchestrator, body: AIOrchestratorConsolePage }
 ] satisfies { project: Omit<Project, "body">; body: Project["body"] }[];
 
 export const projects: Project[] = modules
