@@ -8,6 +8,8 @@ import FounderFlowPage, { project as founderFlow } from "./voyage-fund-story";
 import SuperAIMobilePage, { project as superAiMobile } from "./sunset-fm-app";
 import LaunchPadPage, { project as launchPad } from "./atlas-supply-coming-soon";
 import InsightCopilotPage, { project as insightCopilot } from "./glacier-bio-coming-soon";
+import ArtisanBakeryShowcasePage, { project as artisanBakery } from "./artisan-bakery-showcase";
+import BoulangerieOrderingExperiencePage, { project as boulangerieOrdering } from "./boulangerie-ordering-experience";
 
 const modules = [
   { project: rightmindModel, body: RightMindModelPage },
@@ -17,7 +19,9 @@ const modules = [
   { project: founderFlow, body: FounderFlowPage },
   { project: superAiMobile, body: SuperAIMobilePage },
   { project: launchPad, body: LaunchPadPage },
-  { project: insightCopilot, body: InsightCopilotPage }
+  { project: insightCopilot, body: InsightCopilotPage },
+  { project: artisanBakery, body: ArtisanBakeryShowcasePage },
+  { project: boulangerieOrdering, body: BoulangerieOrderingExperiencePage }
 ] satisfies { project: Omit<Project, "body">; body: Project["body"] }[];
 
 export const projects: Project[] = modules
