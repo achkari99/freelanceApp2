@@ -71,6 +71,98 @@ const hoverToneClasses: Record<HoverTone, { heading: string; accent: string }> =
 };
 
 export function HeroFeaturedList({ cards }: HeroFeaturedListProps) {
+  const scrollRef = React.useRef<HTMLUListElement>(null);
+  const isDraggingRef = React.useRef(false);
+  const startXRef = React.useRef(0);
+  const scrollLeftRef = React.useRef(0);
+  const movedRef = React.useRef(false);
+  const pointerIdRef = React.useRef<number | null>(null);
+
+  const handlePointerDown = React.useCallback((event: React.PointerEvent<HTMLUListElement>) => {
+    if (!event.isPrimary || event.button !== 0) {
+      return;
+    }
+
+    const container = scrollRef.current;
+    if (!container) {
+      return;
+    }
+
+    isDraggingRef.current = true;
+    movedRef.current = false;
+    startXRef.current = event.clientX;
+    scrollLeftRef.current = container.scrollLeft;
+    pointerIdRef.current = event.pointerId;
+    container.dataset.dragging = "true";
+
+    try {
+      container.setPointerCapture(event.pointerId);
+    } catch {
+      // ignore pointer capture errors
+    }
+  }, []);
+
+  const handlePointerMove = React.useCallback((event: React.PointerEvent<HTMLUListElement>) => {
+    if (!isDraggingRef.current) {
+      return;
+    }
+
+    const container = scrollRef.current;
+    if (!container) {
+      return;
+    }
+
+    event.preventDefault();
+    const delta = event.clientX - startXRef.current;
+    if (Math.abs(delta) > 3) {
+      movedRef.current = true;
+    }
+    container.scrollLeft = scrollLeftRef.current - delta;
+  }, []);
+
+  const endDrag = React.useCallback(() => {
+    if (!isDraggingRef.current) {
+      return;
+    }
+
+    isDraggingRef.current = false;
+    const container = scrollRef.current;
+    if (!container) {
+      return;
+    }
+
+    delete container.dataset.dragging;
+
+    if (pointerIdRef.current != null) {
+      try {
+        container.releasePointerCapture(pointerIdRef.current);
+      } catch {
+        // ignore pointer capture release errors
+      }
+      pointerIdRef.current = null;
+    }
+  }, []);
+
+  const handlePointerUp = React.useCallback(() => {
+    endDrag();
+  }, [endDrag]);
+
+  const handlePointerLeave = React.useCallback(() => {
+    endDrag();
+  }, [endDrag]);
+
+  const handlePointerCancel = React.useCallback(() => {
+    endDrag();
+  }, [endDrag]);
+
+  const handleClickCapture = React.useCallback((event: React.MouseEvent<HTMLUListElement>) => {
+    if (movedRef.current) {
+      event.preventDefault();
+      event.stopPropagation();
+      movedRef.current = false;
+    }
+  }, []);
+
   if (cards.length === 0) {
     return null;
   }
@@ -97,7 +189,14 @@ export function HeroFeaturedList({ cards }: HeroFeaturedListProps) {
 
       <motion.ul
         variants={containerVariants}
-        className="mt-10 flex gap-6 overflow-x-auto pb-6 [scrollbar-width:none] [-ms-overflow-style:none] sm:gap-8 md:gap-10 [&::-webkit-scrollbar]:hidden"
+        ref={scrollRef}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerLeave={handlePointerLeave}
+        onPointerCancel={handlePointerCancel}
+        onClickCapture={handleClickCapture}
+        className="mt-10 flex gap-6 overflow-x-auto pb-6 [scrollbar-width:none] [-ms-overflow-style:none] cursor-grab select-none data-[dragging=true]:cursor-grabbing sm:gap-8 md:gap-10 [&::-webkit-scrollbar]:hidden"
       >
         {cards.map((card) => {
           const tone = hoverToneClasses[card.hoverTone ?? "sky"];

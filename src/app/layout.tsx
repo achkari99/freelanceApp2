@@ -24,6 +24,7 @@ import "@/lib/fonts";
 
 import { siteConfig } from "@/lib/site-config";
 import { SilkyScrollProvider } from "@/components/providers/silky-scroll-provider";
+import { ChatWidget } from "@/components/chatbot";
 
 
 
@@ -147,6 +148,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <SiteFooter />
           </div>
           <Analytics />
+          <ChatWidget />
 
         <Script id="ld-json" type="application/ld+json" strategy="afterInteractive">
 
