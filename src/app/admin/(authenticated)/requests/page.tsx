@@ -67,7 +67,7 @@ export default async function RequestsPage({ searchParams }: RequestsPageProps) 
         </p>
       ) : null}
 
-      <div className="overflow-x-auto rounded-3xl border border-white/5 bg-white/5 shadow-[0_25px_55px_-45px_rgba(15,23,42,0.8)]">
+      <div className="overflow-x-auto rounded-3xl border border-white/5 bg-white/5 shadow-[0_25px_55px_-45px_rgba(15,23,42,0.8)] [overscroll-behavior-x:auto] [touch-action:pan-x]">
         <table className="min-w-[760px] divide-y divide-white/5 text-sm">
           <thead className="bg-white/5 text-left text-xs uppercase tracking-[0.35em] text-white/50">
             <tr>

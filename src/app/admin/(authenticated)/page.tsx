@@ -93,38 +93,40 @@ export default async function AdminHome() {
               View all
             </Link>
           </header>
-          <div className="overflow-x-auto rounded-2xl border border-white/5 shadow-[0_25px_55px_-45px_rgba(15,23,42,0.8)]">
-            <table className="min-w-[680px] divide-y divide-white/5 text-sm">
-              <thead className="bg-white/5 text-left text-xs uppercase tracking-[0.35em] text-white/50">
-                <tr>
-                  <th className="px-4 py-3 font-semibold">Client</th>
-                  <th className="px-4 py-3 font-semibold">Services</th>
-                  <th className="px-4 py-3 font-semibold">Budget</th>
-                  <th className="px-4 py-3 font-semibold">Submitted</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5 bg-white/10">
-                {tableRows.length === 0 ? (
+          <div className="-mx-4 sm:-mx-6">
+            <div className="overflow-x-auto rounded-2xl border border-white/5 bg-white/5 shadow-[0_25px_55px_-45px_rgba(15,23,42,0.8)] [overscroll-behavior-x:contain] [touch-action:pan-x]">
+              <table className="min-w-[760px] divide-y divide-white/5 text-sm">
+                <thead className="bg-white/5 text-left text-xs uppercase tracking-[0.35em] text-white/50">
                   <tr>
-                    <td colSpan={4} className="px-4 py-6 text-center text-sm text-white/50">
-                      No submissions just yet. Once prospects complete the start-project form, the stream will populate here.
-                    </td>
+                    <th className="px-4 py-3 font-semibold">Client</th>
+                    <th className="px-4 py-3 font-semibold">Services</th>
+                    <th className="px-4 py-3 font-semibold">Budget</th>
+                    <th className="px-4 py-3 font-semibold">Submitted</th>
                   </tr>
-                ) : (
-                  tableRows.map((row) => (
-                    <tr key={row.id}>
-                      <td className="px-4 py-4">
-                        <div className="font-medium text-white">{row.name}</div>
-                        <p className="text-xs text-white/40">{row.email}</p>
+                </thead>
+                <tbody className="divide-y divide-white/5 bg-white/10">
+                  {tableRows.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="px-4 py-6 text-center text-sm text-white/50">
+                        No submissions just yet. Once prospects complete the start-project form, the stream will populate here.
                       </td>
-                      <td className="px-4 py-4 text-white/80">{row.services}</td>
-                      <td className="px-4 py-4 text-white/60">{row.budget}</td>
-                      <td className="px-4 py-4 text-white/60">{row.submitted}</td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ) : (
+                    tableRows.map((row) => (
+                      <tr key={row.id}>
+                        <td className="px-4 py-4">
+                          <div className="font-medium text-white">{row.name}</div>
+                          <p className="text-xs text-white/40">{row.email}</p>
+                        </td>
+                        <td className="px-4 py-4 text-white/80">{row.services}</td>
+                        <td className="px-4 py-4 text-white/60">{row.budget}</td>
+                        <td className="px-4 py-4 text-white/60">{row.submitted}</td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
           <p className="mt-2 px-1 text-xs uppercase tracking-[0.32em] text-white/40 sm:hidden">
             Tip: swipe sideways to inspect every column.
