@@ -32,10 +32,10 @@ export async function POST(request: Request) {
     }
 
     const summary = buildSummary(payload);
-    const emailSent = await sendEmail(payload, summary);
+    const emailResults = await sendEmail(payload, summary);
     const slackPosted = await postToSlack(payload, summary);
 
-    return NextResponse.json({ ok: true, emailSent, slackPosted });
+    return NextResponse.json({ ok: true, emailSent: emailResults.team, confirmationSent: emailResults.confirmation, slackPosted });
   } catch (error) {
     if (error instanceof ZodError) {
       return NextResponse.json({ ok: false, issues: error.issues }, { status: 422 });
@@ -64,7 +64,7 @@ async function sendEmail(payload: StartProjectApiPayload, summary: string) {
   const to = process.env.START_PROJECT_EMAIL_TO;
 
   if (!host || !port || !user || !pass || !from || !to) {
-    return false;
+    return { team: false, confirmation: false };
   }
 
   const transporter = nodemailer.createTransport({
@@ -74,15 +74,71 @@ async function sendEmail(payload: StartProjectApiPayload, summary: string) {
     auth: { user, pass }
   });
 
-  await transporter.sendMail({
-    from,
-    to,
-    subject: "New project inquiry",
-    text: `${summary}\n\nProject details:\n${payload.description}`,
-    html: `<pre style="font-family: ui-monospace, SFMono-Regular, SFMono, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; white-space: pre-wrap;">${summary}\n\nProject details:\n${payload.description}</pre>`
-  });
+  interface EmailResult {
+    team: boolean;
+    confirmation: boolean;
+  }
 
-  return true;
+  interface TransportMailOptions {
+    from: string;
+    to: string;
+    subject: string;
+    text: string;
+    html: string;
+  }
+
+    const teamMail: Promise<boolean> = await transporter
+      .sendMail({
+        from,
+        to,
+        subject: "New project inquiry",
+        text: `${summary}\n\nProject details:\n${payload.description}`,
+        html: `<pre style="font-family: ui-monospace, SFMono-Regular, SFMono, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; white-space: pre-wrap;">${summary}\n\nProject details:\n${payload.description}</pre>`
+      } as TransportMailOptions)
+      .then((): boolean => true)
+      .catch((error: Error): boolean => {
+        console.error("Project inquiry email failed", error);
+        return false;
+      });
+
+  interface ConfirmationEmailOptions extends TransportMailOptions {
+    replyTo: string;
+  }
+
+  const confirmationMail: Promise<boolean> = await transporter
+      .sendMail({
+        from,
+        to: payload.email,
+        replyTo: from,
+        subject: "We received your 48H prototype request",
+        text: [
+          `Hi ${payload.name.split(" ")[0]},`,
+          "",
+          "Thank you for requesting a 48H prototype with ACH. 🎉",
+          `We've penciled in your preferred timeline: ${payload.timeline}.`,
+          "One of our leads will reach out shortly to confirm logistics and begin planning the build.",
+          "",
+          "If anything changes in the meantime, just reply to this email.",
+          "",
+          "Talk soon,\nThe ACH Squad"
+        ].join("\n"),
+        html: `
+          <div style="font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 15px; line-height: 1.6; color: #0f172a;">
+            <p>Hi <strong>${payload.name.split(" ")[0]}</strong>,</p>
+            <p>Thank you for requesting a 48H prototype with ACH. 🎉</p>
+            <p>We've penciled in your preferred timeline: <strong>${payload.timeline}</strong>. One of our leads will reach out shortly to confirm logistics and begin planning the build.</p>
+            <p>If anything changes in the meantime, just reply to this email.</p>
+            <p style="margin-top: 24px;">Talk soon,<br/>The ACH Squad</p>
+          </div>
+        `
+      } as ConfirmationEmailOptions)
+      .then((): boolean => true)
+      .catch((error: Error): boolean => {
+        console.error("Confirmation email failed", error);
+        return false;
+      });
+
+  return { team: teamMail, confirmation: confirmationMail };
 }
 
 async function postToSlack(payload: StartProjectApiPayload, summary: string) {
