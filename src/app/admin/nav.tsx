@@ -8,17 +8,26 @@ type NavItem = {
   label: string;
 };
 
-export function AdminNav({ items }: { items: NavItem[] }) {
+export function AdminNav({
+  items,
+  className = "flex-1 space-y-3 text-sm",
+  onNavigate
+}: {
+  items: NavItem[];
+  className?: string;
+  onNavigate?: () => void;
+}) {
   const pathname = usePathname();
 
   return (
-    <nav className="flex-1 space-y-3 text-sm">
+    <nav className={className}>
       {items.map((item) => {
         const isActive = pathname === item.href;
         return (
           <Link
             key={item.href}
             href={item.href}
+            onClick={onNavigate}
             className={`block rounded-xl px-4 py-3 transition ${
               isActive
                 ? "border border-white/20 bg-white/10 text-white"

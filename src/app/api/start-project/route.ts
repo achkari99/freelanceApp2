@@ -74,11 +74,6 @@ async function sendEmail(payload: StartProjectApiPayload, summary: string) {
     auth: { user, pass }
   });
 
-  interface EmailResult {
-    team: boolean;
-    confirmation: boolean;
-  }
-
   interface TransportMailOptions {
     from: string;
     to: string;
@@ -227,4 +222,3 @@ function formatFileSize(bytes: number) {
 
   return `${bytes} B`;
 }
-

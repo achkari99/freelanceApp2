@@ -22,17 +22,33 @@ export default async function AdminHome() {
   }
 
   const requests = (rows ?? []) as RequestRow[];
+  const fallbackText = "n/a";
+
   const totalRequests = requests.length;
   const newRequests = requests.filter((row) => String(row.status ?? "new").toLowerCase() === "new").length;
   const upcoming = requests
-    .filter((row) => row.timeline)
+    .filter((row) => Boolean(row.timeline))
     .map((row) => ({
       name: (row["full name"] as string) ?? (row.email as string) ?? "Unknown",
-      timeline: row.timeline as string
+      timeline: (row.timeline as string | null) ?? fallbackText
     }))
     .slice(0, 3);
 
-  const favouriteServices = collectTopServices(requests);
+  const topServices = collectTopServices(requests);
+  const topServicesLabel = topServices.length ? topServices.map((service) => service.label).join(", ") : fallbackText;
+  const timelineCount = upcoming.length ? upcoming.length.toString() : fallbackText;
+
+  const tableRows = requests.map((row) => {
+    const id = row.id ?? `${row.email ?? "request"}-${row.created_at ?? Math.random()}`;
+    return {
+      id: String(id),
+      name: (row["full name"] as string | null) ?? "Unknown",
+      email: (row.email as string | null) ?? fallbackText,
+      services: (row["focus area"] as string | null) ?? fallbackText,
+      budget: (row["budget range"] as string | null) ?? fallbackText,
+      submitted: row.created_at ? dayjs(row.created_at as string).fromNow() : fallbackText
+    };
+  });
 
   return (
     <div className="space-y-10">
@@ -51,13 +67,13 @@ export default async function AdminHome() {
         />
         <KpiCard
           title="Upcoming timelines"
-          value={upcoming.length ? upcoming.length.toString() : "—"}
+          value={timelineCount}
           description="Based on client-submitted target dates"
           icon={<Clock className="h-5 w-5 text-emerald-400" />}
         />
         <KpiCard
           title="Favourite services"
-          value={favouriteServices.map((service) => service.label).join(", ") || "—"}
+          value={topServicesLabel}
           description="Top selections across recent requests"
           icon={<ArrowUpRight className="h-5 w-5 text-amber-400" />}
         />
@@ -65,7 +81,7 @@ export default async function AdminHome() {
 
       <section className="grid gap-6 lg:grid-cols-[2fr,1fr]">
         <div className="rounded-3xl border border-white/5 bg-white/5 p-6">
-          <header className="mb-4 flex items-center justify-between">
+          <header className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="text-lg font-semibold text-white">Latest requests</h2>
               <p className="text-sm text-white/50">Surface signal from the last dozen submissions.</p>
@@ -77,8 +93,8 @@ export default async function AdminHome() {
               View all
             </Link>
           </header>
-          <div className="overflow-hidden rounded-2xl border border-white/5">
-            <table className="min-w-full divide-y divide-white/5 text-sm">
+          <div className="overflow-x-auto rounded-2xl border border-white/5 shadow-[0_25px_55px_-45px_rgba(15,23,42,0.8)]">
+            <table className="min-w-[680px] divide-y divide-white/5 text-sm">
               <thead className="bg-white/5 text-left text-xs uppercase tracking-[0.35em] text-white/50">
                 <tr>
                   <th className="px-4 py-3 font-semibold">Client</th>
@@ -87,35 +103,36 @@ export default async function AdminHome() {
                   <th className="px-4 py-3 font-semibold">Submitted</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5 bg-white/2">
-                {requests.length === 0 ? (
+              <tbody className="divide-y divide-white/5 bg-white/10">
+                {tableRows.length === 0 ? (
                   <tr>
                     <td colSpan={4} className="px-4 py-6 text-center text-sm text-white/50">
                       No submissions just yet. Once prospects complete the start-project form, the stream will populate here.
                     </td>
                   </tr>
                 ) : (
-                  requests.map((row) => (
-                    <tr key={(row.id as string) ?? `${row.email}-${row.created_at ?? Math.random()}`}>
+                  tableRows.map((row) => (
+                    <tr key={row.id}>
                       <td className="px-4 py-4">
-                        <div className="font-medium text-white">{(row["full name"] as string) ?? "Unknown"}</div>
-                        <p className="text-xs text-white/40">{row.email as string}</p>
+                        <div className="font-medium text-white">{row.name}</div>
+                        <p className="text-xs text-white/40">{row.email}</p>
                       </td>
-                      <td className="px-4 py-4 text-white/80">{(row["focus area"] as string) ?? "—"}</td>
-                      <td className="px-4 py-4 text-white/60">{(row["budget range"] as string) ?? "—"}</td>
-                      <td className="px-4 py-4 text-white/60">
-                        {row.created_at ? dayjs(row.created_at as string).fromNow() : "—"}
-                      </td>
+                      <td className="px-4 py-4 text-white/80">{row.services}</td>
+                      <td className="px-4 py-4 text-white/60">{row.budget}</td>
+                      <td className="px-4 py-4 text-white/60">{row.submitted}</td>
                     </tr>
                   ))
                 )}
               </tbody>
             </table>
           </div>
+          <p className="mt-2 px-1 text-xs uppercase tracking-[0.32em] text-white/40 sm:hidden">
+            Tip: swipe sideways to inspect every column.
+          </p>
         </div>
         <div className="space-y-6">
           <div className="rounded-3xl border border-white/5 bg-white/5 p-5">
-            <h2 className="text-sm font-semibold text-white">This week’s follow-ups</h2>
+            <h2 className="text-sm font-semibold text-white">This week&apos;s follow-ups</h2>
             <div className="mt-4 space-y-3">
               {upcoming.length ? (
                 upcoming.map((item) => (
@@ -132,9 +149,16 @@ export default async function AdminHome() {
           <div className="rounded-3xl border border-white/5 bg-gradient-to-br from-indigo-500/20 via-transparent to-sky-500/20 p-5">
             <h2 className="text-sm font-semibold text-white">Need-to-know</h2>
             <ul className="mt-3 space-y-3 text-sm text-white/70">
-              <li>• Components tab lets you log reusable page blocks for future releases.</li>
-              <li>• Content Studio edits sync to Supabase so you can iterate without shipping code.</li>
-              <li>• Update request statuses from the Requests view to keep delivery ops aligned.</li>
+              {[
+                "Components tab lets you log reusable page blocks for future releases.",
+                "Content Studio edits sync to Supabase so you can iterate without shipping code.",
+                "Update request statuses from the Requests view to keep delivery ops aligned."
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-3">
+                  <span className="mt-1 h-1.5 w-1.5 flex-none rounded-full bg-sky-400" />
+                  <span>{item}</span>
+                </li>
+              ))}
             </ul>
           </div>
         </div>

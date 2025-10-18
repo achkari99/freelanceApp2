@@ -69,15 +69,14 @@ export default function LeadershipProfilePage({ params }: LeadershipPageProps) {
   const highlightEntries = profile.highlights;
   const firstName = profile.name.split(" ")[0] ?? profile.name;
 
-  const specialtyLine = profile.specialties.slice(0, 2).join(" • ");
+  const specialtyLine = profile.specialties.slice(0, 2).join(" | ");
   const badgeFooter = specialtyLine || profile.location;
   const accent = "#38bdf8";
 
   const cards: BentoCardProps[] = [
     {
       label: "Lab Leadership",
-      gridColumn: "span 2",
-      gridRow: "span 2",
+      className: "md:col-span-2 md:row-span-2",
       style: {
         aspectRatio: "auto",
         minHeight: "320px",
@@ -128,8 +127,7 @@ export default function LeadershipProfilePage({ params }: LeadershipPageProps) {
     },
     {
       label: "Lab Credentials",
-      gridColumn: "span 2",
-      gridRow: "span 2",
+      className: "md:col-span-2 md:row-span-2",
       style: {
         aspectRatio: "auto",
         minHeight: "320px",
@@ -150,14 +148,14 @@ export default function LeadershipProfilePage({ params }: LeadershipPageProps) {
             />
           </div>
           <p className="text-center text-[0.65rem] uppercase tracking-[0.4em] text-slate-300">
-            ACH 48H badge • drag to explore
+            ACH 48H badge - drag to explore
           </p>
         </div>
       )
     },
     {
       label: "Field Notes",
-      gridColumn: "span 4",
+      className: "md:col-span-2 xl:col-span-4",
       style: {
         aspectRatio: "auto",
         minHeight: "260px",
@@ -187,8 +185,7 @@ export default function LeadershipProfilePage({ params }: LeadershipPageProps) {
     },
     {
       label: "Recent Highlights",
-      gridColumn: "span 2",
-      gridRow: "span 2",
+      className: "md:col-span-2 md:row-span-2",
       style: {
         aspectRatio: "auto",
         minHeight: "300px",
@@ -215,7 +212,7 @@ export default function LeadershipProfilePage({ params }: LeadershipPageProps) {
     },
     {
       label: "Lab Principles",
-      gridColumn: "span 2",
+      className: "md:col-span-2",
       style: {
         aspectRatio: "auto",
         minHeight: "220px",
@@ -238,7 +235,7 @@ export default function LeadershipProfilePage({ params }: LeadershipPageProps) {
     },
     {
       label: `Build with ${firstName}`,
-      gridColumn: "span 2",
+      className: "md:col-span-2",
       style: {
         aspectRatio: "auto",
         minHeight: "220px",
@@ -272,7 +269,7 @@ export default function LeadershipProfilePage({ params }: LeadershipPageProps) {
         <div className="absolute bottom-[-25%] left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-slate-900/70 blur-[180px]" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-6xl px-6 py-16 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
         <Link
           href="/about"
           className="inline-flex items-center gap-2 text-sm font-semibold text-slate-300 transition hover:text-sky-300"
@@ -281,16 +278,16 @@ export default function LeadershipProfilePage({ params }: LeadershipPageProps) {
           Back to About
         </Link>
 
-        <div className="mt-10 max-w-3xl space-y-4 text-white">
-          <Badge className="w-max border-white/20 bg-white/10 text-white/90 backdrop-blur">ACH Leadership</Badge>
-          <h1 className="font-display text-4xl tracking-tight">{profile.name}</h1>
-          <p className="text-base text-slate-200">
+        <div className="mt-10 max-w-3xl space-y-4 text-center text-white sm:text-left">
+          <Badge className="mx-auto w-max border-white/20 bg-white/10 text-white/90 backdrop-blur sm:mx-0">ACH Leadership</Badge>
+          <h1 className="font-display text-3xl tracking-tight sm:text-4xl">{profile.name}</h1>
+          <p className="text-base text-slate-200 sm:text-lg">
             {leadParagraph ??
-              `${profile.name} anchors ACH’s 48H prototype lab—pairing strategy, design, and engineering to ship production-grade proof on pace.`}
+              `${profile.name} anchors ACH's 48H prototype lab - pairing strategy, design, and engineering to ship production-grade proof on pace.`}
           </p>
         </div>
 
-        <div className="mt-12 flex justify-center">
+        <div className="mt-10 flex justify-center px-2 sm:mt-12 sm:px-0">
           <MagicBento
             cards={cards}
             enableStars={false}
@@ -298,7 +295,7 @@ export default function LeadershipProfilePage({ params }: LeadershipPageProps) {
             enableBorderGlow
             enableTilt
             glowColor="56,189,248"
-            gridClassName="w-full"
+            gridClassName="w-full auto-rows-[minmax(0,1fr)] gap-4 sm:gap-6 md:grid-cols-2 xl:grid-cols-4"
             useDefaultLayout={false}
           />
         </div>
@@ -306,3 +303,5 @@ export default function LeadershipProfilePage({ params }: LeadershipPageProps) {
     </div>
   );
 }
+
+

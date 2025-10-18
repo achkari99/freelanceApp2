@@ -21,7 +21,7 @@ export function LogoutButton({ variant = "primary" }: LogoutButtonProps) {
           : "inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white/10 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/20 disabled:opacity-50"
       }
     >
-      {isPending ? "Signing out…" : "Sign out"}
+      {isPending ? "Signing out..." : "Sign out"}
     </button>
   );
 }

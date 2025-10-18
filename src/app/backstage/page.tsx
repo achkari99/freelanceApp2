@@ -15,29 +15,29 @@ export default function BackstagePage() {
 
   return (
     <div className="pb-20">
-      <section className="relative isolate overflow-hidden bg-slate-950 px-6 pb-20 pt-24 text-white sm:rounded-[48px] lg:px-8">
+      <section className="relative isolate overflow-hidden bg-slate-950 px-4 pb-16 pt-20 text-white sm:rounded-[48px] sm:px-6 sm:pb-20 sm:pt-24 lg:px-8">
         <div className="pointer-events-none absolute inset-0" aria-hidden>
           <div className="absolute left-[-18%] top-[-35%] h-80 w-80 rounded-full bg-sky-500/35 blur-[120px]" />
           <div className="absolute right-[-8%] top-[10%] h-96 w-96 rounded-full bg-cyan-400/25 blur-[140px]" />
           <div className="absolute bottom-[-25%] left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-slate-900/60 blur-[160px]" />
         </div>
-        <div className="relative z-10 mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-          <div className="max-w-3xl space-y-6">
-            <Badge className="w-max border-white/30 bg-white/10 text-white backdrop-blur">Lab Notes</Badge>
-            <h1 className="font-display text-4xl tracking-tight text-white">
+        <div className="relative z-10 mx-auto grid max-w-6xl items-center gap-12 text-center lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:text-left">
+          <div className="mx-auto max-w-3xl space-y-6">
+            <Badge className="mx-auto w-max border-white/30 bg-white/10 text-white backdrop-blur lg:mx-0">Lab Notes</Badge>
+            <h1 className="font-display text-3xl tracking-tight text-white sm:text-4xl">
               Peek inside the lab to see the rituals, experiments, and frameworks that keep us shipping in 48 hours.
             </h1>
-            <p className="text-lg text-slate-100/90">
+            <p className="text-base text-slate-100/90 sm:text-lg">
               We publish the tactics, tools, and learnings while they are fresh--no polished case studies required.
             </p>
             <Link
               href="/contact"
-              className="inline-flex items-center text-sm font-semibold text-white/80 transition hover:text-white"
+              className="inline-flex items-center justify-center text-sm font-semibold text-white/80 transition hover:text-white lg:justify-start"
             >
               Have a question for the lab?
             </Link>
           </div>
-          <div className="relative h-[420px] w-full sm:h-[460px]">
+          <div className="relative mx-auto h-80 w-full max-w-[420px] overflow-hidden sm:h-[420px] lg:h-[460px] lg:mx-0 lg:ml-auto lg:max-w-none">
             <CardSwap width={420} height={460} cardDistance={68} verticalDistance={78} delay={5200} skewAmount={7}>
               {featuredPosts.map((post) => (
                 <Card
@@ -62,7 +62,7 @@ export default function BackstagePage() {
           </div>
         </div>
       </section>
-      <div className="mx-auto mt-20 max-w-6xl px-6 lg:px-8">
+      <div className="mx-auto mt-16 max-w-6xl px-4 sm:mt-20 sm:px-6 lg:px-8">
         <BackstageFeed posts={backstageSummaries} />
       </div>
     </div>
